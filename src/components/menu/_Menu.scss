@@ -1,0 +1,51 @@
+.menu__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  max-width: 64.5rem; //Ширину указал, временно, по макет, кода будем делать главную страницу, зададим через clamp
+  height: 132.875rem; //Пока указал фиксированную высоту по макету, когда будем главную страницу создавать, зададим 'height: 100vh'
+
+  border: 1px solid rgb(160, 164, 173);
+  border-radius: 0px 72px 72px 0px;
+  background: rgb(19, 20, 22);
+
+  padding: 6.0625rem;
+
+  position: relative;
+}
+
+.menu__button_close {
+  position: absolute;
+  right: 2.8125rem;
+  top: 2.8125rem;
+  background-color: rgba(217, 217, 217);
+  border-radius: 50%;
+
+  width: 3rem;
+  height: 3rem;
+
+  transition: stroke 0.2s, background-color 0.2s;
+}
+
+
+.menu__button_close svg {
+  fill: none;
+}
+
+.menu__title {
+  margin-bottom: 84px;
+}
+
+.title3_menu {
+  color: rgb(240, 240, 240);
+  font-size: 4.875rem;
+  font-weight: 700;
+  line-height: 6.6875rem;
+}
+
+.menu__list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6.25rem;
+}

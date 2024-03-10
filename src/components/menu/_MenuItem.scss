@@ -1,0 +1,41 @@
+.menu__item {
+  position: relative;
+
+  &:not(:last-child):before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -75%;
+    transform: translateY(75%);
+    height: 3px;
+    width: 100%;
+    background-color: rgb(160, 164, 173);
+  }
+}
+
+.menu__button {
+  display: flex;
+  align-items: center;
+  column-gap: 3rem;
+  width: 100%;
+
+  span {
+    color: rgb(240, 240, 240);
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 4.125rem;
+  }
+}
+
+.menu__info {
+  display: flex;
+  align-items: center;
+  column-gap: 3.125rem;
+}
+
+.menu__text {
+  color: rgb(160, 164, 173);
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 2.875rem;
+}

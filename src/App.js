@@ -1,7 +1,10 @@
-import './App.css';
+import "./App.css";
+import { Plan } from "./components/plan/Plan.jsx";
+
 function App() {
   return (
-    <div className="App">
+    <div>
+      <Plan />
     </div>
   );
 }

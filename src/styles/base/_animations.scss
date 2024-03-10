@@ -1,0 +1,39 @@
+@keyframes showMenuWindow {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes hideMenuWindow {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes showOverlayMenu {
+  from {
+    z-index: 0;
+    opacity: 0;
+  }
+  to {
+    z-index: 21;
+    opacity: 1;
+  }
+}
+
+@keyframes hideOverlayMenu {
+  from {
+    z-index: 21;
+    opacity: 1;
+  }
+  to {
+    z-index: 0;
+    opacity: 0;
+  }
+}
