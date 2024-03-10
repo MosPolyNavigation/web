@@ -1,0 +1,21 @@
+.button__search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1.5rem;
+
+  padding: 2.25rem 7.5rem;
+
+  border: 1px solid rgb(160, 164, 173);
+  border-radius: 104px;
+  box-shadow: 0px 0px 24px 0px rgba(20, 20, 20, 0.4);
+  background: rgb(19, 20, 22);
+
+  color: rgb(160, 164, 173);
+  font-family: "Gilroy";
+  font-size: 3rem;
+  font-weight: 500;
+  line-height: 3.625rem;
+  letter-spacing: 0%;
+  text-align: left;
+}

@@ -1,0 +1,112 @@
+.plan {
+  position: relative;
+
+  overflow-x: scroll;
+  width: 100%;
+  height: 100vh;
+
+}
+
+.plan__wrapper {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  min-width: 90rem;
+  height: 100vh;
+}
+
+.plan__image {
+  height: 100vh;
+}
+
+.plan__item_menu-button {
+  position: fixed;
+  left: 3.125rem;
+  top: 3.125rem;
+
+  z-index: 20;
+}
+
+.plan__item_name {
+  position: fixed;
+  top: 3.125rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgb(160, 164, 173);
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 3.625rem;
+  text-align: center;
+
+  z-index: 20;
+}
+
+.plan__item_floorScroll {
+  position: fixed;
+  left: 3.125rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.plan__item_zoom-button {
+  position: fixed;
+  right: 3.125rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.plan__row {
+  position: fixed;
+  bottom: 3.125rem;
+  padding: 0 3.125rem;
+
+  display: flex;
+  align-items: center;
+  column-gap: 5.625rem;
+}
+
+.overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+
+  &_shadow {
+    box-shadow: inset 0 200px 200px -200px rgba(0, 0, 0, 0.5);
+    height: 15.625rem;
+    z-index: 19;
+  }
+}
+
+.plan__menu-window {
+  position: absolute;
+  transform: translateX(-100%);
+  z-index: 22;
+}
+
+.plan__menu-window-animationShow {
+  animation: showMenuWindow 0.4s ease-in forwards;
+}
+
+.plan__menu-window-animationHide {
+  animation: hideMenuWindow 0.4s ease-in forwards;
+}
+
+.overlay_menu-window-animationShow {
+  animation: showOverlayMenu 0.4s linear forwards;
+}
+
+.overlay_menu-window-animationHide {
+  animation: hideOverlayMenu 0.4s linear forwards;
+}
+
+.overlay_menu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  opacity: 0;
+
+  background-color: rgba(0, 0, 0, 0.5);
+}

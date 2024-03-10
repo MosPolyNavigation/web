@@ -1,0 +1,22 @@
+//base
+
+@import url(https://fonts.googleapis.com/css?family=Manrope:200,300,regular,500,600,700,800);
+@import url(/src/fonts/Gilroy/stylesheet.css); 
+@import "./base/reset";
+@import "./base/animations";
+@import "./base/base";
+
+//style components
+
+@import "../App";
+@import "../components/floorsScroll/FloorScroll";
+@import "../components/buttonZoom/ButtonZoom";
+@import "../components/menu/Menu";
+@import "../components/menu/MenuItem";
+@import "../components/searchInput/SearchInput";
+@import "../components/searchFloor/SearchFloor";
+@import "../components/largeButton/LargeButton";
+@import "../components/smallButton/SmallButton";
+
+@import '../components/plan/Plan';
+

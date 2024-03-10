@@ -1,0 +1,43 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgb(76, 81, 92);
+  border-radius: 4.5rem;
+  box-shadow: 0px 0px 24px 0px rgba(20, 20, 20, 0.4);
+  background: rgb(28, 31, 38);
+
+  transition: background-color 0.2s;
+}
+
+.button_large {
+  width: 9rem;
+  height: 9rem;
+  transition: background-color 0.2s;
+
+  // &_menu-btn:active svg path {
+  //   stroke: #1c1f26;
+  // }
+
+  // &_heart:active svg path {
+  //   fill: #1c1f26;
+  // }
+
+  // &_home:active svg path {
+  //   fill: #1c1f26;
+  // }
+}
+
+// .button_large:focus-visible {
+//   background-color: #262b36;
+// }
+
+.button:hover {
+  background-color: #262b36;
+}
+
+// .button:active {
+//   background-color: #9cbbff;
+//   color: #1c1f26;
+// }
