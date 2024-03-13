@@ -1,0 +1,86 @@
+.plan {
+  position: relative;
+
+  overflow-x: scroll;
+  width: 100%;
+  height: 100vh;
+}
+
+.plan__wrapper {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  min-width: 90rem;
+  height: 100vh;
+}
+
+.plan__image {
+  height: 100vh;
+}
+
+.plan::-webkit-scrollbar {
+  //Убираем визуально скроллы, но функциональность сохраняем
+  display: none;
+}
+
+.text__wrapper {
+  position: fixed;
+  left: 1.25rem;
+  top: 1.25rem;
+
+  display: flex;
+  align-items: center;
+  column-gap: 40px;
+}
+
+.text__name {
+  color: $c4-Light;
+  text-align: center;
+
+  text-shadow: 0px 0px 8px rgba(19, 20, 22, 0.4);
+
+  // font-family: Gilroy;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.button_wrapper {
+  position: fixed;
+}
+
+.button_burger {
+  position: unset;
+}
+
+.button_heart {
+  left: 1.25rem;
+  bottom: 1.25rem;
+}
+
+.button_home {
+  right: 1.25rem;
+  bottom: 1.25rem;
+}
+
+.floorScroll_wrapper {
+  position: fixed;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.scaleButton_wrapper {
+  position: fixed;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.searchPsevdoInput_wrapper {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
