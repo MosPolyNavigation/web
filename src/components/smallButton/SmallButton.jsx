@@ -1,0 +1,12 @@
+import React from "react";
+
+const SmallButton = ({ icon, iconColor, children }) => {
+  return (
+    <button className={children ? "button_small_row button_small" : "button_small"}>
+      <img src={icon} alt={icon} />
+      {children}
+    </button>
+  );
+};
+
+export default SmallButton;

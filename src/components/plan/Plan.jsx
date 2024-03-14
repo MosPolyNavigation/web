@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 // components //
 
 import plan from "../../images/plan.svg";
 import Button from "../button/Button";
+import AdditionalInfo from "../additionalInfo/AdditionalInfo";
+import FloorScroll from "../floorsScroll/FloorScroll";
+import ScaleButton from "../scaleButton/ScaleButton";
+import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
 // icons //
 
 import burgerIcon from "../../images/burgerIcon.svg";
 import heartIcon from "../../images/heartIcon.svg";
 import homeIcon from "../../images/homeIcon.svg";
-import FloorScroll from "../floorsScroll/FloorScroll";
-import ScaleButton from "../scaleButton/ScaleButton";
-import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
 const Plan = () => {
+  const [isShowAddInfo, setIsShowAddInfo] = useState(false);
   return (
     <div className="plan">
       <div className="plan__wrapper">
@@ -28,20 +30,39 @@ const Plan = () => {
           Большая Семёновская <br /> Корпус А
         </span>
       </div>
-      <div className="button_wrapper button_heart">
-        <Button icon={heartIcon} />
-      </div>
-      <div className="button_wrapper button_home">
-        <Button icon={homeIcon} />
-      </div>
       <div className="floorScroll_wrapper">
         <FloorScroll />
       </div>
       <div className="scaleButton_wrapper">
         <ScaleButton />
       </div>
-      <div className="searchPsevdoInput_wrapper">
-        <SearchPsevdoInput />
+      <div className="common__wrapper">
+        <div className="common__wrapper_top">
+          <div className="button_wrapper button_home">
+            <Button icon={homeIcon} />
+          </div>
+          <div className="searchPsevdoInput_wrapper">
+            <SearchPsevdoInput />
+          </div>
+          <div
+            onClick={() => setIsShowAddInfo((prev) => !prev)}
+            className="button_wrapper button_heart"
+          >
+            <Button icon={heartIcon} />
+          </div>
+        </div>
+        <div
+          className={`additionalInfo__wrapper ${
+            isShowAddInfo ? "showAddInfo" : "hideAddInfo"
+          }`}
+        >
+          <AdditionalInfo
+            isShowAddInfo={isShowAddInfo}
+            setIsShowAddInfo={setIsShowAddInfo}
+            nameAudience={"Н405 - Аудитория"}
+            descAudience={"Корпус Н, 4-й этаж"}
+          />
+        </div>
       </div>
     </div>
   );

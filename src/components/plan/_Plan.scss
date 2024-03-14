@@ -25,12 +25,12 @@
 
 .text__wrapper {
   position: fixed;
-  left: 1.25rem;
+  left: 0.625rem;
   top: 1.25rem;
 
   display: flex;
   align-items: center;
-  column-gap: 40px;
+  column-gap: 35px;
 }
 
 .text__name {
@@ -55,32 +55,57 @@
 }
 
 .button_heart {
-  left: 1.25rem;
+  position: unset;
+  left: 0.625rem;
   bottom: 1.25rem;
 }
 
 .button_home {
-  right: 1.25rem;
+  position: unset;
+  right: 0.625rem;
   bottom: 1.25rem;
 }
 
 .floorScroll_wrapper {
   position: fixed;
-  left: 1.25rem;
-  top: 50%;
+  left: 0.625rem;
+  top: 57%;
   transform: translateY(-50%);
 }
 
 .scaleButton_wrapper {
   position: fixed;
-  right: 1.25rem;
-  top: 50%;
+  right: 0.625rem;
+  top: 57%;
   transform: translateY(-50%);
 }
 
 .searchPsevdoInput_wrapper {
+  position: unset;
+  // bottom: 1.25rem;
+  // left: 50%;
+  // transform: translateX(-50%);
+}
+
+.common__wrapper {
   position: fixed;
-  bottom: 1.25rem;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+
+  width: 100%;
+}
+
+.common__wrapper_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 0.625rem;
+
+  margin-bottom: 1.25rem;
+}
+
+.additionalInfo__wrapper {
+  // height: 0;
+  // max-height: 0;
+  transform: translateY(200px);
 }

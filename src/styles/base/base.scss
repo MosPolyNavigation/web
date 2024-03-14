@@ -10,3 +10,7 @@ select,
 a {
   -webkit-tap-highlight-color: transparent; //Убираем синию подсветку на мобильных устройствах
 }
+
+.none {
+  display: none !important;
+}

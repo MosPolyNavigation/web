@@ -1,0 +1,25 @@
+@keyframes showAddInfo {
+  from {
+    transform: translateY(200px);
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    max-height: 200px;
+    opacity: 1;
+  }
+}
+
+@keyframes hideAddInfo {
+  from {
+    transform: translateY(0);
+    max-height: 200px;
+    opacity: 1;
+  }
+  to {
+    transform: translateY(200px);
+    max-height: 0;
+    opacity: 0;
+  }
+}
