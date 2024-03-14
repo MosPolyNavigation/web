@@ -39,7 +39,6 @@
 
   text-shadow: 0px 0px 8px rgba(19, 20, 22, 0.4);
 
-  // font-family: Gilroy;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -82,9 +81,6 @@
 
 .searchPsevdoInput_wrapper {
   position: unset;
-  // bottom: 1.25rem;
-  // left: 50%;
-  // transform: translateX(-50%);
 }
 
 .common__wrapper {
@@ -105,7 +101,23 @@
 }
 
 .additionalInfo__wrapper {
-  // height: 0;
-  // max-height: 0;
   transform: translateY(200px);
+}
+
+.menu_wrapper {
+  position: fixed;
+  left: 0;
+  width: 75%;
+  top: 0;
+  bottom: 0;
+
+  transform: translateX(-100%);
+}
+
+.showMenu {
+  animation: showMenu 0.4s ease-out forwards;
+}
+
+.hideMenu {
+  animation: hideMenu 0.4s ease-out forwards;
 }
