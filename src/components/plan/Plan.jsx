@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import {
+  TransformWrapper,
+  TransformComponent,
+  useControls,
+} from "react-zoom-pan-pinch";
 
 // components //
 
@@ -23,7 +28,14 @@ const Plan = () => {
   return (
     <div className="plan">
       <div className="plan__wrapper">
-        <img className="plan__image" src={plan} alt="plan" />
+        <TransformWrapper>
+          <div className="scaleButton_wrapper">
+            <ScaleButton />
+          </div>
+          <TransformComponent>
+            <img className="plan__image" src={plan} alt="plan" />
+          </TransformComponent>
+        </TransformWrapper>
       </div>
       <div className="text__wrapper">
         <div
@@ -39,9 +51,9 @@ const Plan = () => {
       <div className="floorScroll_wrapper">
         <FloorScroll />
       </div>
-      <div className="scaleButton_wrapper">
+      {/* <div className="scaleButton_wrapper">
         <ScaleButton />
-      </div>
+      </div> */}
       <div className="common__wrapper">
         <div className="common__wrapper_top">
           <div className="button_wrapper button_home">
@@ -71,7 +83,7 @@ const Plan = () => {
         </div>
       </div>
       <div className={`menu_wrapper ${isShowMenu ? "showMenu" : "hideMenu"}`}>
-        <Menu setIsShowMenu={setIsShowMenu}/>
+        <Menu setIsShowMenu={setIsShowMenu} />
       </div>
     </div>
   );

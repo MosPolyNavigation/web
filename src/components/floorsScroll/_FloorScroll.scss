@@ -1,5 +1,5 @@
 .floors__list {
-  height: 8.93rem;
+  height: 10rem;
   width: 2.5rem;
 
   border: 1px solid $c3-Highlight;
@@ -62,4 +62,8 @@
 
 .floor__button_active {
   color: $c2-Dark;
+
+
+  transition: all 0.5s ease;
+  
 }

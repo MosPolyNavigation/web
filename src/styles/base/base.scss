@@ -1,14 +1,10 @@
 body {
   background: #1e1e1e;
-  font-family: Gilroy;
+  font-family: "Gilroy";
 }
 
-input,
-textarea,
-button,
-select,
-a {
-  -webkit-tap-highlight-color: transparent; //Убираем синию подсветку на мобильных устройствах
+* {
+  -webkit-tap-highlight-color: transparent; /* Убирание эффекта активного состояния при нажатии */
 }
 
 .none {

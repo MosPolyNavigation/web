@@ -1,10 +1,10 @@
 .menu__packet {
-  border-radius: 0px 20px 20px 0px;
+  border-radius: 0px 1.25rem 1.25rem 0px;
   border: 1px solid $c3-Highlight;
   background: $c1-Background;
   box-shadow: 0px 0px 8px 0px rgba(19, 20, 22, 0.4);
 
-  padding: 20px;
+  padding: 1.25rem;
 
   height: 100%;
 
@@ -19,8 +19,8 @@
   justify-content: space-between;
 
   button {
-    width: 30px;
-    height: 30px;
+    width: 1.875rem;
+    height: 1.875rem;
 
     display: flex;
     align-items: center;
@@ -36,11 +36,11 @@
   font-weight: 700;
   line-height: normal;
 
-  max-width: 150px;
+  max-width: 9.375rem;
 }
 
 .menu__top_list {
-  margin-top: 30px;
+  margin-top: 1.875rem;
 }
 
 .menu__packet_bottom {
