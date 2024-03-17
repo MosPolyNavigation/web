@@ -37,7 +37,7 @@ const Plan = () => {
           </TransformComponent>
         </TransformWrapper>
       </div>
-      <div className="text__wrapper">
+      {/* <div className="text__wrapper">
         <div
           onClick={() => setIsShowMenu((prev) => !prev)}
           className="button_wrapper button_burger"
@@ -47,13 +47,23 @@ const Plan = () => {
         <span className="text__name">
           Большая Семёновская <br /> Корпус А
         </span>
+      </div> */}
+      <div className="button_wrapper button_burger">
+        <div onClick={() => setIsShowMenu((prev) => !prev)}>
+          <Button icon={burgerIcon} />
+        </div>
+      </div>
+      <div className="boxshadow">
+        
+      </div>
+      <div className="name__wrapper">
+        <span className="text__name">
+          Большая Семёновская <br /> Корпус А
+        </span>
       </div>
       <div className="floorScroll_wrapper">
         <FloorScroll />
       </div>
-      {/* <div className="scaleButton_wrapper">
-        <ScaleButton />
-      </div> */}
       <div className="common__wrapper">
         <div className="common__wrapper_top">
           <div className="button_wrapper button_home">
