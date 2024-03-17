@@ -28,7 +28,6 @@
 
   color: $c4-Light;
   text-align: center;
-  // font-family: Gilroy;
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 400;
@@ -36,10 +35,19 @@
 }
 
 .floors__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 2.125rem;
 
   z-index: 1;
+}
+
+.floors__link {
+  width: 100%;
+  height: 100%;
 }
 
 .floors__item_active {
@@ -63,9 +71,7 @@
 }
 
 .floor__button_active {
-  color: $c2-Dark;
-
+  color: $c2-Dark !important;
 
   transition: all 0.5s ease;
-  
 }

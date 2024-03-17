@@ -1,9 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const FloorScroll = () => {
-  const [isActive, setIsActive] = useState(0);
-  const countFloors = [1, 2, 3, 4, 5, 6];
-
+const FloorScroll = ({ countFloors, isActive, setIsActive }) => {
   const handleIsActive = (index) => {
     setIsActive(index);
   };
@@ -11,14 +9,16 @@ const FloorScroll = () => {
     <ul className="floors__list">
       {countFloors.map((number, index) => (
         <li key={index} className={`floors__item floors__item_${index}`}>
-          <button
+          <Link
+            to={`/floor/${number}`}
             onClick={() => handleIsActive(index)}
             className={`floors__button ${
               isActive === index ? "floor__button_active" : ""
             }`}
           >
             {number}
-          </button>
+          </Link>
+
           {index === 0 ? (
             <span
               className="floors__item_active"

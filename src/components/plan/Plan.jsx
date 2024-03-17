@@ -4,6 +4,7 @@ import {
   TransformComponent,
   useControls,
 } from "react-zoom-pan-pinch";
+import { Routes, Route } from "react-router-dom";
 
 // components //
 
@@ -13,6 +14,15 @@ import AdditionalInfo from "../additionalInfo/AdditionalInfo";
 import FloorScroll from "../floorsScroll/FloorScroll";
 import ScaleButton from "../scaleButton/ScaleButton";
 import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
+
+//floors
+
+import FloorOne from "../../floors/FloorOne";
+import FloorTwo from "../../floors/FloorTwo";
+import FloorThree from "../../floors/FloorThree";
+import FloorFour from "../../floors/FloorFour";
+import FloorFive from "../../floors/FloorFive";
+import FloorSix from "../../floors/FloorSix";
 
 // icons //
 
@@ -24,6 +34,9 @@ import Menu from "../menu/Menu";
 const Plan = () => {
   const [isShowAddInfo, setIsShowAddInfo] = useState(false);
   const [isShowMenu, setIsShowMenu] = useState(false);
+  const [isActive, setIsActive] = useState(0);
+
+  const countFloors = [1, 2, 3, 4, 5, 6];
 
   return (
     <div className="plan">
@@ -33,36 +46,34 @@ const Plan = () => {
             <ScaleButton />
           </div>
           <TransformComponent>
-            <img className="plan__image" src={plan} alt="plan" />
+            <Routes>
+              <Route path={`/floor/1`} element={<FloorOne />} />
+              <Route path={`/floor/2`} element={<FloorTwo />} />
+              <Route path={`/floor/3`} element={<FloorThree />} />
+              <Route path={`/floor/4`} element={<FloorFour />} />
+              <Route path={`/floor/5`} element={<FloorFive />} />
+              <Route path={`/floor/6`} element={<FloorSix />} />
+            </Routes>
           </TransformComponent>
         </TransformWrapper>
       </div>
-      {/* <div className="text__wrapper">
-        <div
-          onClick={() => setIsShowMenu((prev) => !prev)}
-          className="button_wrapper button_burger"
-        >
-          <Button icon={burgerIcon} />
-        </div>
-        <span className="text__name">
-          Большая Семёновская <br /> Корпус А
-        </span>
-      </div> */}
       <div className="button_wrapper button_burger">
         <div onClick={() => setIsShowMenu((prev) => !prev)}>
           <Button icon={burgerIcon} />
         </div>
       </div>
-      <div className="boxshadow">
-        
-      </div>
+      <div className="boxshadow"></div>
       <div className="name__wrapper">
         <span className="text__name">
           Большая Семёновская <br /> Корпус А
         </span>
       </div>
       <div className="floorScroll_wrapper">
-        <FloorScroll />
+        <FloorScroll
+          countFloors={countFloors}
+          isActive={isActive}
+          setIsActive={setIsActive}
+        />
       </div>
       <div className="common__wrapper">
         <div className="common__wrapper_top">
