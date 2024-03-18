@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TransformWrapper,
   TransformComponent,
@@ -34,7 +34,13 @@ import Menu from "../menu/Menu";
 const Plan = () => {
   const [isShowAddInfo, setIsShowAddInfo] = useState(false);
   const [isShowMenu, setIsShowMenu] = useState(false);
-  const [isActive, setIsActive] = useState(0);
+  const [isActive, setIsActive] = useState(() => {
+    return parseInt(localStorage.getItem("activeFloor")) || 0;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("activeFloor", isActive.toString());
+  }, [isActive]);
 
   const countFloors = [1, 2, 3, 4, 5, 6];
 
