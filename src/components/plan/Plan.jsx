@@ -188,6 +188,7 @@ const Plan = () => {
                                 props={(e) => setSearchQuery(e.target.value)}
                                 placeholder={isShowSearch ? "Введите запрос..." : "Поиск..."}
                                 searchQuery={searchQuery}
+                                isShowSearch={isShowSearch}
                             />
                             <button className={`${isShowSearch ? "searchBar_close_show" : "searchBar_close_hidden"}`}
                                     onClick={clickCloseSearch}>
