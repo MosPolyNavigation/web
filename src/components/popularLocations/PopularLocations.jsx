@@ -10,7 +10,7 @@ import wcIcon from "../../images/wcIcon.svg"
 import foodIcon from "../../images/foodIcon.svg"
 
 const PopularLocations = () => {
-    const locations = ["wcw", "wcm", "H 210", "library"]
+    const locations = ["wcw", "wcm", "H 210", "library", "Вход", "Приёмная комиссия"]
     const icons = {
         "wcm": manIcon,
         "wcw": womanIcon,
