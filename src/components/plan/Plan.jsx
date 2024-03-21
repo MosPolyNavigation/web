@@ -12,7 +12,6 @@ import Button from "../button/Button";
 import AdditionalInfo from "../additionalInfo/AdditionalInfo";
 import FloorScroll from "../floorsScroll/FloorScroll";
 import ScaleButton from "../scaleButton/ScaleButton";
-import SearchBar from "../searchBar/SearchBar";
 import Menu from "../menu/Menu";
 import SearchMenu from "../searchMenu/SearchMenu";
 
@@ -29,114 +28,21 @@ import booksIcon from "../../images/booksIcon.svg"
 import wcIcon from "../../images/wcIcon.svg"
 import foodIcon from "../../images/foodIcon.svg"
 import closeLargeIcon from "../../images/closeLargeIcon.svg";
+import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
 const Plan = () => {
     const [isShowAddInfo, setIsShowAddInfo] = useState(false);
     const [isShowMenu, setIsShowMenu] = useState(false);
+    const [isActive, setIsActive] = useState(() => {
+        return parseInt(localStorage.getItem("activeFloor")) || 0;
+    });
     const [isShowSearch, setIsShowSearch] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("")
-    const [audiences] = useState([
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 402",
-            descAudience: "Волонтерский центр"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 405",
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 406",
-        },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 407",
-            descAudience: "Приёмная комиссия"
-        },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 408",
-            descAudience: "Прием заявлений приёмной комиссии"
-        },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 409",
-            descAudience: "Приёмная комиссия"
-        },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 410",
-        },
-        {
-            icon: manIcon,
-            nameAudience: "Мужской туалет",
-        },
 
-        {
-            icon: womanIcon,
-            nameAudience: "Женский туалет",
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 411",
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 412",
-        },
-        {
-            icon: foodIcon,
-            nameAudience: "Столовая",
-        },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 413",
-            descAudience: "Приёмная комиссия"
-        },
-        {
-            icon: booksIcon,
-            nameAudience: "Библиотека",
-        },
-        {
-            icon: wcIcon,
-            nameAudience: "Общий туалет",
-        },
+    useEffect(() => {
+        localStorage.setItem("activeFloor", isActive.toString());
+    }, [isActive]);
 
-
-    ])
-
-    const formattedStr = (str) => {
-        // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистру
-        return str ? str.replace(/\s/g, '').toLowerCase() : "";
-    }
-
-    const searchedAudiences = useMemo(() => {
-        // Ищем совпадения в названии или описании локации
-        return [...audiences].filter(audience => formattedStr(audience.nameAudience).includes(formattedStr(searchQuery.toLowerCase()))
-            || formattedStr(audience.descAudience).includes(formattedStr(searchQuery.toLowerCase())))
-
-    }, [searchQuery, audiences])
-
-    const firstSearchMenuShow = (prev) => {
-        if (isShowSearch) {
-            return prev
-        }
-        return !prev;
-    }
-
-    const clickCloseSearch = () => {
-        // Закрываем меню поиска и очищаем searchBar
-        setIsShowSearch((prev) => !prev)
-        setSearchQuery("");
-    }
-
-
+    const countFloors = [1, 2, 3, 4, 5, 6];
     return (
         <div className="plan">
             <div className="plan__wrapper">
@@ -181,22 +87,13 @@ const Plan = () => {
                     <div className="button_wrapper button_home">
                         <Button icon={homeIcon}/>
                     </div>
-                    <div onClick={() => setIsShowSearch((prev) => firstSearchMenuShow(prev))}
-                         className={`searchBar_wrapper ${isShowSearch ? "searchBar_big" : ""}`}>
-                        <div className="SearchMenu__buttons">
-                            <SearchBar
-                                props={(e) => setSearchQuery(e.target.value)}
-                                placeholder={isShowSearch ? "Введите запрос..." : "Поиск..."}
-                                searchQuery={searchQuery}
-                                isShowSearch={isShowSearch}
-                            />
-                            <button className={`${isShowSearch ? "searchBar_close_show" : "searchBar_close_hidden"}`}
-                                    onClick={clickCloseSearch}>
-                                <img src={closeLargeIcon}
-                                     alt="closeIcon"/>
-                            </button>
-                        </div>
+                    <div className="searchPsevdoInput_wrapper" onClick={() => setIsShowSearch((prev) => !prev)}>
+                        <SearchPsevdoInput/>
                     </div>
+                    {/*<div onClick={() => setIsShowSearch((prev) => firstSearchMenuShow(prev))}*/}
+                    {/*     className={`searchBar_wrapper ${isShowSearch ? "searchBar_big" : ""}`}>*/}
+                    {/*    <SearchBar></SearchBar>*/}
+                    {/*</div>*/}
                     <div
                         onClick={() => setIsShowAddInfo((prev) => !prev)}
                         className="button_wrapper button_heart"
@@ -222,7 +119,7 @@ const Plan = () => {
             </div>
 
             <div className={`searchMenu_wrapper ${isShowSearch ? "showSearchMenu" : "hideSearchMenu"}`}>
-                <SearchMenu setIsShowSearch={setIsShowSearch} audiences={searchedAudiences}/>
+                <SearchMenu setIsShowSearch={setIsShowSearch} isShowSearch={isShowSearch}/>
             </div>
         </div>
     );

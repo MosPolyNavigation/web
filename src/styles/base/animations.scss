@@ -41,22 +41,3 @@
     transform: translateX(-100%);
   }
 }
-
-
-@keyframes showSearchMenu {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-}
-
-@keyframes hideSearchMenu {
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}

@@ -37,14 +37,6 @@
   padding: 13px 10px 13px 60px;
 }
 
-.searchBar_big {
-  position: fixed;
-  bottom: 1.25rem;
-  left: 10px;
-  z-index: 30;
-  margin-top: 20px;
-
-}
 
 .common__wrapper:has(.searchBar_big) {
   position: absolute;
@@ -56,8 +48,9 @@ body:has(.searchBar_big) {
 
 
 .searchBar_big {
+  width: 100%;
   .searchBar_packet {
-    width: 240px;
+    width: 100%;
     justify-content: start;
     padding-left: 20px;
 
