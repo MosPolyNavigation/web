@@ -4,7 +4,7 @@ import {
   TransformComponent,
   useControls,
 } from "react-zoom-pan-pinch";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // components //
 
@@ -24,7 +24,6 @@ import FloorTwo from "../../floors/FloorTwo";
 import FloorThree from "../../floors/FloorThree";
 import FloorFour from "../../floors/FloorFour";
 import FloorFive from "../../floors/FloorFive";
-import FloorSix from "../../floors/FloorSix";
 
 // icons //
 
@@ -69,6 +68,7 @@ const Plan = () => {
               <Route path={`/floor/3`} element={<FloorThree />} />
               <Route path={`/floor/4`} element={<FloorFour />} />
               <Route path={`/floor/5`} element={<FloorFive />} />
+              <Route path="*" element={<Navigate to="/floor/0" />} />
             </Routes>
           </TransformComponent>
         </TransformWrapper>
