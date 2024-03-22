@@ -1,10 +1,12 @@
 .searchPsevdoInput_packet {
+  position: relative;
   width: 140px;
+  padding: 4px 25px;
   height: 40px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   column-gap: 14px;
 
   border-radius: 20px;
@@ -17,13 +19,23 @@
   }
 }
 
-.searchPsevdoInput_span {
+.searchPsevdoInput_input {
   color: $c3-Highlight;
-  text-align: center;
+  text-align: left;
 
   //   font-family: Gilroy;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 13px 10px 13px 60px;
+  cursor: pointer;
+  caret-color: transparent;
 }
+
+

@@ -1,0 +1,27 @@
+.locations__list {
+  display: flex;
+  column-gap: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+
+
+  scrollbar-width: none;
+
+  width: 100%;
+
+
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+
+
+}
+
+.location__item button {
+  color: $c4-Light;
+  white-space: nowrap;
+}
