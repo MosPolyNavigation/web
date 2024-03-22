@@ -1,8 +1,4 @@
-import React from 'react'
-
-const FloorTwo = () => {
-  return (
-    <svg width="3065" height="1105" viewBox="0 0 3065 1105" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="3065" height="1105" viewBox="0 0 3065 1105" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="3065" height="1105" fill="#1E1E1E"/>
 <g id="Corpus N (BS)">
 <rect width="7680" height="4320" transform="translate(-285 -3005)" fill="#1E1E1E"/>
@@ -303,8 +299,3 @@ const FloorTwo = () => {
 </g>
 </g>
 </svg>
-
-  )
-}
-
-export default FloorTwo

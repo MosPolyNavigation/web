@@ -18,6 +18,7 @@ import SearchMenu from "../searchMenu/SearchMenu";
 
 //floors
 
+import FloorZero from "../../floors/FloorZero";
 import FloorOne from "../../floors/FloorOne";
 import FloorTwo from "../../floors/FloorTwo";
 import FloorThree from "../../floors/FloorThree";
@@ -32,11 +33,11 @@ import heartIcon from "../../images/heartIcon.svg";
 import homeIcon from "../../images/homeIcon.svg";
 import studyIcon from "../../images/studyIcon.svg";
 import legalIcon from "../../images/legalIcon.svg";
-import manIcon from "../../images/manIcon.svg"
-import womanIcon from "../../images/womanIcon.svg"
-import booksIcon from "../../images/booksIcon.svg"
-import wcIcon from "../../images/wcIcon.svg"
-import foodIcon from "../../images/foodIcon.svg"
+import manIcon from "../../images/manIcon.svg";
+import womanIcon from "../../images/womanIcon.svg";
+import booksIcon from "../../images/booksIcon.svg";
+import wcIcon from "../../images/wcIcon.svg";
+import foodIcon from "../../images/foodIcon.svg";
 import closeLargeIcon from "../../images/closeLargeIcon.svg";
 import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
@@ -52,7 +53,7 @@ const Plan = () => {
     localStorage.setItem("activeFloor", isActive.toString());
   }, [isActive]);
 
-  const countFloors = [1, 2, 3, 4, 5, 6];
+  const countFloors = [0, 1, 2, 3, 4, 5];
   return (
     <div className="plan">
       <div className="plan__wrapper">
@@ -62,12 +63,12 @@ const Plan = () => {
           </div>
           <TransformComponent>
             <Routes>
+              <Route path={`/floor/0`} element={<FloorZero />} />
               <Route path={`/floor/1`} element={<FloorOne />} />
               <Route path={`/floor/2`} element={<FloorTwo />} />
               <Route path={`/floor/3`} element={<FloorThree />} />
               <Route path={`/floor/4`} element={<FloorFour />} />
               <Route path={`/floor/5`} element={<FloorFive />} />
-              <Route path={`/floor/6`} element={<FloorSix />} />
             </Routes>
           </TransformComponent>
         </TransformWrapper>
@@ -88,9 +89,7 @@ const Plan = () => {
           <Button icon={burgerIcon} />
         </div>
       </div>
-      <div className="boxshadow">
-
-      </div>
+      <div className="boxshadow"></div>
       <div className="name__wrapper">
         <span className="text__name">
           Большая Семёновская <br /> Корпус А
@@ -108,7 +107,10 @@ const Plan = () => {
           <div className="button_wrapper button_home">
             <Button icon={homeIcon} />
           </div>
-          <div className="searchPsevdoInput_wrapper" onClick={() => setIsShowSearch((prev) => !prev)}>
+          <div
+            className="searchPsevdoInput_wrapper"
+            onClick={() => setIsShowSearch((prev) => !prev)}
+          >
             <SearchPsevdoInput />
           </div>
           {/*<div onClick={() => setIsShowSearch((prev) => firstSearchMenuShow(prev))}*/}
@@ -123,8 +125,9 @@ const Plan = () => {
           </div>
         </div>
         <div
-          className={`additionalInfo__wrapper ${isShowAddInfo ? "showAddInfo" : "hideAddInfo"
-            }`}
+          className={`additionalInfo__wrapper ${
+            isShowAddInfo ? "showAddInfo" : "hideAddInfo"
+          }`}
         >
           <AdditionalInfo
             isShowAddInfo={isShowAddInfo}
@@ -138,8 +141,15 @@ const Plan = () => {
         <Menu setIsShowMenu={setIsShowMenu} />
       </div>
 
-      <div className={`searchMenu_wrapper ${isShowSearch ? "showSearchMenu" : "hideSearchMenu"}`}>
-        <SearchMenu setIsShowSearch={setIsShowSearch} isShowSearch={isShowSearch} />
+      <div
+        className={`searchMenu_wrapper ${
+          isShowSearch ? "showSearchMenu" : "hideSearchMenu"
+        }`}
+      >
+        <SearchMenu
+          setIsShowSearch={setIsShowSearch}
+          isShowSearch={isShowSearch}
+        />
       </div>
     </div>
   );

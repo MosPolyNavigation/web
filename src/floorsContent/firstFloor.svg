@@ -1,8 +1,4 @@
-import React from "react";
-
-const FloorOne = () => {
-  return (
-    <svg width="3055" height="1110" viewBox="0 0 3055 1110" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="3055" height="1110" viewBox="0 0 3055 1110" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="3055" height="1110" fill="#1E1E1E"/>
 <g id="Corpus N (BS)">
 <rect width="7680" height="4320" transform="translate(-290 -1595)" fill="#1E1E1E"/>
@@ -209,8 +205,3 @@ const FloorOne = () => {
 </g>
 </g>
 </svg>
-
-  );
-};
-
-export default FloorOne;

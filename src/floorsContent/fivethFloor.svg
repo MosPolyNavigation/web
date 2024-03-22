@@ -1,7 +1,3 @@
-import React from "react";
-
-const FloorFive = () => {
-  return (
 <svg width="3055" height="1105" viewBox="0 0 3055 1105" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="3055" height="1105" fill="#1E1E1E"/>
 <g id="Corpus N (BS)">
@@ -36,7 +32,7 @@ const FloorFive = () => {
 <rect id="n-503" x="1210" y="5" width="160" height="255" fill="#3B3C41"/>
 <rect id="n-502" x="5" y="5" width="325" height="255" fill="#3B3C41"/>
 <g id="Mask group">
- {/* <mask id="mask0_0_1" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="-2886" y="-372" width="6197" height="2038"> 
+<!-- <mask id="mask0_0_1" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="-2886" y="-372" width="6197" height="2038"> -->
 <g id="Frame 1">
 <g id="Group 27">
 <path id="Vector 337" d="M23.5 -364L-1998.5 1658" stroke="#FF5F5F" stroke-opacity="0.5" stroke-width="20"/>
@@ -83,7 +79,7 @@ const FloorFive = () => {
 <path id="Vector 378" d="M3303.5 -364L1281.5 1658" stroke="#FF5F5F" stroke-opacity="0.5" stroke-width="20"/>
 </g>
 </g>
-</mask> */}
+</mask>
 <g mask="url(#mask0_0_1)">
 <path id="Rectangle 243" d="M5 5H630V240H1210V460H630V1099H5V5Z" fill="#FF5F5F" fill-opacity="0.5"/>
 </g>
@@ -235,8 +231,3 @@ const FloorFive = () => {
 </clipPath>
 </defs>
 </svg>
-
-  );
-};
-
-export default FloorFive;
