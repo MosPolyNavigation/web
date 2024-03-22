@@ -6,7 +6,8 @@ const SearchPsevdoInput = () => {
   return (
     <div className="searchPsevdoInput_packet">
       <img src={searchPsevdoIcon} alt="search Psevdo Icon" />
-      <input className="searchPsevdoInput_input" placeholder="Поиск..."></input>
+      {/*<input value="" className="searchPsevdoInput_input" placeholder="Поиск..."></input>*/}
+        <span className="searchPsevdoInput_input">Поиск...</span>
     </div>
   );
 };

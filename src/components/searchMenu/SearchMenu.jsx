@@ -48,14 +48,70 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
             nameAudience: "Н 408",
             descAudience: "Прием заявлений приёмной комиссии"
         },
+        {
+            icon: legalIcon,
+            nameAudience: "Н 409",
+            descAudience: "Приёмная комиссия"
+        },
+        {
+            icon: legalIcon,
+            nameAudience: "Н 410",
+        },
+        {
+            icon: manIcon,
+            nameAudience: "Мужской туалет",
+        },
 
-
+        {
+            icon: womanIcon,
+            nameAudience: "Женский туалет",
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 411",
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 412",
+        },
+        {
+            icon: foodIcon,
+            nameAudience: "Столовая",
+        },
+        {
+            icon: legalIcon,
+            nameAudience: "Н 413",
+            descAudience: "Приёмная комиссия"
+        },
+        {
+            icon: booksIcon,
+            nameAudience: "Библиотека",
+        },
+        {
+            icon: wcIcon,
+            nameAudience: "Общий туалет",
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 414",
+            descAudience: "Летний сад"
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 415",
+            descAudience: "Волонтерский центр"
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 416",
+        },
 
     ])
 
     const formattedStr = (str) => {
-        // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистру
-        return str ? str.replace(/\s/g, '').toLowerCase() : "";
+        // Удаляет все пробелы, знаки табуляции, переноса строки, приводит к нижнему регистру, заменяет ё на е
+        // const latinInCyrillic = {"h": "н", "b": "в", "pr": "пp", "ab": "ав", "a": "а"}
+        return str ? str.replace(/\s/g, '').replace("ё", "е").toLowerCase() : "";
     }
 
     const searchedAudiences = useMemo(() => {

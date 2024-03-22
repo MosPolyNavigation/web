@@ -2,7 +2,6 @@ import React, {useMemo, useRef, useEffect} from "react";
 
 import searchBarDarkIcon from "../../images/searchBarDarkIcon.svg.svg";
 import searchBarLightIcon from "../../images/searchBarLightIcon.svg";
-import {logDOM} from "@testing-library/react";
 
 const SearchBar = ({placeholder, data, isShowSearch, searchQuery}) => {
     const inputRef = useRef(null);

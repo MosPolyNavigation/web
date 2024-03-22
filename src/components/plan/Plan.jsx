@@ -39,6 +39,10 @@ const Plan = () => {
     const [isShowSearch, setIsShowSearch] = useState(false);
 
     useEffect(() => {
+        console.log(isShowSearch)
+    }, [isShowSearch]);
+
+    useEffect(() => {
         localStorage.setItem("activeFloor", isActive.toString());
     }, [isActive]);
 
