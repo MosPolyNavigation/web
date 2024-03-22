@@ -48,84 +48,6 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
             nameAudience: "Н 408",
             descAudience: "Прием заявлений приёмной комиссии"
         },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 409",
-            descAudience: "Приёмная комиссия"
-        },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 410",
-        },
-        {
-            icon: manIcon,
-            nameAudience: "Мужской туалет",
-        },
-
-        {
-            icon: womanIcon,
-            nameAudience: "Женский туалет",
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 411",
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 412",
-        },
-        {
-            icon: foodIcon,
-            nameAudience: "Столовая",
-        },
-        {
-            icon: legalIcon,
-            nameAudience: "Н 413",
-            descAudience: "Приёмная комиссия"
-        },
-        {
-            icon: booksIcon,
-            nameAudience: "Библиотека",
-        },
-        {
-            icon: wcIcon,
-            nameAudience: "Общий туалет",
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
-        {
-            icon: studyIcon,
-            nameAudience: "Н 401",
-            descAudience: "Зимний сад"
-        },
 
 
 
@@ -149,6 +71,7 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
         setSearchQuery("");
     }
 
+
     return (
         <div className="SearchMenu__content">
 
@@ -162,8 +85,8 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
                     <SearchBar
                         data={(e) => setSearchQuery(e.target.value)}
                         isShowSearch={isShowSearch}
-                        searchQuery={searchQuery}
                         placeholder="Введите запрос..."
+                        searchQuery={searchQuery}
                     />
                 </div>
                 <button className={`${isShowSearch ? "searchBar_close_show" : "searchBar_close_hidden"}`}
