@@ -15,6 +15,7 @@ import FloorScroll from "../floorsScroll/FloorScroll";
 import ScaleButton from "../scaleButton/ScaleButton";
 import Menu from "../menu/Menu";
 import SearchMenu from "../searchMenu/SearchMenu";
+import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
 //floors
 
@@ -30,15 +31,6 @@ import FloorFive from "../../floors/FloorFive";
 import burgerIcon from "../../images/burgerIcon.svg";
 import heartIcon from "../../images/heartIcon.svg";
 import homeIcon from "../../images/homeIcon.svg";
-import studyIcon from "../../images/studyIcon.svg";
-import legalIcon from "../../images/legalIcon.svg";
-import manIcon from "../../images/manIcon.svg";
-import womanIcon from "../../images/womanIcon.svg";
-import booksIcon from "../../images/booksIcon.svg";
-import wcIcon from "../../images/wcIcon.svg";
-import foodIcon from "../../images/foodIcon.svg";
-import closeLargeIcon from "../../images/closeLargeIcon.svg";
-import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
 const Plan = () => {
   const [isShowAddInfo, setIsShowAddInfo] = useState(false);
@@ -113,10 +105,6 @@ const Plan = () => {
           >
             <SearchPsevdoInput />
           </div>
-          {/*<div onClick={() => setIsShowSearch((prev) => firstSearchMenuShow(prev))}*/}
-          {/*     className={`searchBar_wrapper ${isShowSearch ? "searchBar_big" : ""}`}>*/}
-          {/*    <SearchBar></SearchBar>*/}
-          {/*</div>*/}
           <div
             onClick={() => setIsShowAddInfo((prev) => !prev)}
             className="button_wrapper button_heart"

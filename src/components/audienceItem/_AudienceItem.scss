@@ -3,7 +3,7 @@
   align-items: center;
   padding: 8px 10px;
   border-bottom: 1px solid $c3-Highlight;
-  transition: all 0.3s;
+  transition: background 0.3s, cursor 0.3s;
   &:has(.audienceItem__desc) {
     align-items: start;
   }

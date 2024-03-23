@@ -1,6 +1,8 @@
 import React, {useMemo, useState} from "react";
 
-import SmallButton from "../smallButton/SmallButton";
+import AudienceList from "../audienceList/AudienceList";
+import PopularLocations from "../popularLocations/PopularLocations";
+import SearchBar from "../searchBar/SearchBar";
 
 // icons
 
@@ -8,9 +10,6 @@ import manIcon from "../../images/manIcon.svg";
 import womanIcon from "../../images/womanIcon.svg";
 import legalIcon from "../../images/legalIcon.svg";
 import studyIcon from "../../images/studyIcon.svg";
-import AudienceList from "../audienceList/AudienceList";
-import PopularLocations from "../popularLocations/PopularLocations";
-import SearchBar from "../searchBar/SearchBar";
 import closeLargeIcon from "../../images/closeLargeIcon.svg";
 import foodIcon from "../../images/foodIcon.svg";
 import booksIcon from "../../images/booksIcon.svg";
@@ -48,14 +47,69 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
             nameAudience: "Н 408",
             descAudience: "Прием заявлений приёмной комиссии"
         },
+        {
+            icon: legalIcon,
+            nameAudience: "Н 409",
+            descAudience: "Приёмная комиссия"
+        },
+        {
+            icon: legalIcon,
+            nameAudience: "Н 410",
+        },
+        {
+            icon: manIcon,
+            nameAudience: "Мужской туалет",
+        },
 
-
+        {
+            icon: womanIcon,
+            nameAudience: "Женский туалет",
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 411",
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 412",
+        },
+        {
+            icon: foodIcon,
+            nameAudience: "Столовая",
+        },
+        {
+            icon: legalIcon,
+            nameAudience: "Н 413",
+            descAudience: "Приёмная комиссия"
+        },
+        {
+            icon: booksIcon,
+            nameAudience: "Библиотека",
+        },
+        {
+            icon: wcIcon,
+            nameAudience: "Общий туалет",
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 414",
+            descAudience: "Летний сад"
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 415",
+            descAudience: "Волонтерский центр"
+        },
+        {
+            icon: studyIcon,
+            nameAudience: "Н 416",
+        },
 
     ])
 
     const formattedStr = (str) => {
         // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистру
-        return str ? str.replace(/\s/g, '').toLowerCase() : "";
+        return str ? str.replace(/\s/g, '').replace("ё", "е").toLowerCase() : "";
     }
 
     const searchedAudiences = useMemo(() => {
@@ -81,7 +135,7 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
             </div>
 
             <div className="SearchMenu__buttons">
-                <div className="searchBar_wrapper searchBar_big">
+                <div className="searchBar_wrapper">
                     <SearchBar
                         data={(e) => setSearchQuery(e.target.value)}
                         isShowSearch={isShowSearch}
@@ -89,8 +143,7 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
                         searchQuery={searchQuery}
                     />
                 </div>
-                <button className={`${isShowSearch ? "searchBar_close_show" : "searchBar_close_hidden"}`}
-                        onClick={clickCloseSearch}>
+                <button onClick={clickCloseSearch}>
                     <img src={closeLargeIcon}
                          alt="closeIcon"/>
                 </button>
