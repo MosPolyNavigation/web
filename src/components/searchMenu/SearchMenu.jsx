@@ -106,16 +106,36 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
         },
 
     ])
+    const icons = {
+        "wcm": manIcon,
+        "wcw": womanIcon,
+        "wcu": wcIcon,
+        "food": foodIcon,
+        "library": booksIcon,
+    }
+
+    const latinInCyrillic = (str, icon) => {
+        str = formattedStr(str)
+        if (Object.values(icons).find((elem) => elem === icon)) {
+            return "";
+        }
+        const mask = {"h": "н", "b": "в", "pr": "пp", "ab": "ав", "a": "а"}
+        for (const latinLetter in mask) {
+            const cyrillicLetter = mask[latinLetter]
+            str = str.replace(cyrillicLetter, latinLetter)
+        }
+        return str
+    }
 
     const formattedStr = (str) => {
-        // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистру
+        // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистр
         return str ? str.replace(/\s/g, '').replace("ё", "е").toLowerCase() : "";
     }
 
     const searchedAudiences = useMemo(() => {
         // Ищем совпадения в названии или описании локации
         return [...audiences].filter(audience => formattedStr(audience.nameAudience).includes(formattedStr(searchQuery.toLowerCase()))
-            || formattedStr(audience.descAudience).includes(formattedStr(searchQuery.toLowerCase())))
+            || latinInCyrillic(audience.nameAudience, audience.icon).includes(formattedStr(searchQuery.toLowerCase())) || formattedStr(audience.descAudience).includes(formattedStr(searchQuery.toLowerCase())))
 
     }, [searchQuery, audiences])
 
