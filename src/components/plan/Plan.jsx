@@ -35,10 +35,34 @@ import homeIcon from "../../images/homeIcon.svg";
 const Plan = () => {
   const [isShowAddInfo, setIsShowAddInfo] = useState(false);
   const [isShowMenu, setIsShowMenu] = useState(false);
+  const [isShowSearch, setIsShowSearch] = useState(false);
+  const [startYAdditionalInfo, setStartYAdditionalInfo] = useState(0);
+  const [startXMenu, setStartXMenu] = useState(0);
   const [isActive, setIsActive] = useState(() => {
     return parseInt(localStorage.getItem("activeFloor")) || 0;
   });
-  const [isShowSearch, setIsShowSearch] = useState(false);
+
+  const handleTouchStartAdditionalInfo = (e) => {
+    setStartYAdditionalInfo(e.touches[0].clientY);
+  };
+
+  const handleTouchMoveAdditionalInfo = (e) => {
+    const deltaY = e.touches[0].clientY - startYAdditionalInfo;
+    if (deltaY >= 50) {
+      setIsShowAddInfo(false);
+    }
+  };
+
+  const handleTouchMoveMenu = (e) => {
+    const deltaX = e.touches[0].clientX - startXMenu;
+    if (deltaX <= 50) {
+      setIsShowMenu(false);
+    }
+  };
+
+  const handleTouchStartMenu = (e) => {
+    setStartXMenu(e.touches[0].clientX);
+  };
 
   useEffect(() => {
     localStorage.setItem("activeFloor", isActive.toString());
@@ -65,17 +89,6 @@ const Plan = () => {
           </TransformComponent>
         </TransformWrapper>
       </div>
-      {/* <div className="text__wrapper">
-        <div
-          onClick={() => setIsShowMenu((prev) => !prev)}
-          className="button_wrapper button_burger"
-        >
-          <Button icon={burgerIcon} />
-        </div>
-        <span className="text__name">
-          Большая Семёновская <br /> Корпус А
-        </span>
-      </div> */}
       <div className="button_wrapper button_burger">
         <div onClick={() => setIsShowMenu((prev) => !prev)}>
           <Button icon={burgerIcon} />
@@ -113,6 +126,8 @@ const Plan = () => {
           </div>
         </div>
         <div
+          onTouchStart={handleTouchStartAdditionalInfo}
+          onTouchMove={handleTouchMoveAdditionalInfo}
           className={`additionalInfo__wrapper ${
             isShowAddInfo ? "showAddInfo" : "hideAddInfo"
           }`}
@@ -125,7 +140,11 @@ const Plan = () => {
           />
         </div>
       </div>
-      <div className={`menu_wrapper ${isShowMenu ? "showMenu" : "hideMenu"}`}>
+      <div
+        onTouchStart={handleTouchStartMenu}
+        onTouchMove={handleTouchMoveMenu}
+        className={`menu_wrapper ${isShowMenu ? "showMenu" : "hideMenu"}`}
+      >
         <Menu setIsShowMenu={setIsShowMenu} />
       </div>
 

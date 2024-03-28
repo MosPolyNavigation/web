@@ -88,3 +88,9 @@
 .hideAddInfo {
   animation: hideAddInfo 0.4s ease-out forwards;
 }
+
+.additionalInfo__packet-hidden {
+  transform: translateY(200px);
+  max-height: 0;
+  opacity: 0;
+}
