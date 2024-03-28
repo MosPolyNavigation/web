@@ -1,6 +1,8 @@
 import React, {useMemo, useState} from "react";
 
-import SmallButton from "../smallButton/SmallButton";
+import AudienceList from "../audienceList/AudienceList";
+import PopularLocations from "../popularLocations/PopularLocations";
+import SearchBar from "../searchBar/SearchBar";
 
 // icons
 
@@ -8,9 +10,6 @@ import manIcon from "../../images/manIcon.svg";
 import womanIcon from "../../images/womanIcon.svg";
 import legalIcon from "../../images/legalIcon.svg";
 import studyIcon from "../../images/studyIcon.svg";
-import AudienceList from "../audienceList/AudienceList";
-import PopularLocations from "../popularLocations/PopularLocations";
-import SearchBar from "../searchBar/SearchBar";
 import closeLargeIcon from "../../images/closeLargeIcon.svg";
 import foodIcon from "../../images/foodIcon.svg";
 import booksIcon from "../../images/booksIcon.svg";
@@ -109,8 +108,7 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
     ])
 
     const formattedStr = (str) => {
-        // Удаляет все пробелы, знаки табуляции, переноса строки, приводит к нижнему регистру, заменяет ё на е
-        // const latinInCyrillic = {"h": "н", "b": "в", "pr": "пp", "ab": "ав", "a": "а"}
+        // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистру
         return str ? str.replace(/\s/g, '').replace("ё", "е").toLowerCase() : "";
     }
 
@@ -137,7 +135,7 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
             </div>
 
             <div className="SearchMenu__buttons">
-                <div className="searchBar_wrapper searchBar_big">
+                <div className="searchBar_wrapper">
                     <SearchBar
                         data={(e) => setSearchQuery(e.target.value)}
                         isShowSearch={isShowSearch}
@@ -145,8 +143,7 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
                         searchQuery={searchQuery}
                     />
                 </div>
-                <button className={`${isShowSearch ? "searchBar_close_show" : "searchBar_close_hidden"}`}
-                        onClick={clickCloseSearch}>
+                <button onClick={clickCloseSearch}>
                     <img src={closeLargeIcon}
                          alt="closeIcon"/>
                 </button>

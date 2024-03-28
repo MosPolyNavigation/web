@@ -4,11 +4,10 @@ import searchPsevdoIcon from "../../images/searchBarDarkIcon.svg.svg";
 
 const SearchPsevdoInput = () => {
   return (
-    <div className="searchPsevdoInput_packet">
-      <img src={searchPsevdoIcon} alt="search Psevdo Icon" />
-      {/*<input value="" className="searchPsevdoInput_input" placeholder="Поиск..."></input>*/}
-        <span className="searchPsevdoInput_input">Поиск...</span>
-    </div>
+      <div className="searchPsevdoInput_packet">
+          <img src={searchPsevdoIcon} alt="search Psevdo Icon"/>
+          <span className="searchPsevdoInput_input">Поиск...</span>
+      </div>
   );
 };
 
