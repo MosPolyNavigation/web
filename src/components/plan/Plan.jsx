@@ -55,7 +55,7 @@ const Plan = () => {
 
   const handleTouchMoveMenu = (e) => {
     const deltaX = e.touches[0].clientX - startXMenu;
-    if (deltaX <= 50) {
+    if (deltaX <= -100) {
       setIsShowMenu(false);
     }
   };
