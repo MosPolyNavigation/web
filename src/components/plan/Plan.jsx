@@ -32,6 +32,8 @@ const Plan = () => {
   });
   const [isShowSearch, setIsShowSearch] = useState(false);
   const [isShowMenuClass, SetisShowMenuClass] = useState("");
+  const [startYAdditionalInfo, setStartYAdditionalInfo] = useState(0);
+  const [startXMenu, setStartXMenu] = useState(0);
 
   const handleTouchStartAdditionalInfo = (e) => {
     setStartYAdditionalInfo(e.touches[0].clientY);
