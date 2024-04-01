@@ -140,6 +140,10 @@
 
 .additionalInfo__wrapper {
   transform: translateY(200px);
+
+  transform: translateY(200px);
+    max-height: 0;
+    opacity: 0;
 }
 
 .menu_wrapper {

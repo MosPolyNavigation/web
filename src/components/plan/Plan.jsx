@@ -1,14 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useControls,
-} from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // components //
-
-import plan from "../../images/plan.svg";
 import Button from "../button/Button";
 import AdditionalInfo from "../additionalInfo/AdditionalInfo";
 import FloorScroll from "../floorsScroll/FloorScroll";
@@ -18,7 +12,6 @@ import SearchMenu from "../searchMenu/SearchMenu";
 import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
 //floors
-
 import FloorZero from "../../floors/FloorZero";
 import FloorOne from "../../floors/FloorOne";
 import FloorTwo from "../../floors/FloorTwo";
@@ -27,41 +20,59 @@ import FloorFour from "../../floors/FloorFour";
 import FloorFive from "../../floors/FloorFive";
 
 // icons //
-
 import burgerIcon from "../../images/burgerIcon.svg";
 import heartIcon from "../../images/heartIcon.svg";
 import homeIcon from "../../images/homeIcon.svg";
 
 const Plan = () => {
-  const [isShowAddInfo, setIsShowAddInfo] = useState(false);
-  const [isShowMenu, setIsShowMenu] = useState(false);
-  const [isShowSearch, setIsShowSearch] = useState(false);
-  const [startYAdditionalInfo, setStartYAdditionalInfo] = useState(0);
-  const [startXMenu, setStartXMenu] = useState(0);
+  const [isShowAddInfoClass, setIsShowAddInfoClass] = useState("");
+  const [isShowAddInfoFlag, setIsShowAddInfoFlag] = useState(true);
   const [isActive, setIsActive] = useState(() => {
     return parseInt(localStorage.getItem("activeFloor")) || 0;
   });
+  const [isShowSearch, setIsShowSearch] = useState(false);
+  const [isShowMenuClass, SetisShowMenuClass] = useState("");
 
-  const handleTouchStartAdditionalInfo = (e) => {
-    setStartYAdditionalInfo(e.touches[0].clientY);
-  };
-
-  const handleTouchMoveAdditionalInfo = (e) => {
-    const deltaY = e.touches[0].clientY - startYAdditionalInfo;
-    if (deltaY >= 50) {
-      setIsShowAddInfo(false);
+  const toggleShowMenu = (currClass) => {
+    if (currClass === "") {
+      SetisShowMenuClass("showMenu");
+      return;
+    }
+    if (currClass === "showMenu") {
+      SetisShowMenuClass("hideMenu");
+      return;
+    }
+    if (currClass === "hideMenu") {
+      SetisShowMenuClass("showMenu");
+      return;
     }
   };
 
-  const handleTouchMoveMenu = (e) => {
-    const deltaX = e.touches[0].clientX - startXMenu;
-    if (deltaX <= -100) {
-      setIsShowMenu(false);
+  const toggleAddInfo = (currClass) => {
+    if (currClass === "" && isShowAddInfoFlag) {
+      setIsShowAddInfoFlag((prev) => !prev);
+      setIsShowAddInfoClass("showAddInfo");
+      console.log(isShowAddInfoFlag);
+      return;
     }
-  };
+    if (currClass === "" && !isShowAddInfoFlag) {
+      setIsShowAddInfoFlag((prev) => !prev);
+      setIsShowAddInfoClass("hideAddInfo");
 
-  const handleTouchStartMenu = (e) => {
-    setStartXMenu(e.touches[0].clientX);
+      return;
+    }
+    if (currClass === "showAddInfo") {
+      setIsShowAddInfoFlag(true);
+      setIsShowAddInfoClass("hideAddInfo");
+
+      return;
+    }
+    if (currClass === "hideAddInfo") {
+      setIsShowAddInfoFlag(true);
+      setIsShowAddInfoClass("showAddInfo");
+
+      return;
+    }
   };
 
   useEffect(() => {
@@ -90,7 +101,7 @@ const Plan = () => {
         </TransformWrapper>
       </div>
       <div className="button_wrapper button_burger">
-        <div onClick={() => setIsShowMenu((prev) => !prev)}>
+        <div onClick={() => toggleShowMenu("")}>
           <Button icon={burgerIcon} />
         </div>
       </div>
@@ -119,33 +130,22 @@ const Plan = () => {
             <SearchPsevdoInput />
           </div>
           <div
-            onClick={() => setIsShowAddInfo((prev) => !prev)}
+            onClick={() => toggleAddInfo("")}
             className="button_wrapper button_heart"
           >
             <Button icon={heartIcon} />
           </div>
         </div>
-        <div
-          onTouchStart={handleTouchStartAdditionalInfo}
-          onTouchMove={handleTouchMoveAdditionalInfo}
-          className={`additionalInfo__wrapper ${
-            isShowAddInfo ? "showAddInfo" : "hideAddInfo"
-          }`}
-        >
+        <div className={`additionalInfo__wrapper ${isShowAddInfoClass}`}>
           <AdditionalInfo
-            isShowAddInfo={isShowAddInfo}
-            setIsShowAddInfo={setIsShowAddInfo}
+            toggleAddInfo={toggleAddInfo}
             nameAudience={"Н405 - Аудитория"}
             descAudience={"Корпус Н, 4-й этаж"}
           />
         </div>
       </div>
-      <div
-        onTouchStart={handleTouchStartMenu}
-        onTouchMove={handleTouchMoveMenu}
-        className={`menu_wrapper ${isShowMenu ? "showMenu" : "hideMenu"}`}
-      >
-        <Menu setIsShowMenu={setIsShowMenu} />
+      <div className={`menu_wrapper ${isShowMenuClass}`}>
+        <Menu toggleShowMenu={toggleShowMenu} />
       </div>
 
       <div
