@@ -1,14 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useControls,
-} from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // components //
-
-import plan from "../../images/plan.svg";
 import Button from "../button/Button";
 import AdditionalInfo from "../additionalInfo/AdditionalInfo";
 import FloorScroll from "../floorsScroll/FloorScroll";
@@ -18,7 +12,6 @@ import SearchMenu from "../searchMenu/SearchMenu";
 import SearchPsevdoInput from "../searchPsevdoInput/SearchPsevdoInput";
 
 //floors
-
 import FloorZero from "../../floors/FloorZero";
 import FloorOne from "../../floors/FloorOne";
 import FloorTwo from "../../floors/FloorTwo";
@@ -27,14 +20,13 @@ import FloorFour from "../../floors/FloorFour";
 import FloorFive from "../../floors/FloorFive";
 
 // icons //
-
 import burgerIcon from "../../images/burgerIcon.svg";
 import heartIcon from "../../images/heartIcon.svg";
 import homeIcon from "../../images/homeIcon.svg";
 
 const Plan = () => {
-  const [isShowAddInfo, setIsShowAddInfo] = useState(false);
-  const [isShowMenu, setIsShowMenu] = useState(false);
+  const [isShowAddInfoClass, setIsShowAddInfoClass] = useState("");
+  const [isShowAddInfoFlag, setIsShowAddInfoFlag] = useState(true);
   const [isActive, setIsActive] = useState(() => {
     return parseInt(localStorage.getItem("activeFloor")) || 0;
   });
@@ -52,6 +44,33 @@ const Plan = () => {
     }
     if (currClass === "hideMenu") {
       SetisShowMenuClass("showMenu");
+      return;
+    }
+  };
+
+  const toggleAddInfo = (currClass) => {
+    if (currClass === "" && isShowAddInfoFlag) {
+      setIsShowAddInfoFlag((prev) => !prev);
+      setIsShowAddInfoClass("showAddInfo");
+      console.log(isShowAddInfoFlag);
+      return;
+    }
+    if (currClass === "" && !isShowAddInfoFlag) {
+      setIsShowAddInfoFlag((prev) => !prev);
+      setIsShowAddInfoClass("hideAddInfo");
+
+      return;
+    }
+    if (currClass === "showAddInfo") {
+      setIsShowAddInfoFlag(true);
+      setIsShowAddInfoClass("hideAddInfo");
+
+      return;
+    }
+    if (currClass === "hideAddInfo") {
+      setIsShowAddInfoFlag(true);
+      setIsShowAddInfoClass("showAddInfo");
+
       return;
     }
   };
@@ -122,20 +141,15 @@ const Plan = () => {
             <SearchPsevdoInput />
           </div>
           <div
-            onClick={() => setIsShowAddInfo((prev) => !prev)}
+            onClick={() => toggleAddInfo("")}
             className="button_wrapper button_heart"
           >
             <Button icon={heartIcon} />
           </div>
         </div>
-        <div
-          className={`additionalInfo__wrapper ${
-            isShowAddInfo ? "showAddInfo" : "hideAddInfo"
-          }`}
-        >
+        <div className={`additionalInfo__wrapper ${isShowAddInfoClass}`}>
           <AdditionalInfo
-            isShowAddInfo={isShowAddInfo}
-            setIsShowAddInfo={setIsShowAddInfo}
+            toggleAddInfo={toggleAddInfo}
             nameAudience={"Н405 - Аудитория"}
             descAudience={"Корпус Н, 4-й этаж"}
           />
