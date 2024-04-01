@@ -39,6 +39,22 @@ const Plan = () => {
     return parseInt(localStorage.getItem("activeFloor")) || 0;
   });
   const [isShowSearch, setIsShowSearch] = useState(false);
+  const [isShowMenuClass, SetisShowMenuClass] = useState("");
+
+  const toggleShowMenu = (currClass) => {
+    if (currClass === "") {
+      SetisShowMenuClass("showMenu");
+      return;
+    }
+    if (currClass === "showMenu") {
+      SetisShowMenuClass("hideMenu");
+      return;
+    }
+    if (currClass === "hideMenu") {
+      SetisShowMenuClass("showMenu");
+      return;
+    }
+  };
 
   useEffect(() => {
     localStorage.setItem("activeFloor", isActive.toString());
@@ -77,7 +93,7 @@ const Plan = () => {
         </span>
       </div> */}
       <div className="button_wrapper button_burger">
-        <div onClick={() => setIsShowMenu((prev) => !prev)}>
+        <div onClick={() => toggleShowMenu("")}>
           <Button icon={burgerIcon} />
         </div>
       </div>
@@ -125,8 +141,8 @@ const Plan = () => {
           />
         </div>
       </div>
-      <div className={`menu_wrapper ${isShowMenu ? "showMenu" : "hideMenu"}`}>
-        <Menu setIsShowMenu={setIsShowMenu} />
+      <div className={`menu_wrapper ${isShowMenuClass}`}>
+        <Menu toggleShowMenu={toggleShowMenu} />
       </div>
 
       <div
