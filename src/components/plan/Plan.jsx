@@ -36,6 +36,7 @@ const Plan = () => {
   const [startXMenu, setStartXMenu] = useState(0);
 
   const handleTouchStartAdditionalInfo = (e) => {
+    setIsShowAddInfoFlag((prev) => !prev);
     setStartYAdditionalInfo(e.touches[0].clientY);
   };
 
