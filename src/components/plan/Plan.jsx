@@ -42,14 +42,14 @@ const Plan = () => {
   const handleTouchMoveAdditionalInfo = (e) => {
     const deltaY = e.touches[0].clientY - startYAdditionalInfo;
     if (deltaY >= 50) {
-      setIsShowAddInfo(false);
+      setIsShowAddInfoClass("hideAddInfo");
     }
   };
 
   const handleTouchMoveMenu = (e) => {
     const deltaX = e.touches[0].clientX - startXMenu;
     if (deltaX <= -100) {
-      setIsShowMenu(false);
+      SetisShowMenuClass("hideMenu");
     }
   };
 
@@ -76,7 +76,6 @@ const Plan = () => {
     if (currClass === "" && isShowAddInfoFlag) {
       setIsShowAddInfoFlag((prev) => !prev);
       setIsShowAddInfoClass("showAddInfo");
-      console.log(isShowAddInfoFlag);
       return;
     }
     if (currClass === "" && !isShowAddInfoFlag) {
@@ -160,7 +159,11 @@ const Plan = () => {
             <Button icon={heartIcon} />
           </div>
         </div>
-        <div className={`additionalInfo__wrapper ${isShowAddInfoClass}`}>
+        <div
+          onTouchStart={handleTouchStartAdditionalInfo}
+          onTouchMove={handleTouchMoveAdditionalInfo}
+          className={`additionalInfo__wrapper ${isShowAddInfoClass}`}
+        >
           <AdditionalInfo
             toggleAddInfo={toggleAddInfo}
             nameAudience={"Н405 - Аудитория"}
@@ -168,7 +171,11 @@ const Plan = () => {
           />
         </div>
       </div>
-      <div className={`menu_wrapper ${isShowMenuClass}`}>
+      <div
+        onTouchStart={handleTouchStartMenu}
+        onTouchMove={handleTouchMoveMenu}
+        className={`menu_wrapper ${isShowMenuClass}`}
+      >
         <Menu toggleShowMenu={toggleShowMenu} />
       </div>
 
@@ -185,5 +192,9 @@ const Plan = () => {
     </div>
   );
 };
+// onTouchStart={handleTouchStartAdditionalInfo}
+// onTouchMove={handleTouchMoveAdditionalInfo}
+// onTouchStart={handleTouchStartMenu}
+// onTouchMove={handleTouchMoveMenu}
 
 export default Plan;
