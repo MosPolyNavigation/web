@@ -33,6 +33,28 @@ const Plan = () => {
   const [isShowSearch, setIsShowSearch] = useState(false);
   const [isShowMenuClass, SetisShowMenuClass] = useState("");
 
+  const handleTouchStartAdditionalInfo = (e) => {
+    setStartYAdditionalInfo(e.touches[0].clientY);
+  };
+
+  const handleTouchMoveAdditionalInfo = (e) => {
+    const deltaY = e.touches[0].clientY - startYAdditionalInfo;
+    if (deltaY >= 50) {
+      setIsShowAddInfo(false);
+    }
+  };
+
+  const handleTouchMoveMenu = (e) => {
+    const deltaX = e.touches[0].clientX - startXMenu;
+    if (deltaX <= -100) {
+      setIsShowMenu(false);
+    }
+  };
+
+  const handleTouchStartMenu = (e) => {
+    setStartXMenu(e.touches[0].clientX);
+  };
+
   const toggleShowMenu = (currClass) => {
     if (currClass === "") {
       SetisShowMenuClass("showMenu");
