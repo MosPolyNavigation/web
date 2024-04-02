@@ -10,3 +10,13 @@ body {
 .none {
   display: none !important;
 }
+
+html {
+  touch-action: pan-y;
+  -ms-content-zooming: none;
+  -ms-user-select: none;
+  -webkit-user-scalable: none; /* Отключение зума на мобильных устройствах */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
