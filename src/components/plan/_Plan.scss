@@ -24,7 +24,7 @@
 
 .react-transform-wrapper,
 .react-transform-component {
-  height: 100%; /* Стили от библиотеки react-zoom-pan-pinch 'В коде вы их не найдете' */
+  height: 100% !important; /* Стили от библиотеки react-zoom-pan-pinch 'В коде вы их не найдете' */
 }
 
 .plan__image {
