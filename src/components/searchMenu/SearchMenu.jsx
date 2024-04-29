@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 
 import AudienceList from "../audienceList/AudienceList";
 import PopularLocations from "../popularLocations/PopularLocations";
@@ -128,7 +128,7 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
     }
 
     const formattedStr = (str) => {
-        // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистр
+        // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистру
         return str ? str.replace(/\s/g, '').replace("ё", "е").toLowerCase() : "";
     }
 
@@ -139,10 +139,31 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
 
     }, [searchQuery, audiences])
 
+    useEffect(() => {
+        // Очищаем поиск и возвращаем скролл в начальное положение
+        if (isShowSearch) {
+            return;
+        }
+        const scrollTimeoutId = setTimeout(setScrollStart, 500);
+        const searchTimeoutId = setTimeout(() => setSearchQuery(""), 500);
+
+        return () => {
+            clearTimeout(scrollTimeoutId);
+            clearTimeout(searchTimeoutId);
+        };
+
+    }, [isShowSearch]);
+
+    const setScrollStart = () => {
+        const audienceListEl = document.querySelector(".audienceList");
+        if (audienceListEl) {
+            audienceListEl.scroll(0, 0);
+        }
+    }
+
     const clickCloseSearch = () => {
         // Закрываем меню поиска и очищаем searchBar
         setIsShowSearch((prev) => !prev)
-        setSearchQuery("");
     }
 
 
