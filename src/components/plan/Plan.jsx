@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// components //
+// components
 import Button from "../button/Button";
 import AdditionalInfo from "../additionalInfo/AdditionalInfo";
 import FloorScroll from "../floorsScroll/FloorScroll";
@@ -19,21 +19,29 @@ import FloorThree from "../../floors/FloorThree";
 import FloorFour from "../../floors/FloorFour";
 import FloorFive from "../../floors/FloorFive";
 
-// icons //
+// images
 import burgerIcon from "../../images/burgerIcon.svg";
 import heartIcon from "../../images/heartIcon.svg";
 import homeIcon from "../../images/homeIcon.svg";
+import mapOne from "../../images/mapOne.png";
+import mapTwo from "../../images/mapTwo.png";
+
+// data
+import NavData from "https://mospolynavigation.github.io/navigationData/NavData.js";
 
 const Plan = () => {
   const [isShowAddInfoClass, setIsShowAddInfoClass] = useState("");
   const [isShowAddInfoFlag, setIsShowAddInfoFlag] = useState(true);
-  const [isActive, setIsActive] = useState(() => {
-    return parseInt(localStorage.getItem("activeFloor")) || 0;
-  });
   const [isShowSearch, setIsShowSearch] = useState(false);
   const [isShowMenuClass, SetisShowMenuClass] = useState("");
   const [startYAdditionalInfo, setStartYAdditionalInfo] = useState(0);
   const [startXMenu, setStartXMenu] = useState(0);
+  // const [data, setData] = useState({});
+  const [campuses, setCampuses] = useState([]);
+  const [corpuses, setCorpuses] = useState([]);
+  const [isActive, setIsActive] = useState(() => {
+    return parseInt(localStorage.getItem("activeFloor")) || 0;
+  });
 
   const handleTouchStartAdditionalInfo = (e) => {
     setIsShowAddInfoFlag((prev) => !prev);
@@ -102,6 +110,89 @@ const Plan = () => {
   useEffect(() => {
     localStorage.setItem("activeFloor", isActive.toString());
   }, [isActive]);
+
+  class Data {
+    campuses = new Map();
+    plans = new Map();
+    status = false;
+    importedVertexes = [];
+
+    constructor() {}
+
+    async getData() {
+      function concatVertexesFromAllPlans(plans) {
+        let vertexes = [];
+        for (const planData of plans.values()) {
+          vertexes.push(...planData.graph);
+        }
+        return vertexes;
+      }
+
+      await NavData.loadCampusesDataAsync().then((resultData) => {
+        this.plans = resultData.plans;
+        this.campuses = resultData.campuses;
+        this.#addPlansNamesToEveryVertexes();
+        this.importedVertexes = concatVertexesFromAllPlans(this.plans);
+        this.status = true;
+        this.campuses.set("PR", {
+          id: "ПР",
+          rusName: "ПР",
+          corpuses: {
+            B: { rusName: "Б", planLinks: [mapOne, mapOne, mapOne] },
+            A: { rusName: "А", planLinks: [mapTwo, mapOne, mapTwo] },
+            G: { rusName: "Г", planLinks: [mapTwo, mapOne, mapTwo] },
+          },
+        });
+        this.campuses.set("AV", {
+          id: "АВ",
+          rusName: "АВ",
+          corpuses: {
+            C: { rusName: "С", planLinks: [mapOne, mapTwo, mapTwo] },
+            F: { rusName: "Ф", planLinks: [mapTwo, mapTwo, mapTwo] },
+            E: { rusName: "Е", planLinks: [mapTwo, mapOne, mapTwo] },
+          },
+        });
+        // console.log("Данные загружены", this);
+      });
+    }
+
+    #addPlansNamesToEveryVertexes() {
+      for (const [planName, planData] of this.plans) {
+        // console.log("Добавляю в общий граф", planName, planData.graph);
+        for (const importedVertex of planData.graph) {
+          importedVertex.planName = planName;
+        }
+      }
+    }
+
+    getPlan(planName = "") {
+      return this.plans.get(planName);
+    }
+  }
+
+  let data = new Data();
+  // data.getData().then(() => {
+  //   let set = new Set();
+  //   console.log(data);
+  //   console.log([...data.campuses.keys()]);
+  //   data.plans.forEach((item) => set.add(item.campus));
+  //   console.log([...set]);
+  // });
+
+  // async function loadData() {
+  //   setData(NavData.loadCampusesDataAsync());
+  //   const campusesData = await NavData.loadCampusesDataAsync();
+  //   console.log(campusesData);
+  //   let data = campusesData.plans;
+  //   console.log(data);
+  //   data.forEach((value, key) => {
+  //     console.log(`Ключ: ${key}, Значение: ${value.corpus}`);
+  //   });
+  // }
+
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
 
   const countFloors = [0, 1, 2, 3, 4, 5];
   return (
