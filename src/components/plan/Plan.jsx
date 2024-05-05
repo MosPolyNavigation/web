@@ -140,7 +140,7 @@ const Plan = () => {
             >
                 <ComeBackHeader title="Кампусы" backFunction={() => setIsShowCampusMenu((prev) => !prev)}></ComeBackHeader>
                 <CampusMenu
-                    currentLocateInfo={{campus: "на Большой Семеновской", building: "Н"}}
+                    currentLocateInfo={{campus: "на Большой Семеновской", building: "А"}}
                     setIsShowCampusMenu={setIsShowCampusMenu}
                     setIsShowSearch={setIsShowSearch}
                     setIsShowAddInfo={setIsShowAddInfo}
@@ -150,6 +150,7 @@ const Plan = () => {
         </div>
     );
 };
+
 // onTouchStart={handleTouchStartAdditionalInfo}
 // onTouchMove={handleTouchMoveAdditionalInfo}
 // onTouchStart={handleTouchStartMenu}
