@@ -10,7 +10,7 @@ import problemIcon from "../../images/problemIcon.svg";
 import settingsIcon from "../../images/settingsIcon.svg";
 import logotype from "../../images/logotype.png";
 
-const Menu = ({ toggleShowMenu }) => {
+const Menu = ({ setIsShowMenu  }) => {
   return (
     <div className="menu__packet">
       <div className="menu__packet_top">
@@ -18,8 +18,8 @@ const Menu = ({ toggleShowMenu }) => {
           <div className="menu__top_title">
             <h2>Путеводитель Московского Политеха</h2>
           </div>
-          <button onClick={() => toggleShowMenu('showMenu')}>
-            <img src={closeLargeIcon} alt="closeIcon" />
+          <button onClick={() => setIsShowMenu((prev) => !prev)}>
+            <img src={closeLargeIcon} alt="closeIcon"/>
           </button>
         </div>
         <ul className="menu__top_list">
