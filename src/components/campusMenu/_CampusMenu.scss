@@ -1,0 +1,44 @@
+.campusMenu_wrapper {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 20;
+
+}
+
+.CampusMenu__content {
+  display: flex;
+  flex-direction: column;
+  background-color: $c1-Background;
+  height: 100%;
+  justify-content: space-between;
+
+
+}
+
+.CampusMenu__block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+
+.CampusMenu__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  button img {
+    width: 20px;
+    height: 20px;
+  }
+}
