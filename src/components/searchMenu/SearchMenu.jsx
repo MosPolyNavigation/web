@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 
 import AudienceList from "../audienceList/AudienceList";
 import PopularLocations from "../popularLocations/PopularLocations";
@@ -106,6 +106,26 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
         },
 
     ])
+    const icons = {
+        "wcm": manIcon,
+        "wcw": womanIcon,
+        "wcu": wcIcon,
+        "food": foodIcon,
+        "library": booksIcon,
+    }
+
+    const latinInCyrillic = (str, icon) => {
+        str = formattedStr(str)
+        if (Object.values(icons).find((elem) => elem === icon)) {
+            return "";
+        }
+        const mask = {"h": "н", "b": "в", "pr": "пp", "ab": "ав", "a": "а"}
+        for (const latinLetter in mask) {
+            const cyrillicLetter = mask[latinLetter]
+            str = str.replace(cyrillicLetter, latinLetter)
+        }
+        return str
+    }
 
     const formattedStr = (str) => {
         // Удаляет все пробелы, знаки табуляции, переноса строки и приводит к нижнему регистру
@@ -115,14 +135,35 @@ const SearchMenu = ({setIsShowSearch, isShowSearch}) => {
     const searchedAudiences = useMemo(() => {
         // Ищем совпадения в названии или описании локации
         return [...audiences].filter(audience => formattedStr(audience.nameAudience).includes(formattedStr(searchQuery.toLowerCase()))
-            || formattedStr(audience.descAudience).includes(formattedStr(searchQuery.toLowerCase())))
+            || latinInCyrillic(audience.nameAudience, audience.icon).includes(formattedStr(searchQuery.toLowerCase())) || formattedStr(audience.descAudience).includes(formattedStr(searchQuery.toLowerCase())))
 
     }, [searchQuery, audiences])
+
+    useEffect(() => {
+        // Очищаем поиск и возвращаем скролл в начальное положение
+        if (isShowSearch) {
+            return;
+        }
+        const scrollTimeoutId = setTimeout(setScrollStart, 500);
+        const searchTimeoutId = setTimeout(() => setSearchQuery(""), 500);
+
+        return () => {
+            clearTimeout(scrollTimeoutId);
+            clearTimeout(searchTimeoutId);
+        };
+
+    }, [isShowSearch]);
+
+    const setScrollStart = () => {
+        const audienceListEl = document.querySelector(".audienceList");
+        if (audienceListEl) {
+            audienceListEl.scroll(0, 0);
+        }
+    }
 
     const clickCloseSearch = () => {
         // Закрываем меню поиска и очищаем searchBar
         setIsShowSearch((prev) => !prev)
-        setSearchQuery("");
     }
 
 
