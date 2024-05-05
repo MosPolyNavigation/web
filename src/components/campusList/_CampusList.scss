@@ -1,0 +1,12 @@
+.campusList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.campusList__message {
+  color: $c5-White;
+  font-size: 24px;
+  padding-left: 10px;
+  margin-top: 50px;
+}

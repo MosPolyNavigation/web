@@ -1,46 +1,44 @@
-.searchMenu_wrapper {
+.campusMenu_wrapper {
   position: fixed;
   left: 0;
   width: 100%;
   top: 0;
   bottom: 0;
   overflow: hidden;
-  z-index: 30;
+  z-index: 20;
 
 }
 
-.SearchMenu__content {
+.CampusMenu__content {
   display: flex;
   flex-direction: column;
   background-color: $c1-Background;
   height: 100%;
-  padding-top: 15px;
-  padding-bottom: 10px;
-  row-gap: 20px;
   justify-content: space-between;
+
 
 }
 
-.SearchMenu__block {
+.CampusMenu__block {
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
-  justify-content: start;
+  justify-content: center;
   flex-grow: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
 }
 
-.SearchMenu__buttons {
-  justify-content: space-between;
+
+.CampusMenu__buttons {
   display: flex;
   align-items: center;
-  column-gap: 20px;
-
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
   button img {
     width: 20px;
     height: 20px;
   }
-
-  padding: 0 20px 0 10px;
 }
-
-

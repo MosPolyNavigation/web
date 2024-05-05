@@ -178,3 +178,16 @@
   pointer-events: none;
   transition: opacity 500ms;
 }
+
+
+.showCampusMenu {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 500ms;
+}
+
+.hideCampusMenu {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms;
+}
