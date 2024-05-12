@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const FloorScroll = ({ countFloors, isActive, setIsActive }) => {
+const FloorScroll = ({ floors, isActive, setIsActive }) => {
   const handleIsActive = (index) => {
     setIsActive(index);
   };
   return (
     <ul className="floors__list">
-      {countFloors.map((number, index) => (
+      {floors.map((number, index) => (
         <li key={index} className={`floors__item floors__item_${index}`}>
           <Link
             to={`/floor/${number}`}
