@@ -67,8 +67,8 @@ const Plan = () => {
               <Route path={`/floor/2`} element={<FloorTwo />} />
               <Route path={`/floor/3`} element={<FloorThree />} />
               <Route path={`/floor/4`} element={<FloorFour />} />
-              <Route path={`/floor/5`} element={<FloorFive />} />
-              <Route path="*" element={<Navigate to="/floor/0" />} /> */}
+              <Route path={`/floor/5`} element={<FloorFive />} /> */}
+              <Route path="*" element={<Navigate to="/floor/0" />} />
             </Routes>
           </TransformComponent>
         </TransformWrapper>
