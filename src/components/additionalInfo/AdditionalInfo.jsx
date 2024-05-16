@@ -9,7 +9,7 @@ import heartSmallIcon from "../../images/heartSmallIcon.svg";
 import fromIcon from "../../images/fromIcon.svg";
 import toIcon from "../../images/toIcon.svg";
 
-const AdditionalInfo = ({ nameAudience, descAudience, setIsShowAddInfo }) => {
+const AdditionalInfo = ({ nameAudience, descAudience, toggleAddInfo }) => {
   return (
     <div className="additionalInfo__packet">
       <div className="additionalInfo__row">
@@ -18,7 +18,7 @@ const AdditionalInfo = ({ nameAudience, descAudience, setIsShowAddInfo }) => {
           <span>{descAudience}</span>
         </div>
         <div
-            onClick={() => setIsShowAddInfo((prev => !prev))}
+          onClick={() => toggleAddInfo("showAddInfo")}
           className="additionalInfo__button"
         >
           <button>

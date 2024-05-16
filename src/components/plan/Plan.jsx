@@ -33,6 +33,37 @@ import homeIcon from "../../images/homeIcon.svg";
 const Plan = () => {
   const [isShowAddInfo, setIsShowAddInfo] = useState(false);
   const [isShowMenu, setIsShowMenu] = useState(false);
+
+  const [isShowAddInfoClass, setIsShowAddInfoClass] = useState("");
+  const [isShowAddInfoFlag, setIsShowAddInfoFlag] = useState(true);
+
+  const toggleAddInfo = (currClass) => {
+    if (currClass === "" && isShowAddInfoFlag) {
+      setIsShowAddInfoFlag((prev) => !prev);
+      setIsShowAddInfoClass("showAddInfo");
+      console.log(isShowAddInfoFlag);
+      return;
+    }
+    if (currClass === "" && !isShowAddInfoFlag) {
+      setIsShowAddInfoFlag((prev) => !prev);
+      setIsShowAddInfoClass("hideAddInfo");
+
+      return;
+    }
+    if (currClass === "showAddInfo") {
+      setIsShowAddInfoFlag(true);
+      setIsShowAddInfoClass("hideAddInfo");
+
+      return;
+    }
+    if (currClass === "hideAddInfo") {
+      setIsShowAddInfoFlag(true);
+      setIsShowAddInfoClass("showAddInfo");
+
+      return;
+    }
+  };
+
   const [isActive, setIsActive] = useState(() => {
     return parseInt(localStorage.getItem("activeFloor")) || 0;
   });
@@ -121,7 +152,7 @@ const Plan = () => {
       <div className="common__wrapper">
         <div className="common__wrapper_top">
           <div
-            onClick={() => setIsShowAddInfo((prev) => !prev)}
+            onClick={() => toggleAddInfo("")}
             className="button_wrapper button_heart"
           >
             <Button icon={heartIcon} />
@@ -147,8 +178,7 @@ const Plan = () => {
           }`}
         >
           <AdditionalInfo
-            isShowAddInfo={isShowAddInfo}
-            setIsShowAddInfo={setIsShowAddInfo}
+            toggleAddInfo={toggleAddInfo}
             nameAudience={"Н405 - Аудитория"}
             descAudience={"Корпус Н, 4-й этаж"}
           />
