@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Button from "../button/Button";
 
 const CampusItem = ({
+  setCurrCorpus,
   name,
   notation,
   address,
@@ -16,6 +17,8 @@ const CampusItem = ({
 }) => {
   const contentRef = useRef(null);
 
+  const [activeCampus, setActiveCampus] = useState(false);
+
   useEffect(() => {
     if (contentRef.current) {
       contentRef.current.style.maxHeight = isOpen
@@ -23,6 +26,12 @@ const CampusItem = ({
         : "0px";
     }
   }, [isOpen]);
+
+  const activeBuilding = (itemContent) => {
+    const item = buildings.filter((building) => building === itemContent)[0];
+    setActiveCampus(item);
+    setCurrCorpus(item);
+  };
 
   return (
     <li className="campusItem__item">
@@ -47,17 +56,33 @@ const CampusItem = ({
               buildings.map((item) =>
                 isCurrentLocate && selectedBuilding === item ? (
                   <li
-                    onClick={() => currAccordion(itemObj, item)}
-                    className="campusItem__building campusItem__building-selected"
+                    key={item}
+                    onClick={() => {
+                      currAccordion(itemObj, item);
+                      activeBuilding(item);
+                    }}
+                    className={`campusItem__building ${
+                      activeCampus === item
+                        ? "campusItem__building-selected"
+                        : ""
+                    }`}
                   >
                     <Button text={item} />
                   </li>
                 ) : (
                   <li
-                    onClick={() => currAccordion(itemObj, item)}
-                    className="campusItem__building"
+                    key={item}
+                    onClick={() => {
+                      currAccordion(itemObj, item);
+                      activeBuilding(item);
+                    }}
+                    className={`campusItem__building ${
+                      activeCampus === item
+                        ? "campusItem__building-selected"
+                        : ""
+                    }`}
                   >
-                    <Button text={item} />
+                    <Button onClick={() => activeBuilding(item)} text={item} />
                   </li>
                 )
               )

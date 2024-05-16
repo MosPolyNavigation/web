@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CampusItem from "../campusItem/CampusItem";
 
 const CampusList = ({
+  setCurrCorpus,
   campuses,
   currentLocateInfo,
   floors,
@@ -48,6 +49,7 @@ const CampusList = ({
         <ul className="campusList">
           {campuses.map((item, index) => (
             <CampusItem
+            setCurrCorpus={setCurrCorpus}
               isCurrentLocate={campus === item.name}
               selectedBuilding={building}
               name={item.name}

@@ -42,6 +42,8 @@ const Plan = () => {
   const [floors, setFloors] = useState([]);
   const [floorsImages, setFloorsImages] = useState([]);
 
+  const [currCorpus, setCurrCorpus] = useState("");
+
   useEffect(() => {
     localStorage.setItem("activeFloor", isActive.toString());
   }, [isActive]);
@@ -81,7 +83,7 @@ const Plan = () => {
       <div className="boxshadow"></div>
       <div className="name__wrapper">
         <span className="text__name">
-          Большая Семёновская <br /> Корпус А
+          Большая Семёновская <br /> Корпус {currCorpus}
         </span>
       </div>
       <div className="floorScroll_wrapper">
@@ -155,6 +157,7 @@ const Plan = () => {
           backFunction={() => setIsShowCampusMenu((prev) => !prev)}
         ></ComeBackHeader>
         <CampusMenu
+          setCurrCorpus={setCurrCorpus}
           currentLocateInfo={{
             campus: "на Большой Семеновской",
             building: "А",

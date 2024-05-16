@@ -42,6 +42,7 @@ import planAFour from "../../plansBs/А/A-4.svg";
 import NavData from "https://mospolynavigation.github.io/navigationData/NavData.js";
 
 const CampusMenu = ({
+  setCurrCorpus,
   currentLocateInfo,
   setIsShowCampusMenu,
   setIsShowAddInfo,
@@ -130,11 +131,11 @@ const CampusMenu = ({
           address: "ул. Большая Семеновская, д. 38",
           corpuses: {
             B: {
-              rusName: "B",
+              rusName: "Б",
               planLinks: [planBOne, planBTwo, planBThree, planBFour],
             },
             N: {
-              rusName: "N",
+              rusName: "Н",
               planLinks: [
                 planNZero,
                 planNOne,
@@ -145,11 +146,11 @@ const CampusMenu = ({
               ],
             },
             V: {
-              rusName: "V",
+              rusName: "В",
               planLinks: [planVOne, planVTwo, planVThree, planVFour, planVFive],
             },
             A: {
-              rusName: "A",
+              rusName: "А",
               planLinks: [planAZero, planAOne, planATwo, planAThree, planAFour],
             },
           },
@@ -264,6 +265,7 @@ const CampusMenu = ({
     <div className="CampusMenu__content">
       <div className="CampusMenu__block">
         <CampusList
+        setCurrCorpus={setCurrCorpus}
           campuses={plans}
           currentLocateInfo={currentLocateInfo}
           floors={floors}
