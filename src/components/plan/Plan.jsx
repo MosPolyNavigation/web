@@ -51,6 +51,8 @@ const Plan = () => {
     setStartYAdditionalInfo(e.touches[0].clientY);
   };
 
+  const [basePlan, setBasePlan] = useState();
+
   const handleTouchMoveAdditionalInfo = (e) => {
     const deltaY = e.touches[0].clientY - startYAdditionalInfo;
     if (deltaY >= 50) {
@@ -89,13 +91,7 @@ const Plan = () => {
                   element={<img src={floorsImage}></img>}
                 />
               ))}
-              {/* <Route path={`/floor/0`} element={<FloorZero />} />
-              <Route path={`/floor/1`} element={<FloorOne />} />
-              <Route path={`/floor/2`} element={<FloorTwo />} />
-              <Route path={`/floor/3`} element={<FloorThree />} />
-              <Route path={`/floor/4`} element={<FloorFour />} />
-              <Route path={`/floor/5`} element={<FloorFive />} /> */}
-              <Route path="*" element={<Navigate to="/floor/0" />} />
+              <Route path="*" element={<Navigate to={`/floor/${1}`} />} />
             </Routes>
           </TransformComponent>
         </TransformWrapper>
