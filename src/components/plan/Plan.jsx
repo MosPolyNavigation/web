@@ -91,7 +91,7 @@ const Plan = () => {
                   element={<img src={floorsImage}></img>}
                 />
               ))}
-              <Route path="*" element={<Navigate to={`/floor/${1}`} />} />
+              <Route path="*" element={<Navigate to={`/floor/${0}`} />} />
             </Routes>
           </TransformComponent>
         </TransformWrapper>
