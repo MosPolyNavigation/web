@@ -13,7 +13,7 @@ const AudienceList = ({audiences}) => {
                 audiences.length ?
                     <ul className="audienceList">
                         {audiences.map((item) => (
-                            <AudienceItem icon={item.icon} nameAudience={item.nameAudience}
+                            <AudienceItem key={item.nameAudience} icon={item.icon} nameAudience={item.nameAudience}
                                           descAudience={item.descAudience}/>
                         ))}
                     </ul>

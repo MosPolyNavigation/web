@@ -257,7 +257,6 @@ const CampusMenu = ({
 
         setPlans((prevPlans) => [...prevPlans, currCampusObj]);
       }
-      console.log(plans);
     });
   }, []);
 

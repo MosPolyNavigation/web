@@ -27,8 +27,24 @@
   height: 100% !important; /* Стили от библиотеки react-zoom-pan-pinch 'В коде вы их не найдете' */
 }
 
-.plan__image {
-  height: 70vh;
+.plans-objects-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+}
+
+svg.plan__image {
+  width: calc(100vw - 5rem - 0.625rem * 3);
+  height: calc(100dvh - 5rem - 0.625rem - 1.25rem * 2);
+
+  tspan {
+    font-family: "GothamSSm", sans-serif;
+  }
+
+  .selected {
+    fill: #4A5598;
+  }
 }
 
 .plan::-webkit-scrollbar {

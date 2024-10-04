@@ -42,13 +42,13 @@ const CampusList = ({
     setIsShowCampusMenu(false);
     localStorage.setItem("activeFloor", isActive.toString());
   };
-
+  
   return (
     <div className="campusList__wrapper">
       {campuses.length ? (
         <ul className="campusList">
           {campuses.map((item, index) => (
-            <CampusItem
+            <CampusItem key={item.notation}
             setCurrCorpus={setCurrCorpus}
               isCurrentLocate={campus === item.name}
               selectedBuilding={building}

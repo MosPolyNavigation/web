@@ -30,7 +30,7 @@ const PopularLocations = () => {
     return (
         <ul className="locations__list">
             {locations.map((item) => (
-                <li className="location__item">
+                <li key={item} className="location__item">
                     {getSmallButton(item)}
                 </li>
             ))}
