@@ -30,54 +30,59 @@ const Plan = () => {
 	})
 	const [isShowSearch, setIsShowSearch] = useState(false)
 	const [isShowCampusMenu, setIsShowCampusMenu] = useState(true)
-	
+
 	const [startYAdditionalInfo, setStartYAdditionalInfo] = useState(0)
 	const [startXMenu, setStartXMenu] = useState(0)
-	
+
 	const [floors, setFloors] = useState([])
 	const [floorsImages, setFloorsImages] = useState([])
-	
+
 	const [currCorpus, setCurrCorpus] = useState('')
-	
+
 	const handleTouchStartAdditionalInfo = (e) => {
 		setStartYAdditionalInfo(e.touches[0].clientY)
 	}
-	
+
 	const [basePlan, setBasePlan] = useState()
-	
-	const onSpaceClick = (e) => { //Обработка нажатия на помещение
+	const [nameAudience, setNameAudience] = useState('Н405 - Аудитория');
+	const [descAudience, setDescAudience] = useState('Корпус Н, 4-й этаж');
+
+	const onSpaceClick = (name, desc) => { //Обработка нажатия на помещение
 		//TODO: Если нет выбранной аудитории - показать (выбрать) и выделить, если есть, то если другая, поменять данные во всплывашке и выделить, иначе скрыть
-		
+
 		//TODO: Почему если я пишу setIsShowAddInfo(false) и setIsShowAddInfo(true), оно не работает?(( Я искренне не понимаю почему, сделайте пожалуйста чтобы нормально работало ((
-		setIsShowAddInfo(prev => !prev)
+		setNameAudience(name);
+		setDescAudience(desc);
+		setIsShowAddInfo(true);
+
 	}
-	
+
 	useEffect(() => {
 		console.log(isShowAddInfo)
 	}, [isShowAddInfo])
-	
+
 	const handleTouchMoveAdditionalInfo = (e) => {
 		const deltaY = e.touches[0].clientY - startYAdditionalInfo
 		if (deltaY >= 50) {
 			setIsShowAddInfo(false)
 		}
 	}
-	
+
 	const handleTouchMoveMenu = (e) => {
 		const deltaX = e.touches[0].clientX - startXMenu
 		if (deltaX <= - 100) {
 			setIsShowMenu(false)
 		}
 	}
-	
+
 	const handleTouchStartMenu = (e) => {
 		setStartXMenu(e.touches[0].clientX)
 	}
-	
+
 	useEffect(() => {
 		localStorage.setItem('activeFloor', isActive.toString())
 	}, [isActive])
-	
+
 	//   const countFloors = [0, 1, 2, 3, 4, 5];
 	return (
 		<div className="plan">
@@ -154,8 +159,8 @@ const Plan = () => {
 					<AdditionalInfo
 						isShowAddInfo={isShowAddInfo}
 						setIsShowAddInfo={setIsShowAddInfo}
-						nameAudience={'Н405 - Аудитория'}
-						descAudience={'Корпус Н, 4-й этаж'}
+						nameAudience={nameAudience}
+						descAudience={descAudience}
 					/>
 				</div>
 			</div>
@@ -166,7 +171,7 @@ const Plan = () => {
 			>
 				<Menu setIsShowMenu={setIsShowMenu} />
 			</div>
-			
+
 			<div
 				className={`searchMenu_wrapper ${
 					isShowSearch ? 'showSearchMenu' : 'hideSearchMenu'
@@ -176,13 +181,13 @@ const Plan = () => {
 					title="Поиск"
 					backFunction={() => setIsShowSearch((prev) => !prev)}
 				></ComeBackHeader>
-				
+
 				<SearchMenu
 					setIsShowSearch={setIsShowSearch}
 					isShowSearch={isShowSearch}
 				/>
 			</div>
-			
+
 			<div
 				className={`campusMenu_wrapper ${
 					isShowCampusMenu ? 'showCampusMenu' : 'hideCampusMenu'
