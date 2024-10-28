@@ -28,7 +28,7 @@ import FloorFive from "../../floors/FloorFive";
 // icons //
 import burgerIcon from "../../images/burgerIcon.svg";
 import heartIcon from "../../images/heartIcon.svg";
-import homeIcon from "../../images/homeIcon.svg";
+import buildingIcon from "../../images/buildingIcon.svg";
 
 const Plan = () => {
   const [isShowAddInfo, setIsShowAddInfo] = useState(false);
@@ -132,7 +132,7 @@ const Plan = () => {
             className="button_wrapper button_home"
             onClick={() => setIsShowCampusMenu((prev) => !prev)}
           >
-            <Button icon={homeIcon} />
+            <Button icon={buildingIcon} />
           </div>
         </div>
         <div

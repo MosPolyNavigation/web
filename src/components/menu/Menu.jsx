@@ -16,7 +16,7 @@ const Menu = ({ setIsShowMenu  }) => {
       <div className="menu__packet_top">
         <div className="menu__top_text">
           <div className="menu__top_title">
-            <h2>Путеводитель Московского Политеха</h2>
+            <h2>Политех Навигация</h2>
           </div>
           <button onClick={() => setIsShowMenu((prev) => !prev)}>
             <img src={closeLargeIcon} alt="closeIcon"/>
@@ -31,7 +31,7 @@ const Menu = ({ setIsShowMenu  }) => {
       <div className="menu__packet_bottom">
         <img src={logotype} alt="Moscow Polytechnic University" />
         <span>
-          Сделано студентами проекта ”Путеводитель по Московскому Политеху”
+          Сделано студентами проекта “Политех-Навигация (ПолиНа)”
         </span>
       </div>
     </div>

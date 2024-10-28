@@ -21,6 +21,7 @@ const PopularLocations = () => {
 
     const getSmallButton = (item) => {
         if (item in icons) {
+            console.log(icons[item])
             return <SmallButton icon={icons[item]} />
         }
         return <SmallButton>{item}</SmallButton>

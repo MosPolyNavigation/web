@@ -155,6 +155,37 @@ const CampusMenu = ({
             },
           },
         });
+        this.campuses.set("BS", {
+          id: "БС",
+          rusName: "БС",
+          rusFullName: "на Большой Семеновской",
+          address: "ул. Большая Семеновская, д. 38",
+          corpuses: {
+            B: {
+              rusName: "Б",
+              planLinks: [planBOne, planBTwo, planBThree, planBFour],
+            },
+            N: {
+              rusName: "Н",
+              planLinks: [
+                planNZero,
+                planNOne,
+                planNTwo,
+                planNThree,
+                planNFour,
+                planNFive,
+              ],
+            },
+            V: {
+              rusName: "В",
+              planLinks: [planVOne, planVTwo, planVThree, planVFour, planVFive],
+            },
+            A: {
+              rusName: "А",
+              planLinks: [planAZero, planAOne, planATwo, planAThree, planAFour],
+            },
+          },
+        });
         // this.campuses.set("AV", {
         //   id: "АВ",
         //   rusName: "АВ",
@@ -263,6 +294,9 @@ const CampusMenu = ({
 
   return (
     <div className="CampusMenu__content">
+      <h2 className="CampusMenu__header">
+        Локации
+      </h2>
       <div className="CampusMenu__block">
         <CampusList
         setCurrCorpus={setCurrCorpus}
