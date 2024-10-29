@@ -40,6 +40,7 @@ const Plan = () => {
   const [isShowCampusMenu, setIsShowCampusMenu] = useState(true);
 
   const [startYAdditionalInfo, setStartYAdditionalInfo] = useState(0);
+  const [startYSearchMenu, setStartYSearchMenu] = useState(0);
   const [startXMenu, setStartXMenu] = useState(0);
 
   const [floors, setFloors] = useState([]);
@@ -59,6 +60,17 @@ const Plan = () => {
       setIsShowAddInfo(false);
     }
   };
+
+    const handleTouchStartSearchMenu = (e) => {
+        setStartYSearchMenu(e.touches[0].clientY);
+    };
+
+    const handleTouchMoveSearchMenu = (e) => {
+        const deltaY = e.touches[0].clientY - startYSearchMenu;
+        if (deltaY >= 150) {
+            setIsShowSearch(false);
+        }
+    };
 
   const handleTouchMoveMenu = (e) => {
     const deltaX = e.touches[0].clientX - startXMenu;
@@ -162,11 +174,10 @@ const Plan = () => {
         className={`searchMenu_wrapper ${
           isShowSearch ? "showSearchMenu" : "hideSearchMenu"
         }`}
+        onTouchStart={handleTouchStartSearchMenu}
+        onTouchMove={handleTouchMoveSearchMenu}
       >
-        <ComeBackHeader
-          title="Поиск"
-          backFunction={() => setIsShowSearch((prev) => !prev)}
-        ></ComeBackHeader>
+
 
         <SearchMenu
           setIsShowSearch={setIsShowSearch}

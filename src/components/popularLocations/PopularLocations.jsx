@@ -8,23 +8,22 @@ import womanIcon from "../../images/womanIcon.svg"
 import booksIcon from "../../images/booksIcon.svg"
 import wcIcon from "../../images/wcIcon.svg"
 import foodIcon from "../../images/foodIcon.svg"
+import enterIcon from "../../images/enterIcon.svg"
+import legalIcon from "../../images/legalIcon.svg"
 
 const PopularLocations = () => {
-    const locations = ["wcw", "wcm", "H 210", "library", "Вход", "Приёмная комиссия"]
-    const icons = {
-        "wcm": manIcon,
-        "wcw": womanIcon,
-        "wcu": wcIcon,
-        "food": foodIcon,
-        "library": booksIcon,
-    }
+    // location = [[text, icon]]
+    const locations = [["", womanIcon], ["", manIcon], ["H 210", foodIcon], ["", booksIcon], ["Вход", enterIcon], ["Приёмная комиссия", legalIcon]]
+    // const icons = {
+    //     "wcm": manIcon,
+    //     "wcw": womanIcon,
+    //     "wcu": wcIcon,
+    //     "food": foodIcon,
+    //     "library": booksIcon,
+    // }
 
     const getSmallButton = (item) => {
-        if (item in icons) {
-            console.log(icons[item])
-            return <SmallButton icon={icons[item]} />
-        }
-        return <SmallButton>{item}</SmallButton>
+        return <SmallButton icon={item[1]}>{item[0]}</SmallButton>
     }
 
 

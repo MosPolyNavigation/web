@@ -18,8 +18,12 @@
 }
 
 
+.audienceItem__item:first-child {
+  border-top: 1px solid $c3-Highlight;
+}
+
 .audienceItem__item:last-child {
-  border: none;
+  border-bottom: 1px solid $c3-Highlight;
 }
 
 

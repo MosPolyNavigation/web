@@ -4,7 +4,7 @@ import SmallButton from "../smallButton/SmallButton";
 
 //icons
 
-import closeIcon from "../../images/closeIcon.svg";
+import closeLargeGreyIcon from "../../images/closeLargeGreyIcon.svg";
 import heartSmallIcon from "../../images/heartSmallIcon.svg";
 import fromIcon from "../../images/fromIcon.svg";
 import toIcon from "../../images/toIcon.svg";
@@ -22,7 +22,7 @@ const AdditionalInfo = ({ nameAudience, descAudience, setIsShowAddInfo }) => {
           className="additionalInfo__button"
         >
           <button>
-            <img src={closeIcon} alt="close icon" />
+            <img src={closeLargeGreyIcon} alt="close icon" />
           </button>
         </div>
       </div>

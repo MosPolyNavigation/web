@@ -140,6 +140,8 @@
 
   padding: 0 0.625rem;
 
+
+
   margin-bottom: 1.25rem;
 }
 
@@ -171,16 +173,24 @@
   animation: hideMenu 0.4s ease-out forwards;
 }
 
+//.showSearchMenu {
+//  opacity: 1;
+//  pointer-events: auto;
+//  transition: opacity 500ms;
+//}
+//
+//.hideSearchMenu {
+//  opacity: 0;
+//  pointer-events: none;
+//  transition: opacity 500ms;
+//}
+
 .showSearchMenu {
-  opacity: 1;
-  pointer-events: auto;
-  transition: opacity 500ms;
+  animation: showSearchMenu 0.4s ease-out forwards;
 }
 
 .hideSearchMenu {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 500ms;
+  animation: hideSearchMenu 0.4s ease-out forwards;
 }
 
 
