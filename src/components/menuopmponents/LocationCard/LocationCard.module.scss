@@ -1,0 +1,113 @@
+@import '../../../styles/base';
+
+%cardTransition {
+  transition: all 400ms ease;
+}
+
+@keyframes onLoadAnimation {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+@keyframes scaleAnimation {
+  from {
+    filter: blur(3px);
+    translate: 0 -15%;
+    scale: 1.1;
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    translate: 0 0;
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+.locationCard {
+  width: 100%;
+  min-height: $size-40;
+
+  opacity: 0;
+  background: $color-2;
+  @extend %border-default;
+  cursor: pointer;
+
+  padding: toRem(8) $size-20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+
+  animation: onLoadAnimation 50ms 100ms forwards, scaleAnimation 400ms 100ms forwards ease-out;
+  @extend %cardTransition;
+
+  &.disabled {
+    .titleWrapper {
+      color: $color-3;
+    }
+  }
+
+  .titleWrapper {
+    width: 100%;
+    display: flex;
+
+    @extend %text-4;
+    color: $color-4;
+    @extend %cardTransition;
+
+    .filler {
+      flex-grow: 0.5;
+      @extend %cardTransition;
+    }
+  }
+
+  .contentWrapper {
+    will-change: height;
+
+    max-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    //animation: onLoadAnimation 0s 1s forwards;
+    @extend %cardTransition;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: $size-10;
+
+      .corpuses {
+        width: 100%;
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: $size-10;
+      }
+    }
+  }
+
+
+}
+
+.locationCard.expanded {
+  cursor: auto;
+
+  padding: $size-20;
+  gap: $size-10;
+
+  .titleWrapper {
+    color: $color-5;
+
+    .filler {
+      flex-grow: 0;
+    }
+  }
+
+}

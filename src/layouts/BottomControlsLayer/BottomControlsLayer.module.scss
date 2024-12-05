@@ -1,0 +1,35 @@
+@import '../../styles/base';
+
+.bottomControlsLayer {
+  position: absolute;
+  z-index: 2;
+  inset: auto $size-10 $size-20 $size-10;
+  translate: 0;
+
+  display: flex;
+  justify-content: space-between;
+  transition: all 300ms ease;
+
+  &.centered {
+    translate: 0 toRem(-129);
+  }
+
+  .favouriteBtn {
+    transition: all $search-anim-dur ease;
+  }
+
+  &.searchOpen {
+    z-index: 3;
+
+    .favouriteBtn {
+      pointer-events: none;
+      opacity: 0;
+    }
+  }
+
+  .locationsBtn {
+    padding-left: calc($size-10 + toRem(0.5));
+    padding-right: calc($size-10 - toRem(2.5));
+  }
+
+}

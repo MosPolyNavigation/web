@@ -1,0 +1,41 @@
+@import '../../../styles/base';
+
+.spaceInfo {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+
+  .title {
+    @extend %text-3;
+    margin-right: toRem(30);
+
+    .spaceIcon {
+      display: inline-block;
+      margin-right: $size-10;
+      position: relative;
+      top: 3px;
+    }
+  }
+
+  .location {
+    color: $color-4;
+    margin-bottom: $size-15;
+  }
+
+  .actions {
+    display: flex;
+    gap: $size-10;
+
+    .heartBtn {
+      margin-right: auto;
+    }
+
+    @media (min-width: 992px) {
+      .heartBtn {
+        margin: unset;
+      }
+    }
+  }
+}

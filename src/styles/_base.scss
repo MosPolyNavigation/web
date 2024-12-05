@@ -1,0 +1,10 @@
+@import 'variables';
+@import 'functions';
+@import 'text';
+
+@keyframes hide-end{
+  to {
+    display: none;
+    visibility: hidden;
+  }
+}

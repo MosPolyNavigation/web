@@ -1,0 +1,60 @@
+@import '../../../styles/base';
+
+$floor-animation-duration: 500ms;
+
+.floorNumber {
+  display: inline-block;
+  position: relative;
+
+  .floorBox {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .new {
+    translate: 0 $size-40;
+
+    &.toUp {
+      animation: toUp $floor-animation-duration ease-in-out forwards ;
+    }
+
+    &.toDown {
+      animation: toDown $floor-animation-duration ease-in-out forwards ;
+    }
+  }
+
+  .base {
+    translate: 0 0;
+
+    &.toUp {
+      animation: toUp $floor-animation-duration ease-in-out forwards reverse;
+    }
+
+    &.toDown {
+      animation: toDown $floor-animation-duration ease-in-out forwards reverse;
+    }
+  }
+}
+
+@keyframes toUp {
+  from {
+    translate: 0 -$size-40;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+
+@keyframes toDown {
+  from {
+    translate: 0 $size-40;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}

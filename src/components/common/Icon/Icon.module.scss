@@ -1,0 +1,28 @@
+@import '../../../styles/base';
+
+.icon {
+
+  &:not(.initialColor) {
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: cover;
+  }
+
+  &.sizeM {
+    width: $size-20;
+    height: $size-20;
+    min-width: $size-20;
+  }
+
+  &.sizeS {
+    width: toRem(16);
+    height: toRem(16);
+    min-width: toRem(16);
+  }
+
+  &.initialColor {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}

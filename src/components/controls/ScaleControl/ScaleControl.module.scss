@@ -1,0 +1,33 @@
+@import '../../../styles/base';
+
+.scaleControl {
+  @extend %border-default;
+  @extend %shadow-default;
+  background: $color-2;
+  width: $size-40;
+  height: fit-content;
+  padding: toRem(2);
+  display: flex;
+  flex-direction: column;
+  gap: $size-5;
+  pointer-events: auto;
+
+  .scaleButton {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 150ms ease;
+  }
+}
+
+@media (hover: hover) {
+  .scaleButton:hover {
+    background-color: $color-hover;
+  }
+}
+
+
+

@@ -1,0 +1,79 @@
+@import '../../../styles/base';
+
+.floorControl {
+	width: $size-40;
+	height: fit-content;
+	min-height: toRem(40 * 3.5);
+	max-height: toRem(40 * 4.5);
+	background: $color-2;
+	color: $color-4;
+	padding: toRem(2);
+	@extend %border-default;
+	@extend %shadow-default;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $size-5;
+	overflow-y: scroll;
+	scrollbar-width: none;
+	position: relative;
+	pointer-events: auto;
+
+	.floorNumber {
+		width: toRem(34);
+		height: toRem(34);
+		border-radius: 50%;
+		color: $color-4;
+		font-size: toRem(20);
+		line-height: toRem(20);
+		font-weight: 400;
+		padding: toRem(7);
+		text-align: center;
+		z-index: 1;
+		transition: color 500ms ease, background-color 150ms ease;
+
+		&.current {
+			color: $color-2;
+		}
+	}
+
+	.circle {
+		position: absolute;
+		top: toRem(2);
+		left: toRem(2);
+		width: toRem(34);
+		height: toRem(34);
+		background-color: $ext-color-blue;
+		border-radius: 50%;
+		z-index: 0;
+		transition: top 500ms ease;
+
+		&.floor0 {
+			top: toRem(2)
+		}
+		&.floor1 {
+			top: toRem(2 + (34 + 5) * 1)
+		}
+		&.floor2 {
+			top: toRem(2 + (34 + 5) * 2)
+		}
+		&.floor3 {
+			top: toRem(2 + (34 + 5) * 3)
+		}
+		&.floor4 {
+			top: toRem(2 + (34 + 5) * 4)
+		}
+		&.floor5 {
+			top: toRem(2 + (34 + 5) * 5)
+		}
+		&.floor6 {
+			top: toRem(2 + (34 + 5) * 6)
+		}
+	}
+}
+
+@media (hover: hover) {
+	.floorNumber:hover:not(.current) {
+		background-color: $color-hover;
+	}
+}

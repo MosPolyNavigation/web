@@ -1,0 +1,55 @@
+@import '../../../styles/base';
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    width: 100%;
+    padding: $size-10 0;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: $size-5;
+    @extend %text-2;
+
+    .basicText {
+      display: flex;
+      align-items: center;
+      gap: $size-10;
+
+      .icon {
+        width: $size-20;
+        height: $size-20;
+        //background: $ext-color-blue;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: cover;
+      }
+    }
+
+    .addText {
+      margin-left: calc($size-10 + $size-20); //30
+      color: $color-4;
+      text-align: start;
+      overflow-y: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 1; /* number of lines to show */
+      line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  .divider {
+    width: 100%;
+    height: 2px;
+    background-color: $color-3;
+    border-radius: 1px;
+  }
+
+  &.sizeS {
+    .content {
+      padding: $size-5 $size-10 $size-5 0;
+    }
+  }
+}

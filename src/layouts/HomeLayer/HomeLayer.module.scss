@@ -1,0 +1,68 @@
+@import '../../styles/base';
+
+@keyframes show {
+  from {
+    scale: 1.05;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+.homeLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background: $color-1;
+  scale: 1;
+  opacity: 1;
+
+  padding: $size-20 $size-10 calc($size-40 * 2) $size-10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  animation: show ease-out 400ms;
+  transition: all ease 400ms;
+
+  &.hidden {
+    opacity: 0;
+    scale: 1.05;
+
+    animation: hide-end 0s 500ms forwards;
+  }
+
+  .screenCaption {
+    @extend %text-4;
+    color: $color-5;
+  }
+
+  .content {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: $size-20;
+  }
+
+  &.apple {
+    .content {
+      animation: apple-fix 500s ease infinite alternate;
+    }
+  }
+}
+
+@keyframes apple-fix {
+  from {
+    gap: toRem(20);
+  }
+  to {
+    gap: toRem(20.1)
+  }
+}

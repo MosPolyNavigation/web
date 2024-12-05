@@ -1,0 +1,99 @@
+@import '../../styles/base';
+
+.bottomLayer {
+  //noinspection CssInvalidPropertyValue
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  //noinspection CssInvalidPropertyValue
+  top: calc(100dvh - toRem(129));
+  min-height: calc(100dvh - $size-20);
+  pointer-events: auto;
+  @extend %shadow-default;
+  animation: show ease 300ms;
+  transition: all ease 300ms;
+  translate: 0 0;
+
+
+  &.hidden {
+    translate: 0 toRem(129);
+    box-shadow: none;
+    animation: hide-end 0s 500ms forwards;
+  }
+
+  &.expandedFromHidden {
+    translate: 0 calc(-100dvh + toRem(129) + $size-20);
+    animation: showExpandedFromHidden ease 500ms;
+
+    @media (orientation: portrait) {
+      -moz-animation: none;
+    }
+
+    @keyframes showExpandedFromHidden {
+      from {
+        translate: 0 toRem(129);
+      }
+      to {
+        translate: 0 calc(-100dvh + toRem(129) + $size-20);
+        @extend %shadow-default;
+      }
+    }
+  }
+
+  &.expandedFromMiddle {
+    translate: 0 calc(-100dvh + toRem(129) + $size-20);
+    animation: showExpandedFromMiddle ease 500ms;
+
+    @media (orientation: portrait) {
+      -moz-animation: none;
+    }
+
+    @keyframes showExpandedFromMiddle {
+      from {
+        translate: 0 0;
+      }
+      to {
+        translate: 0 calc(-100dvh + toRem(129) + $size-20);
+        @extend %shadow-default;
+      }
+    }
+  }
+
+  @keyframes show {
+    from {
+      translate: 0 toRem(129);
+      box-shadow: none;
+    }
+    to {
+      translate: 0 0;
+      @extend %shadow-default;
+    }
+  }
+
+  background-color: $color-2;
+  @extend %border-default;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  @extend %shadow-default;
+
+
+  padding: 0 $size-20;
+  display: flex;
+  flex-direction: column;
+
+  .slider {
+    width: $size-40;
+    height: toRem(3);
+    margin: $size-10 auto toRem(7) auto;
+    background-color: $color-3;
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: $size-20;
+    right: $size-20;
+  }
+}
