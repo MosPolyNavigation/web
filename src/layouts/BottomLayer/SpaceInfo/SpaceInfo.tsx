@@ -16,11 +16,11 @@ const SpaceInfo: FC = () => {
 				<span>Н405 - Аудитория</span>
 				
 				{/*TODO: Это на время айдишник*/}
-				<span style={{color: Color.C4, fontWeight: 600, marginLeft: 150}}>{selectedRoom}</span>
+				{/*<span style={{color: Color.C4, fontWeight: 600, marginLeft: 150}}>{selectedRoom}</span>*/}
 				
 			</div>
 
-			<div className={cl.location}>Корпус Н, 4-й этаж</div>
+			<div className={cl.location}>Корпус Н, 4-й этаж, &nbsp;&nbsp; <u>id: {selectedRoom}</u></div>
 
 			<div className={cl.actions}>
 				<Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={IconLink.HEART} />
