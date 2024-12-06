@@ -3,8 +3,9 @@
 .floorControl {
 	width: $size-40;
 	height: fit-content;
-	min-height: toRem(40 * 3.5);
-	max-height: toRem(40 * 4.5);
+	//min-height: toRem(40 * 3.5);
+	//TODO: Сделать чтобы было адаптивно макс высота при маленьких экранах
+	//max-height: toRem(40 * 4.5);
 	background: $color-2;
 	color: $color-4;
 	padding: toRem(2);
