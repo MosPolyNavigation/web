@@ -18,8 +18,10 @@ export type PlanData = {
 	floor: number,
 	available: boolean,
 	wayToSvg: string,
+	graph: unknown[]
 	entrances: PlanEntrances[],
-	corpus: CorpusData
+	corpus: CorpusData,
+
 }
 
 export type Id = string

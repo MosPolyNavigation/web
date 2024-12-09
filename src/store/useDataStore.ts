@@ -64,6 +64,7 @@ function fillData(data: initialLocationData[]) {
 			short: inLocation.short,
 			address: inLocation.address,
 			available: inLocation.available,
+			crossings: inLocation.crossings ?? []
 		};
 
 		dataStore().locations.push(location);
@@ -76,6 +77,7 @@ function fillData(data: initialLocationData[]) {
 					available: inCorpus.available,
 					title: inCorpus.title,
 					location: dataStore().locations.find(location => location.id === inLocation.id) as LocationData,
+					stairs: inCorpus.stairs ?? []
 				};
 
 				dataStore().corpuses.push(corpus);
@@ -86,6 +88,7 @@ function fillData(data: initialLocationData[]) {
 							floor: parseInt(inPlan.floor),
 							available: inPlan.available,
 							wayToSvg: inPlan.wayToSvg,
+							graph: inPlan.graph ?? [],
 							entrances: inPlan.entrances as PlanEntrances[],
 							corpus: dataStore().corpuses.find(corpus => corpus.id === inCorpus.id) as CorpusData,
 						};
@@ -114,7 +117,7 @@ type initialLocationData = {
 	available: boolean
 	address: string
 	corpuses?: initialCorpusData[]
-	crossings?: string
+	crossings?: unknown[]
 }
 
 type initialCorpusData = {
@@ -123,7 +126,7 @@ type initialCorpusData = {
 	title: string
 	available: boolean
 	plans?: initialPlanData[]
-	stairs?: string
+	stairs?: unknown[]
 }
 
 type initialPlanData = {
@@ -132,6 +135,6 @@ type initialPlanData = {
 	floor: string
 	available: boolean
 	wayToSvg: string
-	graph: string
+	graph?: unknown[]
 	entrances: string
 }

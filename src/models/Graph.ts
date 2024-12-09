@@ -1,5 +1,5 @@
 //Граф тут из данных
-import {useDataStore} from "../store/useDataStore";
+import {dataStore, useDataStore} from "../store/useDataStore";
 import {LocationData} from "../associations/types";
 
 export class Graph {
@@ -8,8 +8,13 @@ export class Graph {
 
 
     constructor(location: LocationData) { //Вызывается после того заполнились данные приложения и заполняет себя
-        console.log( useDataStore.getState().locations ) //Вывести в консоль локации
         console.log(location)
+        const corpusesOfLocation = dataStore().corpuses.filter(corpus => corpus.location === location)
+        console.log(corpusesOfLocation)
+        corpusesOfLocation.forEach(corpus => {
+            const plansOfCorpus = dataStore().plans.filter(plan => plan.corpus === corpus);
+            console.log(plansOfCorpus)
+        })
         console.log('Граф начинает заполняться')
         this.vertexes = new Map()
     }
