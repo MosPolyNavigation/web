@@ -1,4 +1,4 @@
-export enum State {
+export enum CardState {
 	HIDDEN= 'HIDDEN',
 	COLLAPSED= 'COLLAPSED',
 	EXPANDED= 'EXPANDED'

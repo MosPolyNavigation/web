@@ -1,5 +1,5 @@
 import {create} from 'zustand/react';
-import {BtnName, Layout, State} from '../associations/enums.ts';
+import {BtnName, Layout, CardState} from '../associations/enums.ts';
 
 import {PlanData, RoomModel} from '../associations/types.ts';
 import {PlanModel} from '../models/Plan/PlanModel.ts';
@@ -7,8 +7,10 @@ import {PlanModel} from '../models/Plan/PlanModel.ts';
 type State = {
 	activeLayout: Layout
 	previousLayout: Layout
-	selectedRoom: null | string
+	selectedRoomId: null | string
 	currentPlan: null | PlanData
+	previousPlan: PlanData | null
+	bottomCardState: CardState
 	planModel: null | PlanModel
 }
 
@@ -16,7 +18,7 @@ type Action = {
 	changeSelectedRoom: (roomId: null | string) => void;
 	controlBtnClickHandler: (btnName: BtnName) => void
 	changeLayout: (layout: Layout) => void
-	changeCurrentPlan: (plan: PlanData) => void
+	changeCurrentPlan: (plan: PlanData | null) => void
 	changePlanModel: (
 		planInf: PlanData,
 		planSvgEl: SVGSVGElement,
@@ -32,8 +34,13 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	activeLayout: Layout.PLAN,
 	previousLayout: Layout.PLAN,
 	currentPlan: null,
-	selectedRoom: null,
+	previousPlan: null,
+	selectedRoomId: null,
 	planModel: null,
+	updateState: {},
+	bottomCardState: CardState.HIDDEN,
+
+
 	
 	controlBtnClickHandler: (btnName) => {
 		const activeLayout = get().activeLayout;
@@ -60,16 +67,16 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	},
 	
 	changeSelectedRoom: (roomId) => {
-		if(get().selectedRoom !== roomId) {
-			set(({selectedRoom: roomId}));
+		if(get().selectedRoomId !== roomId) {
+			set(({selectedRoomId: roomId}));
 		}
 		if(roomId) {
-			set(({bottomCardState: State.COLLAPSED}));
+			set(({bottomCardState: CardState.COLLAPSED}));
 		}
 	},
 	
 	changeCurrentPlan: (plan) => {
-		if(get().currentPlan !== plan) {
+		if(get().currentPlan !== plan && plan) {
 			set(({previousPlan: get().currentPlan}));
 			set(({currentPlan: plan}));
 			console.log(`План изменен на %c${plan.id}`, 'font-weight: bold;');

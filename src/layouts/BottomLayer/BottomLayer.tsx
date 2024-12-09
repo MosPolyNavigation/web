@@ -3,7 +3,7 @@ import cl from './BottomLayer.module.scss';
 import IconButton from '../../components/buttons/IconButton/IconButton.tsx';
 import {IconLink} from '../../associations/IconLink.ts';
 import classNames from 'classnames';
-import {Layout, State} from '../../associations/enums.ts';
+import {Layout, CardState} from '../../associations/enums.ts';
 import useOnHideRemover from '../../hooks/useOnHideRemover.ts';
 import {useAppStore} from '../../store/useAppStore.ts';
 
@@ -15,18 +15,18 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 	const activeLayout = useAppStore(state => state.activeLayout)
 	const [selectedRoom, changeSelectedRoom] = [useAppStore(state => state.selectedRoom), useAppStore(state => state.changeSelectedRoom)]
 
-	const [bottomCardState, setBottomCardState] = useState<State>(State.HIDDEN);
-	const previousState = useRef<State>(bottomCardState);
+	const [bottomCardState, setBottomCardState] = useState<CardState>(CardState.HIDDEN);
+	const previousState = useRef<CardState>(bottomCardState);
 
 	useEffect(() => {
 		if(activeLayout === Layout.SEARCH) {
-			setBottomCardState(State.EXPANDED)
+			setBottomCardState(CardState.EXPANDED)
 		}
 		else if(selectedRoom) {
-			setBottomCardState(State.COLLAPSED)
+			setBottomCardState(CardState.COLLAPSED)
 		}
 		else {
-			setBottomCardState(State.HIDDEN)
+			setBottomCardState(CardState.HIDDEN)
 		}
 	}, [selectedRoom, activeLayout]);
 
@@ -46,9 +46,9 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 
 	//TODO: переделать на навешивание классов через время
 	const layerClassNames = classNames(cl.bottomLayer, {
-		[cl.hidden]: (bottomCardState === State.HIDDEN),
-		[cl.expandedFromMiddle]: (previousState.current === State.COLLAPSED && bottomCardState === State.EXPANDED),
-		[cl.expandedFromHidden]: (previousState.current === State.HIDDEN && bottomCardState === State.EXPANDED),
+		[cl.hidden]: (bottomCardState === CardState.HIDDEN),
+		[cl.expandedFromMiddle]: (previousState.current === CardState.COLLAPSED && bottomCardState === CardState.EXPANDED),
+		[cl.expandedFromHidden]: (previousState.current === CardState.HIDDEN && bottomCardState === CardState.EXPANDED),
 	});
 
 	return (
