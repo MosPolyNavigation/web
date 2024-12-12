@@ -4,6 +4,7 @@ import {appStore} from './useAppStore.ts';
 import {CorpusData, LocationData, PlanData, PlanEntrances} from '../associations/types.ts';
 import {appConfig} from '../appConfig.ts';
 import {Graph} from "../models/Graph";
+import { Way } from '../models/Way.ts';
 
 // noinspection JSUnusedLocalSymbols
 const address = 'https://mospolynavigation.github.io/polyna-preprocess/locations.json';
@@ -105,6 +106,7 @@ function fillData(data: initialLocationData[]) {
 		const graphInitLocation = firstPlan.corpus.location;
 		if(graphInitLocation) {
 			dataStore().setGraphForLocation(graphInitLocation)
+			// new Way('a-0-stair-1', 'a-3-stair-1')
 		}
 	}
 }
@@ -117,7 +119,7 @@ type initialLocationData = {
 	available: boolean
 	address: string
 	corpuses?: initialCorpusData[]
-	crossings?: unknown[]
+	crossings?: Array<[string, string, number]>
 }
 
 type initialCorpusData = {
@@ -126,7 +128,7 @@ type initialCorpusData = {
 	title: string
 	available: boolean
 	plans?: initialPlanData[]
-	stairs?: unknown[]
+	stairs?: Array<string[]>
 }
 
 type initialPlanData = {
