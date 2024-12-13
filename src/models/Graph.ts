@@ -8,16 +8,13 @@ export class Graph {
     readonly location: LocationData
 
 
-    constructor(location: LocationData) { //Вызывается после того заполнились данные приложения и заполняет себя 
+    constructor(location: LocationData) { //Вызывается после того заполнились данные приложения и заполняет себя
         console.log('Граф начинает заполняться')
         this.location = location
         this.fillVertexesByRawVertexes()
         this.addStairs()
         this.addCrossings()
         console.log(this.vertexes.filter(vertex => vertex.type === 'crossing'))
-        const types = new Set(
-            this.vertexes.map(vertex => vertex.type)
-        )      
 		
     }
 

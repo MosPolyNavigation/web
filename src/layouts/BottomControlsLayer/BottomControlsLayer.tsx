@@ -10,10 +10,12 @@ import {useAppStore} from '../../store/useAppStore.ts';
 const BottomControlsLayer: FC = () => {
 
 	const [activeLayout,controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
-	const [selectedRoom, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
+	const [selectedRoomId, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
+	const query = useAppStore(state => state.query);
+	console.log(query.to)
 
 	const heartBtnClickHandler = () => {
-		if(!selectedRoom) {
+		if(!selectedRoomId) {
 			changeSelectedRoom('n-405')
 		}
 		else {
@@ -33,7 +35,7 @@ const BottomControlsLayer: FC = () => {
 	return (
 		<div
 			className={classNames(cl.bottomControlsLayer, {
-				[cl.centered]: !!selectedRoom && activeLayout !== Layout.SEARCH,
+				[cl.centered]: !!selectedRoomId && activeLayout !== Layout.SEARCH,
 				[cl.searchOpen]: activeLayout === Layout.SEARCH,
 			})}
 		>
@@ -43,6 +45,13 @@ const BottomControlsLayer: FC = () => {
 				onClick={heartBtnClickHandler}
 				//КНОПКА С СЕРДЕЧКОМ
 			/>
+			{activeLayout === Layout.PLAN &&
+			<div style={{position: "absolute"}}>
+				От: {query.to}
+				<br />
+				До: {query.from}
+			</div>
+			}
 			<SearchButton
 				expanded={activeLayout === Layout.SEARCH}
 				onClick={() => controlBtnClickHandler(BtnName.SEARCH)}

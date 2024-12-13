@@ -106,7 +106,7 @@ function fillData(data: initialLocationData[]) {
 		const graphInitLocation = firstPlan.corpus.location;
 		if(graphInitLocation) {
 			dataStore().setGraphForLocation(graphInitLocation)
-			// new Way('a-0-stair-1', 'a-3-stair-1')
+			// new Way('a-210', 'a-412')
 		}
 	}
 }

@@ -3,6 +3,7 @@ import {BtnName, Layout} from '../associations/enums.ts';
 
 import {PlanData, RoomModel} from '../associations/types.ts';
 import {PlanModel} from '../models/Plan/PlanModel.ts';
+import {QueryService} from "../models/QueryService";
 
 type State = {
 	activeLayout: Layout
@@ -11,6 +12,7 @@ type State = {
 	currentPlan: null | PlanData
 	previousPlan: PlanData | null
 	planModel: null | PlanModel
+	query: QueryService
 }
 
 type Action = {
@@ -22,7 +24,8 @@ type Action = {
 		planInf: PlanData,
 		planSvgEl: SVGSVGElement,
 		virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void,
-	) => void
+	) => void,
+	setQuery: (query: QueryService) => void
 }
 
 export function appStore() {
@@ -37,6 +40,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	selectedRoomId: null,
 	planModel: null,
 	updateState: {},
+	query: new QueryService(),
 
 
 	
@@ -91,4 +95,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	changePlanModel: (planInf, planSvgEl, virtualSvg, roomClickHandler) => {
 		set({planModel: new PlanModel(planInf, planSvgEl, virtualSvg, roomClickHandler)});
 	},
+
+	setQuery: (query) => {
+		set({query: query});
+	}
 }));

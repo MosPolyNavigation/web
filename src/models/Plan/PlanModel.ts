@@ -1,7 +1,7 @@
 import {Id, PlanData, RoomModel} from '../../associations/types.ts';
 import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts';
 import cl from '../../layouts/Plan/PlanLayout.module.scss';
-import {wait} from '../../functions/common/coomonFunctions.ts';
+// import {wait} from '../../functions/common/coomonFunctions.ts';
 
 export class PlanModel {
 	private readonly rooms: Map<Id, RoomModel>;
@@ -18,13 +18,13 @@ export class PlanModel {
 		planSvgEl.innerHTML = virtualSvg.innerHTML; //Установка внутреннего содержимого отображаемого свг из спаршенного
 		
 		planSvgEl.style.scale = ''; //Сброс масштаба
-		const svgGBCR = planSvgEl.firstElementChild.getBoundingClientRect();
+		const svgGBound = planSvgEl.firstElementChild?.getBoundingClientRect() as DOMRect;
 		
 		//Если ширина свгшки больше чем ширина экрана с отступом 129пикс (пока фиксированно), то уменьшить и то же для высоты
-		if(svgGBCR.width > window.innerWidth - 120)
-			planSvgEl.style.scale = ((window.innerWidth - 120) / svgGBCR.width).toFixed(5);
-		if(svgGBCR.height > window.innerHeight - 140)
-			planSvgEl.style.scale = ((window.innerHeight - 140) / svgGBCR.height).toFixed(5);
+		if(svgGBound.width > window.innerWidth - 120)
+			planSvgEl.style.scale = ((window.innerWidth - 120) / svgGBound.width).toFixed(5);
+		if(svgGBound.height > window.innerHeight - 140)
+			planSvgEl.style.scale = ((window.innerHeight - 140) / svgGBound.height).toFixed(5);
 		
 		['g#Walls', 'g#Textes', '#gEntrances', 'g#Icons'].forEach(selector => {
 			this.planSvgEl.querySelector(selector)?.classList?.add(cl.noSelect);
@@ -55,7 +55,7 @@ export class PlanModel {
 			// }
 		}
 		
-		function isEntranceOfRoom(entranceEl, roomEl): boolean { //Функция возвращает, является ли кружочек входа входом в данное помещение
+		function isEntranceOfRoom(entranceEl: HTMLElement | SVGCircleElement, roomEl: HTMLElement | SVGPathElement | SVGRectElement): boolean { //Функция возвращает, является ли кружочек входа входом в данное помещение
 			const cx = Number(entranceEl.getAttribute('cx'));
 			const cy = Number(entranceEl.getAttribute('cy'));
 			const x = Number(roomEl.getAttribute('x'));
@@ -117,23 +117,23 @@ export class PlanModel {
 	}
 	
 	// noinspection JSUnusedLocalSymbols
-	private testRoomsAndEntrances() {
-		console.log('ПОМЕЩЕНИЯ И ВХОДЫ');
-		
-		async function aue() {
-			const {rooms} = this;
-			for(const [roomId, roomData] of rooms) {
-				await wait(1000);
-				console.log(roomId);
-				roomData.roomEl.setAttribute('fill', '#3d9984');
-				roomData.roomEl.setAttribute('class', '');
-				roomData.entranceEl.setAttribute('fill', '#CE5757');
-				roomData.entranceEl.setAttribute('r', '20');
-				roomData.entranceEl.setAttribute('class', '');
-				console.log(roomData.roomEl);
-			}
-		}
-		
-		aue.bind(this)();
-	}
+	// private testRoomsAndEntrances() {
+	// 	console.log('ПОМЕЩЕНИЯ И ВХОДЫ');
+	//
+	// 	async function aue() {
+	// 		const {rooms} = this;
+	// 		for(const [roomId, roomData] of rooms) {
+	// 			await wait(1000);
+	// 			console.log(roomId);
+	// 			roomData.roomEl.setAttribute('fill', '#3d9984');
+	// 			roomData.roomEl.setAttribute('class', '');
+	// 			roomData.entranceEl.setAttribute('fill', '#CE5757');
+	// 			roomData.entranceEl.setAttribute('r', '20');
+	// 			roomData.entranceEl.setAttribute('class', '');
+	// 			console.log(roomData.roomEl);
+	// 		}
+	// 	}
+	//
+	// 	aue.bind(this)();
+	// }
 }

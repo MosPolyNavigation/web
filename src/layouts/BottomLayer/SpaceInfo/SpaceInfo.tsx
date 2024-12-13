@@ -4,31 +4,39 @@ import Icon from '../../../components/common/Icon/Icon.tsx';
 import {IconLink} from '../../../associations/IconLink.ts';
 import {Color, Size} from '../../../associations/enums.ts';
 import Button from '../../../components/buttons/LargeButton/Button.tsx';
-import {useAppStore} from '../../../store/useAppStore.ts';
+import {appStore, useAppStore} from '../../../store/useAppStore.ts';
+import {QueryService} from "../../../models/QueryService";
 
 const SpaceInfo: FC = () => {
-	const selectedRoom = useAppStore(state => state.selectedRoomId);
-	
+	const selectedRoomId = useAppStore(state => state.selectedRoomId);
+
+	function fromBtnHandler() {
+		appStore().setQuery(new QueryService({from: selectedRoomId}))
+		appStore().changeSelectedRoom(null)
+	}
+
+	function toBtnHandler() {
+		appStore().setQuery(new QueryService({to: selectedRoomId}))
+		appStore().changeSelectedRoom(null)
+	}
+
+
+
 	return (
 		<div className={cl.spaceInfo}>
 			<div className={cl.title}>
-				<Icon color={Color.VIOLET} classNameExt={cl.spaceIcon} iconLink={IconLink.STUDY} />
+				<Icon color={Color.VIOLET} classNameExt={cl.spaceIcon} iconLink={IconLink.STUDY}/>
 				<span>Н405 - Аудитория</span>
-				
-				{/*TODO: Это на время айдишник*/}
-				{/*<span style={{color: Color.C4, fontWeight: 600, marginLeft: 150}}>{selectedRoom}</span>*/}
-				
 			</div>
 
-			<div className={cl.location}>Корпус Н, 4-й этаж, &nbsp;&nbsp; <u>id: {selectedRoom}</u></div>
+			{/*TODO: Это на время айдишник*/}
+			<div className={cl.location}>Корпус Н, 4-й этаж, &nbsp;&nbsp; <u>id: {selectedRoomId}</u></div>
 
 			<div className={cl.actions}>
-				<Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={IconLink.HEART} />
-				<Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text="Отсюда" />
-				<Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text="Сюда" />
-
+				<Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={IconLink.HEART}/>
+				<Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text="Отсюда" onClick={fromBtnHandler}/>
+				<Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text="Сюда" onClick={toBtnHandler}/>
 			</div>
-
 		</div>
 	);
 };
