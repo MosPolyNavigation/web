@@ -6,11 +6,10 @@ import {wait} from '../../functions/common/coomonFunctions.ts';
 export class PlanModel {
 	private readonly rooms: Map<Id, RoomModel>;
 	
-	
-	constructor(private planInf: PlanData, private planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void) {
+	constructor(private plan: PlanData, private planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void) {
 		this.rooms = new Map();
 		
-		virtualSvg.querySelector(`g#${planInf.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть
+		virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть
 		
 		copyAttribute(planSvgEl, virtualSvg, 'viewBox'); //Копирование атрибутов из спаршенного изображения в реф-свг на страницу
 		copyAttribute(planSvgEl, virtualSvg, 'xmlns');
@@ -66,7 +65,7 @@ export class PlanModel {
 			return (cx >= x && cx <= x + width && cy >= y && cy <= y + height);
 		}
 		
-		const entrancesFromData: Map<Id, Id> = new Map(planInf.entrances); //Достаем данные о входах в помещения на плане из данных
+		const entrancesFromData: Map<Id, Id> = new Map(plan.entrances); //Достаем данные о входах в помещения на плане из данных
 		
 		for(const [roomId, roomData] of this.rooms) { //заполнение входов в помещения
 			if(entrancesFromData.get(roomId)) { //если вход задан в данных, взять оттуда
@@ -105,7 +104,6 @@ export class PlanModel {
 					room.roomEl.classList.remove(cl.selected);
 				}
 				if(options.hideEntrances) {
-					console.log(room);
 					room.entranceEl.classList.remove(cl.selected);
 				}
 			}

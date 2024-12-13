@@ -13,7 +13,7 @@ interface BottomLayerProps {
 
 const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 	const activeLayout = useAppStore(state => state.activeLayout)
-	const [selectedRoom, changeSelectedRoom] = [useAppStore(state => state.selectedRoom), useAppStore(state => state.changeSelectedRoom)]
+	const [selectedRoom, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
 
 	const [bottomCardState, setBottomCardState] = useState<CardState>(CardState.HIDDEN);
 	const previousState = useRef<CardState>(bottomCardState);

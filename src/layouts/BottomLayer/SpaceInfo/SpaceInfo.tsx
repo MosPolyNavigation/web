@@ -7,7 +7,7 @@ import Button from '../../../components/buttons/LargeButton/Button.tsx';
 import {useAppStore} from '../../../store/useAppStore.ts';
 
 const SpaceInfo: FC = () => {
-	const selectedRoom = useAppStore(state => state.selectedRoom);
+	const selectedRoom = useAppStore(state => state.selectedRoomId);
 	
 	return (
 		<div className={cl.spaceInfo}>

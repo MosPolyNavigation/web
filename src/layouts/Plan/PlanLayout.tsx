@@ -21,12 +21,12 @@ const PlanLayout: FC = () => {
 	function roomClickHandler(room: RoomModel) {
 		const planModel = appStore().planModel
 		if(planModel) {
-			if(appStore().selectedRoom !== room.roomId) {
-				useAppStore.setState({selectedRoom: room.roomId});
+			if(appStore().selectedRoomId !== room.roomId) {
+				appStore().changeSelectedRoom(room.roomId)
 				planModel.toggleRoom(room, {activateRoom: true, hideRooms: true, hideEntrances: true, activateEntrance: true});
 			}
 			else {
-				useAppStore.setState({selectedRoom: null});
+				appStore().changeSelectedRoom(null)
 				planModel.toggleRoom(room, {hideRooms: true, hideEntrances: true})
 			}
 		}
@@ -38,7 +38,7 @@ const PlanLayout: FC = () => {
 				.then(response => {
 					if(!planSvgRef.current) return; //Если вдруг нет свгшки на странице, пропустить
 					// Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
-					const parsedSvgDomEl = (new DOMParser()).parseFromString(response.data, 'image/svg+xml').documentElement as SVGSVGElement;
+					const parsedSvgDomEl = (new DOMParser()).parseFromString(response.data, 'image/svg+xml').documentElement as SVGSVGElement | HTMLElement;
 					appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl, roomClickHandler) //Установка новой модели-плана в стор приложения
 				});
 		}

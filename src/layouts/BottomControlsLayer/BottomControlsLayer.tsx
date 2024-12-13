@@ -10,7 +10,7 @@ import {useAppStore} from '../../store/useAppStore.ts';
 const BottomControlsLayer: FC = () => {
 
 	const [activeLayout,controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
-	const [selectedRoom, changeSelectedRoom] = [useAppStore(state => state.selectedRoom), useAppStore(state => state.changeSelectedRoom)]
+	const [selectedRoom, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
 
 	const heartBtnClickHandler = () => {
 		if(!selectedRoom) {
@@ -41,6 +41,7 @@ const BottomControlsLayer: FC = () => {
 				classNameExt={cl.favouriteBtn}
 				iconLink={IconLink.HEART}
 				onClick={heartBtnClickHandler}
+				//КНОПКА С СЕРДЕЧКОМ
 			/>
 			<SearchButton
 				expanded={activeLayout === Layout.SEARCH}

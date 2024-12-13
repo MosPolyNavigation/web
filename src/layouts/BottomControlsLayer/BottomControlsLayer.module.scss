@@ -16,6 +16,7 @@
 
   .favouriteBtn {
     transition: all $search-anim-dur ease;
+    visibility: hidden;
   }
 
   &.searchOpen {

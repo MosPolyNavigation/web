@@ -1,5 +1,5 @@
 import {create} from 'zustand/react';
-import {BtnName, Layout, CardState} from '../associations/enums.ts';
+import {BtnName, Layout} from '../associations/enums.ts';
 
 import {PlanData, RoomModel} from '../associations/types.ts';
 import {PlanModel} from '../models/Plan/PlanModel.ts';
@@ -10,7 +10,6 @@ type State = {
 	selectedRoomId: null | string
 	currentPlan: null | PlanData
 	previousPlan: PlanData | null
-	bottomCardState: CardState
 	planModel: null | PlanModel
 }
 
@@ -38,7 +37,6 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	selectedRoomId: null,
 	planModel: null,
 	updateState: {},
-	bottomCardState: CardState.HIDDEN,
 
 
 	
@@ -70,9 +68,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 		if(get().selectedRoomId !== roomId) {
 			set(({selectedRoomId: roomId}));
 		}
-		if(roomId) {
-			set(({bottomCardState: CardState.COLLAPSED}));
-		}
+		console.log(get().selectedRoomId)
 	},
 	
 	changeCurrentPlan: (plan) => {
