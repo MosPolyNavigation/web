@@ -3,14 +3,16 @@ export type LocationData = {
 	title: string
 	short: string
 	available: boolean
-	address: string
+	address: string,
+	crossings: Array<[string, string, number]>
 }
 
 export type CorpusData = {
 	id: string,
 	title: string,
 	available: boolean,
-	location: LocationData
+	location: LocationData,
+	stairs: Array<string[]>
 }
 
 export type PlanData = {
