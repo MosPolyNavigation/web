@@ -23,11 +23,9 @@ const PlanLayout: FC = () => {
 		if(planModel) {
 			if(appStore().selectedRoomId !== room.roomId) {
 				appStore().changeSelectedRoom(room.roomId)
-				planModel.toggleRoom(room, {activateRoom: true, hideRooms: true, hideEntrances: true, activateEntrance: true});
 			}
 			else {
 				appStore().changeSelectedRoom(null)
-				planModel.toggleRoom(room, {hideRooms: true, hideEntrances: true})
 			}
 		}
 	}

@@ -47,9 +47,9 @@ const BottomControlsLayer: FC = () => {
 			/>
 			{activeLayout === Layout.PLAN &&
 			<div style={{position: "absolute"}}>
-				От: {query.to}
+				От: {query.from}
 				<br />
-				До: {query.from}
+				До: {query.to}
 			</div>
 			}
 			<SearchButton

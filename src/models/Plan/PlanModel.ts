@@ -3,7 +3,7 @@ import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.t
 import cl from '../../layouts/Plan/PlanLayout.module.scss';
 
 export class PlanModel {
-	private readonly rooms: Map<Id, RoomModel>;
+	readonly rooms: Map<Id, RoomModel>;
 	
 	constructor(public plan: PlanData, private planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void) {
 		this.rooms = new Map();
@@ -90,8 +90,13 @@ export class PlanModel {
 			});
 		}
 	}
-	
-	public toggleRoom(room: RoomModel, options: {
+
+	/**
+	 * Переключение подсветки помещения и кружочков входа
+	 * @param room Модель помещения, которое надо выделить, если надо выделить помещение
+	 * @param options `hideRooms` и `hideEntrances` - скрыть все помещения / кружочки входа, `activateRoom` и `activateEntrance` выделить переданное помещение / его кружочек входа
+	 */
+	public toggleRoom(room: RoomModel | null, options: {
 		activateRoom?: boolean,
 		hideRooms?: boolean,
 		activateEntrance?: boolean,
@@ -107,10 +112,10 @@ export class PlanModel {
 				}
 			}
 		}
-		if(options.activateRoom) {
+		if(options.activateRoom && room) {
 			room.roomEl.classList.add(cl.selected);
 		}
-		if(options.activateEntrance) {
+		if(options.activateEntrance && room) {
 			room.entranceEl.classList.add(cl.selected);
 		}
 	}

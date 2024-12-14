@@ -23,7 +23,8 @@ type Action = {
 	changePlanModel: (
 		planInf: PlanData,
 		planSvgEl: SVGSVGElement,
-		virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void,
+		virtualSvg: SVGSVGElement | HTMLElement,
+		roomClickHandler: (room: RoomModel) => void,
 	) => void,
 	setQuery: (query: QueryService) => void
 }
@@ -55,8 +56,10 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 		} //Скрыть левое меню
 		
 		else if(btnName === BtnName.BOTTOM_RIGHT) {
-			if(activeLayout === Layout.PLAN)
+			if(activeLayout === Layout.PLAN) {
+				get().changeSelectedRoom(null)
 				get().changeLayout(Layout.LOCATIONS);
+			}
 			else if(activeLayout === Layout.LOCATIONS)
 				get().changeLayout(Layout.PLAN);
 			else if(activeLayout === Layout.SEARCH)
@@ -71,6 +74,16 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	changeSelectedRoom: (roomId) => {
 		if(get().selectedRoomId !== roomId) {
 			set(({selectedRoomId: roomId}));
+			const planModel = get().planModel;
+			if(planModel) {
+				planModel.toggleRoom(null, {hideRooms: true, hideEntrances: true});
+				if(roomId) {
+				const room = planModel.rooms.get(roomId);
+				if(room) {
+					planModel.toggleRoom(room, {activateRoom: true, activateEntrance: true})
+				}
+				}
+			}
 		}
 		console.log(get().selectedRoomId)
 	},
