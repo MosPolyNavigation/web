@@ -14,7 +14,8 @@ export class Graph {
         this.fillVertexesByRawVertexes()
         this.addStairs()
         this.addCrossings()
-        console.log(this.vertexes.filter(vertex => vertex.type === 'crossing'))
+	    console.log('Граф заполнен:', this)
+        // console.log(this.vertexes.filter(vertex => vertex.type === 'crossing'))
 		
     }
 
@@ -39,7 +40,7 @@ export class Graph {
 
     private addStairs() { //добавление связей между лестницами в графе по данным
         const corpusesOfLocations = dataStore().corpuses.filter(corpus => corpus.location === this.location)
-        console.log(corpusesOfLocations)
+        // console.log(corpusesOfLocations)
         corpusesOfLocations.forEach(corpus => {
             corpus.stairs.forEach(stairsGroup => {
                 for (let stairIndex = 1; stairIndex < stairsGroup.length; stairIndex ++) {
@@ -149,8 +150,6 @@ export class Graph {
 		for (let [id, way] of ways) {
 			way.push(id)
 		}
-		// console.log(distances)
-		console.log((idVertex2))
 		console.log(`Путь найден за ${Date.now() - start} миллисекунд с количеством итераций ${iterations[0]}, ${iterations[1]} и количеством вершин ${filteredVertexes.length}`)
 		return {
 			way: ways.get(idVertex2).map(vertexId => this.findVertexById(vertexId)),

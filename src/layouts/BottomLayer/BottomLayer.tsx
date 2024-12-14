@@ -35,7 +35,7 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			console.log(previousState.current, ' => ', bottomCardState);
+			// console.log(previousState.current, ' => ', bottomCardState);
 			previousState.current = bottomCardState;
 		}, 50);
 	}, [bottomCardState]);

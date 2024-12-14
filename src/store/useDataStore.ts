@@ -33,16 +33,16 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 		axios.get(address)
 			.then(response => {
 				const data: initialLocationData[] = response.data;
-				fillData(data);
 				console.log('Данные загружены с сервера');
+				fillData(data);
 			})
 			.catch(e => {
 				console.error('Не удалось загрузить данные с сервера', e);
 
 				axios.get('/mpunav/data/mainData.json').then(response => {
 					const data: initialLocationData[] = response.data;
-					fillData(data);
 					console.log('Данные загружены из приложения');
+					fillData(data);
 				})
 			})
 	},
@@ -58,6 +58,7 @@ export function dataStore() {
 
 
 function fillData(data: initialLocationData[]) {
+	console.log('Начинается обработка загруженных данных')
 	data.forEach(inLocation => {
 		const location: LocationData = {
 			id: inLocation.id,
@@ -109,6 +110,11 @@ function fillData(data: initialLocationData[]) {
 			// new Way('a-210', 'a-412')
 		}
 	}
+	console.log('Данные заполнены', {
+		locations: dataStore().locations,
+		corpuses: dataStore().corpuses,
+		plans: dataStore().plans
+	})
 }
 
 

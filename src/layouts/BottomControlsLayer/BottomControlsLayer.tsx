@@ -12,7 +12,6 @@ const BottomControlsLayer: FC = () => {
 	const [activeLayout,controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
 	const [selectedRoomId, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
 	const query = useAppStore(state => state.query);
-	console.log(query.to)
 
 	const heartBtnClickHandler = () => {
 		if(!selectedRoomId) {
