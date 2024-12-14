@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "host": "vite preview --host",
     "hostshare": "vite preview --host --port 3000",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run forcebuild && gh-pages -d dist"
   },
   "dependencies": {
     "axios": "^1.7.7",

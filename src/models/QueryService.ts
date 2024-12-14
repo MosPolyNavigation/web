@@ -1,5 +1,4 @@
 import {appStore} from "../store/useAppStore";
-import {Logger} from "sass";
 
 export class QueryService {
 	from: string | null //Айди помещению "Отсюда"

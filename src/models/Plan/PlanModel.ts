@@ -1,12 +1,11 @@
 import {Id, PlanData, RoomModel} from '../../associations/types.ts';
 import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts';
 import cl from '../../layouts/Plan/PlanLayout.module.scss';
-// import {wait} from '../../functions/common/coomonFunctions.ts';
 
 export class PlanModel {
 	private readonly rooms: Map<Id, RoomModel>;
 	
-	constructor(private plan: PlanData, private planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void) {
+	constructor(public plan: PlanData, private planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void) {
 		this.rooms = new Map();
 		
 		virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть
