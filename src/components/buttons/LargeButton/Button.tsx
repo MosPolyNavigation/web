@@ -17,40 +17,29 @@ interface ButtonProps extends Attributes {
 	current?: boolean
 }
 
-const Button: FC<ButtonProps> = (
-	{
-		iconLink,
-		onClick,
-		text,
-		size,
-		color,
-		textColor,
-		classNameExt,
-		disabled,
-		current,
-	},
-) => {
-	if(!size) size = Size.M;
+const Button = (props: ButtonProps) => {
+	let size = props.size
+	if(!props.size) size = Size.M;
 
 	const buttonClasses = classNames(
-		cl.button, classNameExt,
+		cl.button, props.classNameExt,
 		{
 			[cl.sizeL]: size === Size.M,
 			[cl.sizeS]: size === Size.S,
-			[cl.current]: current,
+			[cl.current]: props.current,
 		},
 	);
 
-	const textStyle = textColor && {color: textColor};
+	const textStyle = props.textColor && {color: props.textColor};
 
 	return (
 		<button
-			disabled={disabled}
+			disabled={props.disabled}
 			className={buttonClasses}
-			onClick={onClick}
+			onClick={props.onClick}
 		>
-			{iconLink && <Icon color={color ? color : Color.C4} size={size} iconLink={iconLink} />}
-			{text && <span style={textStyle} className={cl.text}>{text}</span>}
+			{props.iconLink && <Icon color={props.color ? props.color : Color.C4} size={props.size} iconLink={props.iconLink} />}
+			{props.text && <span style={textStyle} className={cl.text}>{props.text}</span>}
 		</button>
 	);
 };

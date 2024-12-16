@@ -1,3 +1,5 @@
+import {RawVertex} from "../store/useDataStore.ts";
+
 export type LocationData = {
 	id: string
 	title: string
@@ -20,10 +22,9 @@ export type PlanData = {
 	floor: number,
 	available: boolean,
 	wayToSvg: string,
-	graph: unknown[]
+	graph: RawVertex[]
 	entrances: PlanEntrances[],
 	corpus: CorpusData,
-
 }
 
 export type Id = string

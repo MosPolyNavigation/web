@@ -5,7 +5,7 @@ import cl from '../../layouts/Plan/PlanLayout.module.scss';
 export class PlanModel {
 	readonly rooms: Map<Id, RoomModel>;
 	
-	constructor(public plan: PlanData, private planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement, roomClickHandler: (room: RoomModel) => void) {
+	constructor(public plan: PlanData, private planSvgEl: SVGSVGElement, virtualSvg:  SVGSVGElement | HTMLElement, roomClickHandler: (room: RoomModel) => void) {
 		this.rooms = new Map();
 		
 		virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть

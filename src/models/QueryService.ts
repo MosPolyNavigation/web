@@ -1,7 +1,7 @@
-import {appStore, useAppStore} from "../store/useAppStore";
+import {appStore} from "../store/useAppStore";
 import {Way} from "./Way.ts";
 import chalk from "chalk";
-import {dataStore, useDataStore} from "../store/useDataStore.ts";
+import {dataStore} from "../store/useDataStore.ts";
 
 /**
  * Класс, представляющий **Сервис выбора куда и откуда**, хранится в состоянии приложения и при задании новых "куда" и "откуда" начинает новый маршрут

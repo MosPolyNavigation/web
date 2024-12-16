@@ -1,6 +1,6 @@
-import { PlanData } from "../associations/types";
-import { dataStore, useDataStore } from "../store/useDataStore";
-import { Vertex } from "./Graph";
+import {PlanData} from "../associations/types";
+import {dataStore} from "../store/useDataStore";
+import {Vertex} from "./Graph";
 
 export class Way {
 	steps: Step[]; //Это вернуть
@@ -21,11 +21,11 @@ export class Way {
 			const wayAndDistance = graph.getShortestWayFromTo(this.from, this.to)
 			// console.log(wayAndDistance)
 
-			let way = [...wayAndDistance.way];
-			let firstVertex = way.shift() as Vertex;
+			const way = [...wayAndDistance.way];
+			const firstVertex = way.shift() as Vertex;
 			this.steps = [new Step(firstVertex.plan, firstVertex)];
 			for (const wayVertex of way) {
-				let lastStep = this.steps.at(-1) as Step;
+				const lastStep = this.steps.at(-1) as Step;
 				if (wayVertex.plan === lastStep.plan) {
 					lastStep.distance += graph.getDistanceBetween2Vertexes(
 						lastStep.way.at(-1) as Vertex,

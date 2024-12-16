@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 
-export default function useOnHideRemover(dependencyWhenShow) {
+export default function useOnHideRemover(dependencyWhenShow: unknown): [boolean, (e: React.AnimationEvent<HTMLDivElement>) => void] {
 	const [isRemoved, setIsRemoved] = useState<boolean>(false);
 
 	useEffect(() => {
 		setIsRemoved(false);
 	}, [dependencyWhenShow]);
 
-	function removerAnimationEndHandler(e: React.AnimationEvent) {
+	function removerAnimationEndHandler(e: React.AnimationEvent<HTMLDivElement>): void {
 		if(e.animationName.startsWith('hide-end')) {
 			setIsRemoved(true);
 		}

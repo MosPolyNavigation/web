@@ -21,11 +21,13 @@ const SearchMenu: FC<SearchMenuProps> = () => {
 	}, []);
 
 	const actionBtnsProps = {
-		size: Size.S, color: Color.INITIAL
+		size: Size.S as Size.S,
+		color: Color.INITIAL
 	}
 
 	const resultProps = {
-		color: Color.INITIAL, size: Size.S
+		color: Color.INITIAL,
+		size: Size.S as Size.S
 	}
 
 	// При изменении результатов скролл вниз

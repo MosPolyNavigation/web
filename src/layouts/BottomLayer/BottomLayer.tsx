@@ -19,13 +19,11 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 	const previousState = useRef<CardState>(bottomCardState);
 
 	useEffect(() => {
-		if(activeLayout === Layout.SEARCH) {
+		if (activeLayout === Layout.SEARCH) {
 			setBottomCardState(CardState.EXPANDED)
-		}
-		else if(selectedRoom) {
+		} else if (selectedRoom) {
 			setBottomCardState(CardState.COLLAPSED)
-		}
-		else {
+		} else {
 			setBottomCardState(CardState.HIDDEN)
 		}
 	}, [selectedRoom, activeLayout]);
@@ -40,7 +38,7 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 		}, 50);
 	}, [bottomCardState]);
 
-	if(isRemoved) {
+	if (isRemoved) {
 		return null;
 	}
 

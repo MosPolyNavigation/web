@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import cl from './MenuItem.module.scss';
 import {IconLink} from '../../../associations/IconLink.ts';
 import {Color, Size} from '../../../associations/enums.ts';
@@ -14,21 +14,21 @@ interface MenuItemProps {
 	size?: Size.S | Size.M
 }
 
-const MenuItem: FC<MenuItemProps> = ({isFirst, iconLink, color, text, addText, size= Size.M}) => {
+const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
 
 	return (
-		<button className={classNames(cl.menuItem, {[cl.sizeS]: size === Size.S})} >
-			{!isFirst && <div className={cl.divider}></div>}
+		<button className={classNames(cl.menuItem, {[cl.sizeS]: props.size === Size.S})} >
+			{!props.isFirst && <div className={cl.divider}></div>}
 
 			<div className={cl.content}>
 
 				<div className={cl.basicText}>
-					{iconLink && <Icon iconLink={iconLink} color={color} />}
-					{text}
+					{props.iconLink && <Icon iconLink={props.iconLink} color={props.color} />}
+					{props.text}
 				</div>
 
-				{addText && <div className={cl.addText}>
-					{addText}
+				{props.addText && <div className={cl.addText}>
+					{props.addText}
 				</div>}
 
 			</div>

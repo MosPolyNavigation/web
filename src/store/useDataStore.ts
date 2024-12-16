@@ -1,12 +1,10 @@
 import {create} from 'zustand/react';
 import axios from 'axios';
 import {appStore} from './useAppStore.ts';
-import {CorpusData, LocationData, PlanData, PlanEntrances} from '../associations/types.ts';
+import {CorpusData, LocationData, PlanData} from '../associations/types.ts';
 import {appConfig} from '../appConfig.ts';
 import {Graph} from "../models/Graph";
-import { Way } from '../models/Way.ts';
 
-// noinspection JSUnusedLocalSymbols
 const address = 'https://mospolynavigation.github.io/polyna-preprocess/locations.json';
 
 type State = {
@@ -91,7 +89,7 @@ function fillData(data: initialLocationData[]) {
 							available: inPlan.available,
 							wayToSvg: inPlan.wayToSvg,
 							graph: inPlan.graph ?? [],
-							entrances: inPlan.entrances as PlanEntrances[],
+							entrances: inPlan.entrances ?? [],
 							corpus: dataStore().corpuses.find(corpus => corpus.id === inCorpus.id) as CorpusData,
 						};
 
@@ -130,7 +128,6 @@ type initialLocationData = {
 
 type initialCorpusData = {
 	id: string
-	// locationID: string
 	title: string
 	available: boolean
 	plans?: initialPlanData[]
@@ -139,10 +136,17 @@ type initialCorpusData = {
 
 type initialPlanData = {
 	id: string
-	// corpusID: string
 	floor: string
 	available: boolean
 	wayToSvg: string
-	graph?: unknown[]
-	entrances: string
+	graph?: RawVertex[]
+	entrances: Array<[string, string]>
+}
+
+export type RawVertex = {
+	id: string
+	x: number
+	y: number
+	type: string
+	neighborData: Array<[string, number]>
 }
