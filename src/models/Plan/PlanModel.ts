@@ -20,10 +20,10 @@ export class PlanModel {
 		const svgGBound = planSvgEl.firstElementChild?.getBoundingClientRect() as DOMRect;
 		
 		//Если ширина свгшки больше чем ширина экрана с отступом 129пикс (пока фиксированно), то уменьшить и то же для высоты
-		if(svgGBound.width > window.innerWidth - 120)
-			planSvgEl.style.scale = ((window.innerWidth - 120) / svgGBound.width).toFixed(5);
-		if(svgGBound.height > window.innerHeight - 140)
-			planSvgEl.style.scale = ((window.innerHeight - 140) / svgGBound.height).toFixed(5);
+		// if(svgGBound.width > window.innerWidth - 120)
+		// 	planSvgEl.style.scale = ((window.innerWidth - 120) / svgGBound.width).toFixed(5);
+		// if(svgGBound.height > window.innerHeight - 140)
+		// 	planSvgEl.style.scale = ((window.innerHeight - 140) / svgGBound.height).toFixed(5);
 		
 		['g#Walls', 'g#Textes', '#gEntrances', 'g#Icons'].forEach(selector => {
 			this.planSvgEl.querySelector(selector)?.classList?.add(cl.noSelect);
