@@ -59,7 +59,7 @@ export class Way {
 	}
 }
 
-class Step {
+export class Step {
 	plan: PlanData
 	way: Vertex[];
 	distance: number;

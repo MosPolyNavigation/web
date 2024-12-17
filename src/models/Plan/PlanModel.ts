@@ -1,11 +1,12 @@
 import {Id, PlanData, RoomModel} from '../../associations/types.ts';
 import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts';
 import cl from '../../layouts/Plan/PlanLayout.module.scss';
+import {appStore} from "../../store/useAppStore.ts";
 
 export class PlanModel {
 	readonly rooms: Map<Id, RoomModel>;
 	
-	constructor(public plan: PlanData, private planSvgEl: SVGSVGElement, virtualSvg:  SVGSVGElement | HTMLElement, roomClickHandler: (room: RoomModel) => void) {
+	constructor(public plan: PlanData, public planSvgEl: SVGSVGElement, virtualSvg:  SVGSVGElement | HTMLElement, roomClickHandler: (room: RoomModel) => void) {
 		this.rooms = new Map();
 		
 		virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть
@@ -81,13 +82,26 @@ export class PlanModel {
 				}
 			}
 		}
-		
+
 		// this.testRoomsAndEntrances();
 		
 		for(const [, room] of this.rooms) {
 			room.roomEl.addEventListener('click', () => {
 				roomClickHandler(room);
 			});
+		}
+
+		const queryServiceWay = appStore().query.way
+		if(queryServiceWay) {
+			if (queryServiceWay.steps.length - 1 > queryServiceWay.activeStep) {
+				if (queryServiceWay.steps[queryServiceWay.activeStep + 1].plan === plan) {
+					queryServiceWay.activeStep += 1
+					console.log('Переход на следующий шаг')
+				}
+			}
+			else {
+				console.log('Уже достигнут последний шаг')
+			}
 		}
 	}
 

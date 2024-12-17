@@ -89,8 +89,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 			}
 		}
 
-		if (get().selectedRoomId) console.log(`Выбрано помещение ${chalk.underline(get().selectedRoomId)}`)
-		else console.log(`Снят выбор помещения`)
+		// if (get().selectedRoomId) console.log(`Выбрано помещение ${chalk.underline(get().selectedRoomId)}`)
+		// else console.log(`Снят выбор помещения`)
 	},
 
 	changeCurrentPlan: (plan) => {
@@ -104,7 +104,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 
 	changeLayout: (layout) => {
 		if (layout !== get().activeLayout) {
-			console.log(`Слой изменён на: %c${layout}}`, 'font-weight: bold;');
+			// console.log(`Слой изменён на: %c${layout}}`, 'font-weight: bold;');
 			set({previousLayout: get().activeLayout});
 			set({activeLayout: layout});
 		}
