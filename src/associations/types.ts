@@ -35,8 +35,12 @@ type CircleId = Id
 export type PlanEntrances = [RoomId, CircleId]
 
 export type RoomModel = {
-	roomId: Id,
-	roomEl: SVGRectElement | SVGPathElement,
-	entranceId: Id,
+	roomId: Id
+	roomEl: SVGRectElement | SVGPathElement
+	entranceId: Id
 	entranceEl: SVGCircleElement
+	/**
+	 * Слушатели события на клик для переключения на следующий план в маршруте
+	 */
+	nextStepClickHandler?: () => void
 };

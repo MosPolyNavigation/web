@@ -30,6 +30,20 @@
           &.selected {
             fill: #4A5598;
           }
+
+          &.highlight {
+            fill: #444965;
+            animation: selected-au-highlight 1.5s infinite alternate ease-in-out;
+
+            @keyframes selected-au-highlight {
+              from {
+                fill: #444965;
+              }
+              to {
+                fill: #4f5883;
+              }
+            }
+          }
         }
 
         //Другие помещения
@@ -45,6 +59,23 @@
           &.selected {
             fill-opacity: .5;
             filter: saturate(1.5);
+          }
+
+          &.highlight {
+            fill-opacity: 0.4;
+            filter: saturate(1.1);
+            animation: selected--other-room-highlight 1.5s infinite alternate ease-in-out;
+
+            @keyframes selected--other-room-highlight {
+              from {
+                fill-opacity: 0.45;
+                filter: saturate(1.2);
+              }
+              to {
+                fill-opacity: 0.55;
+                filter: saturate(1.5);
+              }
+            }
           }
         }
 

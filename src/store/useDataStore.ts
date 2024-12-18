@@ -8,9 +8,21 @@ import {Graph} from "../models/Graph";
 const address = 'https://mospolynavigation.github.io/polyna-preprocess/locations.json';
 
 type State = {
+	/**
+	 * Хранит локации (кампусы)
+	 */
 	locations: LocationData[]
+	/**
+	 * Хранит корпусы с ссылками на локации
+	 */
 	corpuses: CorpusData[]
+	/**
+	 * Хранит планы с ссылками на корпусы
+	 */
 	plans: PlanData[]
+	/**
+	 * Хранит граф
+	 */
 	graph: Graph | null
 }
 

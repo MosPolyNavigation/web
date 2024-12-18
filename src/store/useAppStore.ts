@@ -7,12 +7,30 @@ import {QueryService} from "../models/QueryService";
 import chalk from "chalk";
 
 type State = {
+	/**
+	 * Хранит текущий слой приложения: план, экран локаций, поиск, меню и т.д.
+	 */
 	activeLayout: Layout
 	previousLayout: Layout
+	/**
+	 * Хранит id выбранного (выделенного) помещения
+	 */
 	selectedRoomId: null | string
+	/**
+	 * Хранит текущий план и его данные в виде объекта `PlanData`
+	 */
 	currentPlan: null | PlanData
 	previousPlan: PlanData | null
+	/**
+	 * Хранит Модель текущего плана, его SVG и помещения.
+	 * Получается из `currentPlan` и изображения плана.
+	 * Нужно для **взаимодействия с SVG** плана
+	 */
 	planModel: null | PlanModel
+	/**
+	 * Сервис выбора помещений и маршрута
+	 * Хранит id "Куда" и "Откуда", а также построенный маршрут
+	 */
 	query: QueryService
 }
 
@@ -95,6 +113,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 
 	changeCurrentPlan: (plan) => {
 		if (get().currentPlan !== plan && plan) {
+			appStore().changeSelectedRoom(null)
 			set(({previousPlan: get().currentPlan}));
 			set(({currentPlan: plan}));
 			console.log(`План изменен на ${chalk.underline(plan.id)}`,);

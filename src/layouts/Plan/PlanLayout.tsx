@@ -9,8 +9,8 @@ import {Vertex} from "../../models/Graph.ts";
 import classNames from "classnames";
 
 const PlanLayout: FC = () => {
-	const planSvgRef = useRef<null | SVGSVGElement>(null);
-	const currentPlan = useAppStore(state => state.currentPlan);
+	const planSvgRef = useRef<null | SVGSVGElement>(null)
+	const currentPlan = useAppStore(state => state.currentPlan)
 	const planModel = useAppStore(state => state.planModel)
 	const query = useAppStore(state => state.query);
 
@@ -50,10 +50,16 @@ const PlanLayout: FC = () => {
 
 	const [wayAnimationClass, setWayAnimationClass] = useState(cl.wayAnimation)
 	const {primaryWayPathD, primaryWayLength} = useMemo(() => {
-		let queryService = appStore().query.way;
-		if (queryService) {
-			const currentStep = queryService.steps[queryService.activeStep]
+		const wholeWay = appStore().query.way;
+		if (wholeWay && wholeWay.steps[wholeWay.activeStep].plan === planModel.plan) {
+			const currentStep = wholeWay.steps[wholeWay.activeStep]
 			if (currentStep.plan === currentPlan) {
+				planModel.deHighlightRoomsForNextStep() //Снятие старых хайлайтов и слушателей на смену плана
+				planModel.highlightRoomForNextStep(
+					planModel.rooms.get(currentStep.way.at(-1).id),
+					!(wholeWay.steps.length - 1 > wholeWay.activeStep)
+				) //Добавление новых хайлайтов на конечное на текущем плане помещение и слушателей кликап на смену плана на следующий в маршруте
+
 				const vertexesOfWay = currentStep.way
 				setWayAnimationClass('')
 				setTimeout(() => {

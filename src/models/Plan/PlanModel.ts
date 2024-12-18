@@ -1,35 +1,36 @@
 import {Id, PlanData, RoomModel} from '../../associations/types.ts';
 import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts';
 import cl from '../../layouts/Plan/PlanLayout.module.scss';
-import {appStore} from "../../store/useAppStore.ts";
+import {appStore, useAppStore} from "../../store/useAppStore.ts";
 
 export class PlanModel {
 	readonly rooms: Map<Id, RoomModel>;
-	
+
 	constructor(public plan: PlanData, public planSvgEl: SVGSVGElement, virtualSvg:  SVGSVGElement | HTMLElement, roomClickHandler: (room: RoomModel) => void) {
+		console.log(plan.id)
 		this.rooms = new Map();
-		
+
 		virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть
-		
+
 		copyAttribute(planSvgEl, virtualSvg, 'viewBox'); //Копирование атрибутов из спаршенного изображения в реф-свг на страницу
 		copyAttribute(planSvgEl, virtualSvg, 'xmlns');
 		planSvgEl.setAttribute('fill', 'none');
-		
+
 		planSvgEl.innerHTML = virtualSvg.innerHTML; //Установка внутреннего содержимого отображаемого свг из спаршенного
-		
+
 		planSvgEl.style.scale = ''; //Сброс масштаба
 		const svgGBound = planSvgEl.firstElementChild?.getBoundingClientRect() as DOMRect;
-		
+
 		//Если ширина свгшки больше чем ширина экрана с отступом 129пикс (пока фиксированно), то уменьшить и то же для высоты
 		// if(svgGBound.width > window.innerWidth - 120)
 		// 	planSvgEl.style.scale = ((window.innerWidth - 120) / svgGBound.width).toFixed(5);
 		// if(svgGBound.height > window.innerHeight - 140)
 		// 	planSvgEl.style.scale = ((window.innerHeight - 140) / svgGBound.height).toFixed(5);
-		
+
 		['g#Walls', 'g#Textes', '#gEntrances', 'g#Icons'].forEach(selector => {
 			this.planSvgEl.querySelector(selector)?.classList?.add(cl.noSelect);
 		});
-		
+
 		for(const roomEl of this.planSvgEl.getElementById('Spaces').children) {
 			if(roomEl.id.startsWith('!') || roomEl.tagName === 'g')
 				continue;
@@ -45,7 +46,7 @@ export class PlanModel {
 			roomEl.classList.add(cl.room); //добавляем помещению соответствующий класс, для подсветки
 			setTimeout(() => roomEl.classList.add(cl.animated), 20); //Добавление класса анимации чуть позже, чтобы успели обновиться свойства
 		}
-		
+
 		const entrancesIdToEl: Map<Id, SVGCircleElement> = new Map();
 		for(const entranceEl of this.planSvgEl.getElementById('Entrances').children) {
 			// if(entranceEl.tagName === 'circle') {
@@ -54,7 +55,7 @@ export class PlanModel {
 				setTimeout(() => entranceEl.classList.add(cl.animated), 20);
 			// }
 		}
-		
+
 		function isEntranceOfRoom(entranceEl: HTMLElement | SVGCircleElement, roomEl: HTMLElement | SVGPathElement | SVGRectElement): boolean { //Функция возвращает, является ли кружочек входа входом в данное помещение
 			const cx = Number(entranceEl.getAttribute('cx'));
 			const cy = Number(entranceEl.getAttribute('cy'));
@@ -64,9 +65,9 @@ export class PlanModel {
 			const height = Number(roomEl.getAttribute('height'));
 			return (cx >= x && cx <= x + width && cy >= y && cy <= y + height);
 		}
-		
+
 		const entrancesFromData: Map<Id, Id> = new Map(plan.entrances); //Достаем данные о входах в помещения на плане из данных
-		
+
 		for(const [roomId, roomData] of this.rooms) { //заполнение входов в помещения
 			if(entrancesFromData.get(roomId)) { //если вход задан в данных, взять оттуда
 				roomData.entranceId = <string>entrancesFromData.get(roomId);
@@ -84,7 +85,7 @@ export class PlanModel {
 		}
 
 		// this.testRoomsAndEntrances();
-		
+
 		for(const [, room] of this.rooms) {
 			room.roomEl.addEventListener('click', () => {
 				roomClickHandler(room);
@@ -133,7 +134,38 @@ export class PlanModel {
 			room.entranceEl.classList.add(cl.selected);
 		}
 	}
-	
+
+	/**
+	 * Метод, добавляющий класс хайлайта на переданное помещение, а также слушатель события клика для переключения плана на следующий в маршруте
+	 * @param room
+	 * @param last Последний ли это план в маршруте, если нет, добавляет слушатель на переключения плана на следующий в маршруте
+	 */
+	public highlightRoomForNextStep(room: RoomModel, last: boolean) {
+		console.log(room)
+		room.roomEl.classList.add(cl.highlight)
+		if(!last) {
+			const nextStepClickHandler = () => {
+				appStore().changeCurrentPlan(
+					appStore().query.way.steps[appStore().query.way.activeStep + 1].plan
+				)
+			}
+			room.roomEl.addEventListener('click', nextStepClickHandler)
+			room.nextStepClickHandler = nextStepClickHandler
+		}
+	}
+
+	/**
+	 * Метод, убирающий с текущего плана хайлайты и слушатели, т.е. удаляет добавленное в методе `highlightRoomForNextStep`
+	 */
+	public deHighlightRoomsForNextStep() {
+		this.rooms.forEach(room => {
+			room.roomEl.classList.remove(cl.highlight);
+			if(room.nextStepClickHandler) {
+				room.roomEl.removeEventListener('click', room.nextStepClickHandler);
+			}
+		})
+	}
+
 	// noinspection JSUnusedLocalSymbols
 	// private testRoomsAndEntrances() {
 	// 	console.log('ПОМЕЩЕНИЯ И ВХОДЫ');
