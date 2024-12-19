@@ -7,6 +7,7 @@ import {PlanData} from '../../../associations/types.ts';
 
 const FloorsControl: FC = () => {
 	const currentPlan = useAppStore(state => state.currentPlan);
+	const queryService = useAppStore(state => state.queryService);
 
 	const [floorsPlans, setFloorsPlans] = useState<PlanData[] | null>(null);
 
@@ -40,8 +41,11 @@ const FloorsControl: FC = () => {
 		appStore().changeCurrentPlan(plan)
 	}
 
+
 	return (
-		<div className={cl.floorControl}>
+		<div className={classNames(cl.floorControl, {
+			[cl.invisible]: queryService.way
+		})}>
 			{floorsPlans &&
 				floorsPlans.map((plan: PlanData) => {
 					const floorClasses = classNames(cl.floorNumber, {[cl.current]: (plan === currentPlan)});

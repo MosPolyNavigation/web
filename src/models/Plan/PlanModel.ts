@@ -92,7 +92,7 @@ export class PlanModel {
 			});
 		}
 
-		const queryServiceWay = appStore().query.way
+		const queryServiceWay = appStore().queryService.way
 		if(queryServiceWay) {
 			if (queryServiceWay.steps.length - 1 > queryServiceWay.activeStep) {
 				if (queryServiceWay.steps[queryServiceWay.activeStep + 1].plan === plan) {
@@ -146,7 +146,7 @@ export class PlanModel {
 		if(!last) {
 			const nextStepClickHandler = () => {
 				appStore().changeCurrentPlan(
-					appStore().query.way.steps[appStore().query.way.activeStep + 1].plan
+					appStore().queryService.way.steps[appStore().queryService.way.activeStep + 1].plan
 				)
 			}
 			room.roomEl.addEventListener('click', nextStepClickHandler)

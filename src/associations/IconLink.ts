@@ -14,6 +14,10 @@ export enum IconLink {
 	SETTINGS = 'img/icons/ui/settings.svg',
 	HEART = 'img/icons/ui/heart.svg',
 	LOCATIONS = 'img/icons/ui/building.svg',
+	ARROW_UP = 'img/icons/ui/arrow-up.svg',
+	ARROW_DOWN = 'img/icons/ui/arrow-down.svg',
+	ARROW_LEFT = 'img/icons/ui/arrow-left.svg',
+	ARROW_RIGHT = 'img/icons/ui/arrow-right.svg',
 
 	LEGAL = 'img/icons/plans/legal.svg',
 	STUDY = 'img/icons/plans/study.svg',

@@ -12,7 +12,7 @@ const PlanLayout: FC = () => {
 	const planSvgRef = useRef<null | SVGSVGElement>(null)
 	const currentPlan = useAppStore(state => state.currentPlan)
 	const planModel = useAppStore(state => state.planModel)
-	const query = useAppStore(state => state.query);
+	const query = useAppStore(state => state.queryService);
 
 	const svgLink = useMemo<string | null>(() => {
 		if (currentPlan) {
@@ -50,11 +50,10 @@ const PlanLayout: FC = () => {
 
 	const [wayAnimationClass, setWayAnimationClass] = useState(cl.wayAnimation)
 	const {primaryWayPathD, primaryWayLength} = useMemo(() => {
-		const wholeWay = appStore().query.way;
+		const wholeWay = appStore().queryService.way;
 		if (wholeWay && wholeWay.steps[wholeWay.activeStep].plan === planModel.plan) {
 			const currentStep = wholeWay.steps[wholeWay.activeStep]
 			if (currentStep.plan === currentPlan) {
-				planModel.deHighlightRoomsForNextStep() //Снятие старых хайлайтов и слушателей на смену плана
 				planModel.highlightRoomForNextStep(
 					planModel.rooms.get(currentStep.way.at(-1).id),
 					!(wholeWay.steps.length - 1 > wholeWay.activeStep)

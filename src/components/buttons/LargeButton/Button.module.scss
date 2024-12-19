@@ -25,6 +25,7 @@
     //width: fit-content;'
     flex-basis: $size-40;
     padding: calc($size-10 - toRem(1));
+    gap: $size-5;
     @extend %text-3;
   }
 
@@ -59,6 +60,7 @@
 
     left: 0.4px;
     text-decoration: none;
+    font-weight: 500;
   }
 }
 

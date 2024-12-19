@@ -2,7 +2,7 @@ import React, {Attributes, FC} from 'react';
 import {IconLink} from '../../../associations/IconLink.ts';
 import cl from './Button.module.scss';
 import Icon from '../../common/Icon/Icon.tsx';
-import {Color, Size} from '../../../associations/enums.ts';
+import {Color, Pos, Size} from '../../../associations/enums.ts';
 import classNames from 'classnames';
 
 interface ButtonProps extends Attributes {
@@ -15,6 +15,7 @@ interface ButtonProps extends Attributes {
 	classNameExt?: string,
 	disabled?: boolean,
 	current?: boolean
+	textPosition?: Pos.LEFT | Pos.RIGHT
 }
 
 const Button = (props: ButtonProps) => {
@@ -38,8 +39,9 @@ const Button = (props: ButtonProps) => {
 			className={buttonClasses}
 			onClick={props.onClick}
 		>
+			{props.text && props.textPosition === Pos.LEFT && <span style={textStyle} className={cl.text}>{props.text}</span>}
 			{props.iconLink && <Icon color={props.color ? props.color : Color.C4} size={props.size} iconLink={props.iconLink} />}
-			{props.text && <span style={textStyle} className={cl.text}>{props.text}</span>}
+			{props.text && props.textPosition !== Pos.LEFT && <span style={textStyle} className={cl.text}>{props.text}</span>}
 		</button>
 	);
 };

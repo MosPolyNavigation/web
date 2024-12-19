@@ -19,7 +19,7 @@ export class QueryService {
 
 		if(args) {
 
-		const oldQueryService = appStore().query //Предыдущий сервис, чтобы брать "откуда" и "куда" из него
+		const oldQueryService = appStore().queryService //Предыдущий сервис, чтобы брать "откуда" и "куда" из него
 		if (args.from && args.from === oldQueryService.to //Если "куда" есть и совпадает со старым "откуда"
 			|| args.to && args.to === oldQueryService.from //или наоборот
 			|| args.swap //Или если поменять местами 'куда' 'откуда'
@@ -27,10 +27,14 @@ export class QueryService {
 			this.swapFromOld(oldQueryService) //То сделать из поменянными местами
 		} else {
 			//Иначе если есть куда и это не в "никуда", назначить откуда куда из конструктора, либо если там нулл то из старого
-			if(args.from && args.from !== Pointer.NOTHING) this.from = args.from
-			else this.from = oldQueryService.from
-			if(args.to && args.to !== Pointer.NOTHING) this.to = args.to
-			else this.to = oldQueryService.to
+			if(args.from !== Pointer.NOTHING) {
+				if(args.from) this.from = args.from
+				else this.from = oldQueryService.from
+			}
+			if(args.to !== Pointer.NOTHING) {
+				if(args.to) this.to = args.to
+				else this.to = oldQueryService.to
+			}
 		}
 		}
 

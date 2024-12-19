@@ -1,17 +1,19 @@
 import {FC} from 'react';
-import {BtnName, Layout} from '../../associations/enums.ts';
+import {BtnName, Color, Layout, Pos} from '../../associations/enums.ts';
 import {IconLink} from '../../associations/IconLink.ts';
 import classNames from 'classnames';
 import cl from './BottomControlsLayer.module.scss';
 import Button from '../../components/buttons/LargeButton/Button.tsx';
 import SearchButton from '../../components/buttons/SearchButton/SearchButton.tsx';
-import {useAppStore} from '../../store/useAppStore.ts';
+import {appStore, useAppStore} from '../../store/useAppStore.ts';
+import {Pointer, QueryService} from "../../models/QueryService.ts";
 
 const BottomControlsLayer: FC = () => {
 
 	const [activeLayout,controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
 	const [selectedRoomId, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
-	const query = useAppStore(state => state.query);
+	const queryService = useAppStore(state => state.queryService);
+	const query = useAppStore(state => state.queryService);
 
 	const heartBtnClickHandler = () => {
 		if(!selectedRoomId) {
@@ -38,28 +40,34 @@ const BottomControlsLayer: FC = () => {
 				[cl.searchOpen]: activeLayout === Layout.SEARCH,
 			})}
 		>
-			<Button
-				classNameExt={cl.favouriteBtn}
-				iconLink={IconLink.HEART}
-				onClick={heartBtnClickHandler}
-				//КНОПКА С СЕРДЕЧКОМ
-			/>
-			{activeLayout === Layout.PLAN &&
-			<div style={{position: "absolute"}}>
-				От: {query.from}
-				<br />
-				До: {query.to}
-			</div>
-			}
-			<SearchButton
-				expanded={activeLayout === Layout.SEARCH}
-				onClick={() => controlBtnClickHandler(BtnName.SEARCH)}
-			/>
-			<Button
-				iconLink={rightBtnIcon}
-				classNameExt={rightBtnClass}
-				onClick={() => controlBtnClickHandler(BtnName.BOTTOM_RIGHT)}
-			/>
+			{queryService.way ? <>
+					<Button iconLink={IconLink.CROSS} onClick={() => appStore().setQueryService(new QueryService({from: Pointer.NOTHING, to: Pointer.NOTHING}))}/>
+					<Button iconLink={IconLink.ARROW_RIGHT} text={'Далее: Корпус А'} textColor={Color.C4} textPosition={Pos.LEFT}/>
+				</>
+			: <>
+					<Button
+						classNameExt={cl.favouriteBtn}
+						iconLink={IconLink.HEART}
+						onClick={heartBtnClickHandler}
+						//КНОПКА С СЕРДЕЧКОМ
+					/>
+					{activeLayout === Layout.PLAN &&
+						<div style={{position: "absolute"}}>
+							От: {query.from}
+							<br />
+							До: {query.to}
+						</div>
+					}
+					<SearchButton
+						expanded={activeLayout === Layout.SEARCH}
+						onClick={() => controlBtnClickHandler(BtnName.SEARCH)}
+					/>
+					<Button
+						iconLink={rightBtnIcon}
+						classNameExt={rightBtnClass}
+						onClick={() => controlBtnClickHandler(BtnName.BOTTOM_RIGHT)}
+					/>
+				</>}
 		</div>
 	);
 };

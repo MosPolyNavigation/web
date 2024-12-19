@@ -19,6 +19,13 @@
 	scrollbar-width: none;
 	position: relative;
 	pointer-events: auto;
+	transition: opacity 250ms ease;
+
+	&.invisible {
+		opacity: 0;
+		user-select: none;
+		pointer-events: none;
+	}
 
 	.floorNumber {
 		width: toRem(34);

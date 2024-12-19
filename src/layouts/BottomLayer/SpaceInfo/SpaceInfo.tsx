@@ -11,12 +11,12 @@ const SpaceInfo: FC = () => {
 	const selectedRoomId = useAppStore(state => state.selectedRoomId);
 
 	function fromBtnHandler() {
-		appStore().setQuery(new QueryService({from: selectedRoomId}))
+		appStore().setQueryService(new QueryService({from: selectedRoomId}))
 		appStore().changeSelectedRoom(null)
 	}
 
 	function toBtnHandler() {
-		appStore().setQuery(new QueryService({to: selectedRoomId}))
+		appStore().setQueryService(new QueryService({to: selectedRoomId}))
 		appStore().changeSelectedRoom(null)
 	}
 

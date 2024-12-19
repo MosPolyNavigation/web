@@ -6,7 +6,10 @@ export enum CardState {
 
 export enum Pos {
 	BOTTOM= 'BOTTOM',
-	MIDDLE= 'MIDDLE'
+	MIDDLE= 'MIDDLE',
+	LEFT = 'LEFT',
+	RIGHT = 'RIGHT',
+
 }
 
 export enum Color {
