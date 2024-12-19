@@ -4,7 +4,7 @@
   @extend %border-default;
   @extend %shadow-default;
   background-color: $color-2;
-  transition: background-color 150ms ease, scale 150ms ease;
+  transition: all 150ms ease, opacity 250ms ease;
   pointer-events: auto;
 
 
@@ -14,9 +14,16 @@
   text-wrap: nowrap;
 
 
+
   &:disabled {
     color: $color-4;
     pointer-events: none;
+  }
+
+  &.invisible {
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
   }
 
   &.sizeL {

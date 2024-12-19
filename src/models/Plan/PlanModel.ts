@@ -7,7 +7,6 @@ export class PlanModel {
 	readonly rooms: Map<Id, RoomModel>;
 
 	constructor(public plan: PlanData, public planSvgEl: SVGSVGElement, virtualSvg:  SVGSVGElement | HTMLElement, roomClickHandler: (room: RoomModel) => void) {
-		console.log(plan.id)
 		this.rooms = new Map();
 
 		virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть
@@ -95,17 +94,17 @@ export class PlanModel {
 		const queryService = appStore().queryService;
 		const steps = queryService.steps
 		const currentStepIndex = queryService.currentStepIndex
-		if(steps) {
-			if (steps.length > currentStepIndex + 1) {
-				if (steps[currentStepIndex + 1].plan === plan) {
-					queryService.currentStepIndex += 1
-					console.log('Переход на следующий шаг')
-				}
-			}
-			else {
-				console.log('Уже достигнут последний шаг')
-			}
-		}
+		// if(steps) {
+		// 	if (steps.length > currentStepIndex + 1) {
+		// 		if (steps[currentStepIndex + 1].plan === plan) {
+		// 			// queryService.currentStepIndex += 1
+		// 			console.log('Переход на следующий шаг')
+		// 		}
+		// 	}
+		// 	else {
+		// 		console.log('Уже достигнут последний шаг')
+		// 	}
+		// }
 	}
 
 	/**
@@ -143,13 +142,10 @@ export class PlanModel {
 	 * @param last Последний ли это план в маршруте, если нет, добавляет слушатель на переключения плана на следующий в маршруте
 	 */
 	public highlightRoomForNextStep(room: RoomModel, last: boolean) {
-		console.log(room)
 		room.roomEl.classList.add(cl.highlight)
 		if(!last) {
 			const nextStepClickHandler = () => {
-				appStore().changeCurrentPlan(
-					appStore().queryService.steps[appStore().queryService.currentStepIndex + 1].plan
-				)
+				appStore().queryService.nextStep()
 			}
 			room.roomEl.addEventListener('click', nextStepClickHandler)
 			room.nextStepClickHandler = nextStepClickHandler

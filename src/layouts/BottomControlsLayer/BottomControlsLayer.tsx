@@ -1,8 +1,9 @@
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {BtnName, Color, Layout, Pos} from '../../associations/enums.ts';
 import {IconLink} from '../../associations/IconLink.ts';
 import classNames from 'classnames';
 import cl from './BottomControlsLayer.module.scss';
+import clButton from '../../components/buttons/LargeButton/Button.module.scss'
 import Button from '../../components/buttons/LargeButton/Button.tsx';
 import SearchButton from '../../components/buttons/SearchButton/SearchButton.tsx';
 import {appStore, useAppStore} from '../../store/useAppStore.ts';
@@ -10,16 +11,15 @@ import {Pointer, QueryService} from "../../models/QueryService.ts";
 
 const BottomControlsLayer: FC = () => {
 
-	const [activeLayout,controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
+	const [activeLayout, controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
 	const [selectedRoomId, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
 	const queryService = useAppStore(state => state.queryService);
 	const query = useAppStore(state => state.queryService);
 
 	const heartBtnClickHandler = () => {
-		if(!selectedRoomId) {
+		if (!selectedRoomId) {
 			changeSelectedRoom('n-405')
-		}
-		else {
+		} else {
 			changeSelectedRoom(null)
 		}
 	};
@@ -28,8 +28,8 @@ const BottomControlsLayer: FC = () => {
 		[cl.locationsBtn]: (activeLayout !== Layout.SEARCH && activeLayout !== Layout.LOCATIONS),
 	});
 
-	const rightBtnIcon = (function() {
-		if(activeLayout === Layout.SEARCH || activeLayout === Layout.LOCATIONS) return IconLink.CROSS;
+	const rightBtnIcon = (function () {
+		if (activeLayout === Layout.SEARCH || activeLayout === Layout.LOCATIONS) return IconLink.CROSS;
 		return IconLink.LOCATIONS;
 	})();
 
@@ -40,11 +40,9 @@ const BottomControlsLayer: FC = () => {
 				[cl.searchOpen]: activeLayout === Layout.SEARCH,
 			})}
 		>
-			{queryService.steps ? <>
-					<Button iconLink={IconLink.CROSS} onClick={() => appStore().setQueryService(new QueryService({from: Pointer.NOTHING, to: Pointer.NOTHING}))}/>
-					<Button iconLink={IconLink.ARROW_RIGHT} text={'Далее: Корпус А'} textColor={Color.C4} textPosition={Pos.LEFT}/>
-				</>
-			: <>
+			{queryService.steps
+				? <OnWayControls/>
+				: <>
 					<Button
 						classNameExt={cl.favouriteBtn}
 						iconLink={IconLink.HEART}
@@ -54,7 +52,7 @@ const BottomControlsLayer: FC = () => {
 					{activeLayout === Layout.PLAN &&
 						<div style={{position: "absolute"}}>
 							От: {query.from}
-							<br />
+							<br/>
 							До: {query.to}
 						</div>
 					}
@@ -73,3 +71,43 @@ const BottomControlsLayer: FC = () => {
 };
 
 export default BottomControlsLayer;
+
+function OnWayControls() {
+	const queryService = useAppStore(state => state.queryService);
+	const planModel = useAppStore(state => state.planModel)
+	const {steps, currentStepIndex} = queryService;
+	const isLastStep = steps.length <= currentStepIndex + 1
+	const [nextBtnText, setNextBtnText] = useState<string>('')
+	const [nextBtnIcon, setNextBtnIcon] = useState<IconLink>(null)
+	useEffect(() => {
+		if (!isLastStep) {
+			const currentStep = steps[currentStepIndex];
+			const nextStep = steps[currentStepIndex + 1];
+			let nextBtnTextBuilder = 'Далее: '
+			if (nextStep.plan.corpus === currentStep.plan.corpus) {
+				if (nextStep.plan.floor > currentStep.plan.floor) {
+					nextBtnTextBuilder = 'Далее: Подняться '
+					setNextBtnIcon(IconLink.ARROW_UP)
+				} else {
+					nextBtnTextBuilder = 'Далее: Спуститься '
+					setNextBtnIcon(IconLink.ARROW_DOWN)
+				}
+				nextBtnTextBuilder += `${nextStep.plan.floor}-й этаж`
+			} else {
+				nextBtnTextBuilder += `Корпус ${nextStep.plan.corpus.title}`
+				setNextBtnIcon(IconLink.ARROW_RIGHT)
+			}
+			setNextBtnText(nextBtnTextBuilder)
+		}
+	}, [planModel]);
+
+
+	return <>
+		<Button iconLink={IconLink.CROSS} onClick={() => appStore().setQueryService(new QueryService({from: Pointer.NOTHING, to: Pointer.NOTHING}))}/>
+		<Button classNameExt={classNames({[clButton.invisible]: isLastStep})}
+		        iconLink={nextBtnIcon} text={nextBtnText}
+		        textColor={Color.C4} textPosition={Pos.LEFT}
+		        onClick={() => queryService.nextStep()}
+		/>
+	</>;
+}

@@ -54,7 +54,6 @@ export class QueryService {
 					appStore().changeCurrentPlan(firstPlan)
 				}
 				// if(firstPlan)
-				console.log(firstPlan)
 				// useAppStore().changeCurrentPlan(dataStore().plans)
 			}
 			//то построить маршрут , а дальше посмотрим
@@ -66,6 +65,13 @@ export class QueryService {
 		this.to = oldQueryService.from
 		this.from = oldQueryService.to
 	}
+
+	 public nextStep() {
+		 this.currentStepIndex++
+		 appStore().changeCurrentPlan(
+			 appStore().queryService.steps[this.currentStepIndex].plan
+		 )
+	 }
 }
 
 export enum Pointer {
