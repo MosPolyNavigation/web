@@ -72,6 +72,13 @@ export class QueryService {
 			 appStore().queryService.steps[this.currentStepIndex].plan
 		 )
 	 }
+
+	previousStep() {
+		this.currentStepIndex--
+		appStore().changeCurrentPlan(
+			appStore().queryService.steps[this.currentStepIndex].plan
+		)
+	}
 }
 
 export enum Pointer {

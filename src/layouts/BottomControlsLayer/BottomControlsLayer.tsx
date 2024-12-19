@@ -86,10 +86,10 @@ function OnWayControls() {
 			let nextBtnTextBuilder = 'Далее: '
 			if (nextStep.plan.corpus === currentStep.plan.corpus) {
 				if (nextStep.plan.floor > currentStep.plan.floor) {
-					nextBtnTextBuilder = 'Далее: Подняться '
+					// nextBtnTextBuilder = 'Далее: Подняться '
 					setNextBtnIcon(IconLink.ARROW_UP)
 				} else {
-					nextBtnTextBuilder = 'Далее: Спуститься '
+					// nextBtnTextBuilder = 'Далее: Спуститься '
 					setNextBtnIcon(IconLink.ARROW_DOWN)
 				}
 				nextBtnTextBuilder += `${nextStep.plan.floor}-й этаж`
@@ -104,6 +104,12 @@ function OnWayControls() {
 
 	return <>
 		<Button iconLink={IconLink.CROSS} onClick={() => appStore().setQueryService(new QueryService({from: Pointer.NOTHING, to: Pointer.NOTHING}))}/>
+		{currentStepIndex !== 0 && <Button iconLink={IconLink.ARROW_LEFT}
+		         classNameExt={classNames(cl.backBtn, {
+			         [cl.backBtnForceRight]: isLastStep,
+		         })}
+		         onClick={() => queryService.previousStep()}
+		/>}
 		<Button classNameExt={classNames({[clButton.invisible]: isLastStep})}
 		        iconLink={nextBtnIcon} text={nextBtnText}
 		        textColor={Color.C4} textPosition={Pos.LEFT}
