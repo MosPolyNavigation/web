@@ -50,13 +50,15 @@ const PlanLayout: FC = () => {
 
 	const [wayAnimationClass, setWayAnimationClass] = useState(cl.wayAnimation)
 	const {primaryWayPathD, primaryWayLength} = useMemo(() => {
-		const wholeWay = appStore().queryService.way;
-		if (wholeWay && wholeWay.steps[wholeWay.activeStep].plan === planModel.plan) {
-			const currentStep = wholeWay.steps[wholeWay.activeStep]
+		const queryService = appStore().queryService;
+		const steps = queryService.steps
+		const currentStepIndex = queryService.currentStepIndex
+		if (steps && steps[currentStepIndex].plan === planModel.plan) {
+			const currentStep = steps[currentStepIndex]
 			if (currentStep.plan === currentPlan) {
 				planModel.highlightRoomForNextStep(
 					planModel.rooms.get(currentStep.way.at(-1).id),
-					!(wholeWay.steps.length - 1 > wholeWay.activeStep)
+					!(queryService.steps.length > currentStepIndex + 1)
 				) //Добавление новых хайлайтов на конечное на текущем плане помещение и слушателей кликап на смену плана на следующий в маршруте
 
 				const vertexesOfWay = currentStep.way

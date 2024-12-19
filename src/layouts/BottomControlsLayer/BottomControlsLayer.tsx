@@ -40,7 +40,7 @@ const BottomControlsLayer: FC = () => {
 				[cl.searchOpen]: activeLayout === Layout.SEARCH,
 			})}
 		>
-			{queryService.way ? <>
+			{queryService.steps ? <>
 					<Button iconLink={IconLink.CROSS} onClick={() => appStore().setQueryService(new QueryService({from: Pointer.NOTHING, to: Pointer.NOTHING}))}/>
 					<Button iconLink={IconLink.ARROW_RIGHT} text={'Далее: Корпус А'} textColor={Color.C4} textPosition={Pos.LEFT}/>
 				</>

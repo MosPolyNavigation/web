@@ -44,7 +44,7 @@ const FloorsControl: FC = () => {
 
 	return (
 		<div className={classNames(cl.floorControl, {
-			[cl.invisible]: queryService.way
+			[cl.invisible]: queryService.steps
 		})}>
 			{floorsPlans &&
 				floorsPlans.map((plan: PlanData) => {

@@ -19,6 +19,7 @@ export class Way {
 		const graph = dataStore().graph;
 		if (graph) {
 			const wayAndDistance = graph.getShortestWayFromTo(this.from, this.to)
+			this.fullDistance = wayAndDistance.distance
 			// console.log(wayAndDistance)
 
 			const way = [...wayAndDistance.way];
