@@ -1,7 +1,7 @@
 import {create} from 'zustand/react';
-import {BtnName, Layout} from '../associations/enums.ts';
+import {BtnName, Layout} from '../constants/enums.ts';
 
-import {PlanData, RoomModel} from '../associations/types.ts';
+import {PlanData, RoomModel} from '../constants/types.ts';
 import {PlanModel} from '../models/Plan/PlanModel.ts';
 import {QueryService} from "../models/QueryService";
 import chalk from "chalk";

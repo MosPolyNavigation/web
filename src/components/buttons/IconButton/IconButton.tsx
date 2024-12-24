@@ -1,9 +1,9 @@
 import  {FC} from 'react';
 import cl from './IconButton.module.scss';
-import {IconLink} from '../../../associations/IconLink.ts';
+import {IconLink} from '../../../constants/IconLink.ts';
 import Icon from '../../common/Icon/Icon.tsx';
 import classNames from 'classnames';
-import {Color} from '../../../associations/enums.ts';
+import {Color} from '../../../constants/enums.ts';
 
 interface IconButtonProps {
 	iconLink: IconLink;

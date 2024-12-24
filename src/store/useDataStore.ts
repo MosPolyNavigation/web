@@ -1,7 +1,7 @@
 import {create} from 'zustand/react';
 import axios from 'axios';
 import {appStore} from './useAppStore.ts';
-import {CorpusData, LocationData, PlanData} from '../associations/types.ts';
+import {CorpusData, LocationData, PlanData} from '../constants/types.ts';
 import {appConfig} from '../appConfig.ts';
 import {Graph} from "../models/Graph";
 

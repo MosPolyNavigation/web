@@ -2,8 +2,8 @@
 import React, {FC, useEffect, useRef} from 'react';
 import cl from './SearchButton.module.scss';
 import Icon from '../../common/Icon/Icon.tsx';
-import {IconLink} from '../../../associations/IconLink.ts';
-import {Color} from '../../../associations/enums.ts';
+import {IconLink} from '../../../constants/IconLink.ts';
+import {Color} from '../../../constants/enums.ts';
 import classNames from 'classnames';
 
 interface SearchButtonProps {

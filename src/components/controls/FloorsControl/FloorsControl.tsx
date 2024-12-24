@@ -3,7 +3,7 @@ import cl from './FloorsControl.module.scss';
 import classNames from 'classnames';
 import {appStore, useAppStore} from '../../../store/useAppStore.ts';
 import {getSortedPlansByCorpus} from '../../../functions/placesFunctions.ts';
-import {PlanData} from '../../../associations/types.ts';
+import {PlanData} from '../../../constants/types.ts';
 
 const FloorsControl: FC = () => {
 	const currentPlan = useAppStore(state => state.currentPlan);

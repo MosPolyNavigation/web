@@ -3,9 +3,9 @@ import cl from './LocationCard.module.scss';
 import classNames from 'classnames';
 import Button from '../../buttons/LargeButton/Button.tsx';
 import {appStore, useAppStore} from '../../../store/useAppStore.ts';
-import {CorpusData, LocationData} from '../../../associations/types.ts';
+import {CorpusData, LocationData} from '../../../constants/types.ts';
 import {getBottomFloorPlan} from '../../../functions/placesFunctions.ts';
-import {Layout} from '../../../associations/enums.ts';
+import {Layout} from '../../../constants/enums.ts';
 
 interface LocationCardProps extends Attributes {
 	expanded?: boolean,

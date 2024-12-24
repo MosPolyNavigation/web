@@ -1,4 +1,4 @@
-import {CorpusData, PlanData} from '../associations/types.ts';
+import {CorpusData, PlanData} from '../constants/types.ts';
 import {useDataStore} from '../store/useDataStore.ts';
 
 export function getBottomFloorPlan(corpus: CorpusData): PlanData {

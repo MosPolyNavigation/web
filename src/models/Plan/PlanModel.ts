@@ -1,6 +1,6 @@
-import {Id, PlanData, RoomModel} from '../../associations/types.ts';
+import {Id, PlanData, RoomModel} from '../../constants/types.ts';
 import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts';
-import cl from '../../layouts/Plan/PlanLayout.module.scss';
+import cl from '../../components/layouts/Plan/PlanLayout.module.scss';
 import {appStore, useAppStore} from "../../store/useAppStore.ts";
 
 export class PlanModel {

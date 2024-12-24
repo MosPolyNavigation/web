@@ -1,0 +1,84 @@
+@import '../../../styles/base';
+
+.leftMenu {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  //noinspection CssInvalidPropertyValue
+  width: calc(100% - toRem(60));
+  max-width: toRem(260);
+
+  background-color: $color-2;
+  @extend %border-default;
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  @extend %shadow-default;
+
+  padding: $size-20;
+  display: flex;
+  flex-direction: column;
+  gap: $size-40;
+
+  //&.visible {
+  transition: translate ease 300ms;
+  translate: 0;
+  will-change: translate;
+  animation: show ease 300ms;
+
+
+
+  &.hidden {
+    translate: -100%;
+    box-shadow: none;
+    animation: hide-end 0s 500ms forwards;
+  }
+
+  @keyframes show {
+    from {
+      translate: -100%;
+      box-shadow: none;
+    }
+    to {
+      translate: 0;
+      @extend %shadow-default;
+    }
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    gap: $size-20;
+
+    @extend %text-3;
+    color: $color-5;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bottom {
+    margin-top: auto;
+
+    display: flex;
+    gap: $size-10;
+    align-items: center;
+
+    @extend %text-1;
+    color: $color-4;
+
+    .logo {
+      width: $size-40;
+      height: $size-40;
+      background: url('/img/logo.png') center no-repeat;
+      background-size: cover;
+    }
+  }
+}

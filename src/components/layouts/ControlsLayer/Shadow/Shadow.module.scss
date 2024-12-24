@@ -1,0 +1,10 @@
+@import '../../../../styles/base';
+
+.shadow {
+  position: absolute;
+  inset: 0;
+  height: toRem(115);
+  width: 100%;
+  z-index: -2;;
+  background: linear-gradient(180deg, rgba(19, 20, 22, 0.6) 20%, rgba(19, 20, 22, 0) 100%);
+}

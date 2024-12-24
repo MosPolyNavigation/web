@@ -1,8 +1,8 @@
 import {FC} from 'react';
 import cl from './ScaleControl.module.scss';
 import Icon from '../../common/Icon/Icon.tsx';
-import {IconLink} from '../../../associations/IconLink.ts';
-import {Color} from '../../../associations/enums.ts';
+import {IconLink} from '../../../constants/IconLink.ts';
+import {Color} from '../../../constants/enums.ts';
 
 interface ScaleControlProps {
 	onClick?: () => void;

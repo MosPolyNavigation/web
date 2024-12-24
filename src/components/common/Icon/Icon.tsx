@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import cl from './Icon.module.scss';
-import {IconLink} from '../../../associations/IconLink.ts';
-import {Color, Size} from '../../../associations/enums.ts';
+import {IconLink} from '../../../constants/IconLink.ts';
+import {Color, Size} from '../../../constants/enums.ts';
 import classNames from 'classnames';
 
 interface IconProps {

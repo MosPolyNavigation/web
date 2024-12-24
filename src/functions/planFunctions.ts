@@ -1,4 +1,4 @@
-import {PlanData} from '../associations/types.ts';
+import {PlanData} from '../constants/types.ts';
 import {appConfig} from '../appConfig.ts';
 
 export function copyAttribute(target: SVGSVGElement | HTMLElement | null, source: SVGSVGElement | HTMLElement | null, qualifiedName: string | null) {

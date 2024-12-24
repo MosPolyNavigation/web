@@ -1,4 +1,4 @@
-import {PlanData} from "../associations/types";
+import {PlanData} from "../constants/types";
 import {dataStore} from "../store/useDataStore";
 import {Vertex} from "./Graph";
 

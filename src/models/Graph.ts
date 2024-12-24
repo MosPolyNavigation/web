@@ -1,6 +1,6 @@
 //Граф тут из данных
 import {dataStore} from "../store/useDataStore";
-import {LocationData, PlanData} from "../associations/types";
+import {LocationData, PlanData} from "../constants/types";
 
 export class Graph {
 	vertexes: Array<Vertex> = [] //Мапа вершин

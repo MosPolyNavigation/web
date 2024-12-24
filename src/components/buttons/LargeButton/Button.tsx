@@ -1,8 +1,8 @@
 import React, {Attributes, FC} from 'react';
-import {IconLink} from '../../../associations/IconLink.ts';
+import {IconLink} from '../../../constants/IconLink.ts';
 import cl from './Button.module.scss';
 import Icon from '../../common/Icon/Icon.tsx';
-import {Color, Pos, Size} from '../../../associations/enums.ts';
+import {Color, Pos, Size} from '../../../constants/enums.ts';
 import classNames from 'classnames';
 
 interface ButtonProps extends Attributes {
