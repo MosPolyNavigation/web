@@ -17,11 +17,12 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 
 	const [bottomCardState, setBottomCardState] = useState<CardState>(CardState.HIDDEN);
 	const previousState = useRef<CardState>(bottomCardState);
+	const queryService = useAppStore(state => state.queryService);
 
 	useEffect(() => {
-		if (activeLayout === Layout.SEARCH) {
+		if (activeLayout === Layout.SEARCH)  {
 			setBottomCardState(CardState.EXPANDED)
-		} else if (selectedRoom) {
+		} else if (selectedRoom  || queryService.steps) {
 			setBottomCardState(CardState.COLLAPSED)
 		} else {
 			setBottomCardState(CardState.HIDDEN)

@@ -11,9 +11,12 @@ import SearchMenu from '../../components/layouts/BottomLayer/SearchMenu/SearchMe
 import {useAppStore} from '../../store/useAppStore.ts';
 import {useDataStore} from '../../store/useDataStore.ts';
 import PlanLayout from '../../components/layouts/Plan/PlanLayout.tsx';
+import WayInfo from "../../components/layouts/BottomLayer/WayInfo/WayInfo.tsx";
+import {IconLink} from "../../constants/IconLink.ts";
 
 function App() {
 	const activeLayout = useAppStore(state => state.activeLayout);
+	const queryService = useAppStore(state => state.queryService);
 
 	useEffect(() => {
 		useDataStore.getState().fetchData();
@@ -30,8 +33,12 @@ function App() {
 			<HomeLayer />
 
 			<BottomLayer>
-				{activeLayout !== Layout.SEARCH && <SpaceInfo />}
 				{activeLayout === Layout.SEARCH && <SearchMenu />}
+				{/*TODO: По идее надо добавить в стор сосотояния для открытого SpaceInfo и WayInfo чтобы вот так костыльно не делать*/}
+				{activeLayout !== Layout.SEARCH && queryService.steps === undefined && <SpaceInfo />}
+				{activeLayout !== Layout.SEARCH &&
+					queryService.steps ? <WayInfo fromWay={{fromIcon: IconLink.STUDY, text: "Н 405 (Аудитория)"}} toWay={{toIcon: IconLink.STUDY, text: "Н 519 (Аудитория)"}} steps={[{stepIcon: IconLink.STEP1, stepText: "Дойти до лестницы, подняться на 5-й этаж"}, {stepIcon: IconLink.STEP1, stepText: "Дойти до аудитории"}]} /> : ""
+				}
 			</BottomLayer>
 
 			<PlanLayout />

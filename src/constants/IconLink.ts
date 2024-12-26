@@ -9,6 +9,7 @@ export enum IconLink {
 	FROM = 'img/icons/ui/from.svg',
 	TO = 'img/icons/ui/to.svg',
 	SWAP = 'img/icons/ui/swap.svg',
+	STEP1 = 'img/icons/ui/step1.svg',
 	PROBLEM = 'img/icons/ui/problem.svg',
 	ABOUT = 'img/icons/ui/about.svg',
 	SETTINGS = 'img/icons/ui/settings.svg',

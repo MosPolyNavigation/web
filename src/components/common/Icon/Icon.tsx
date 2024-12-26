@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 interface IconProps {
 	iconLink: IconLink,
-	color?: Color,
+	color: Color,
 	classNameExt?: string,
 	size?: Size.M | Size.S,
 }
