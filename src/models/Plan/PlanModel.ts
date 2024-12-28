@@ -91,20 +91,12 @@ export class PlanModel {
 			});
 		}
 
-		const queryService = appStore().queryService;
-		const steps = queryService.steps
-		const currentStepIndex = queryService.currentStepIndex
-		// if(steps) {
-		// 	if (steps.length > currentStepIndex + 1) {
-		// 		if (steps[currentStepIndex + 1].plan === plan) {
-		// 			// queryService.currentStepIndex += 1
-		// 			console.log('Переход на следующий шаг')
-		// 		}
-		// 	}
-		// 	else {
-		// 		console.log('Уже достигнут последний шаг')
-		// 	}
-		// }
+		const selectedRoomId = appStore().selectedRoomId
+		if(selectedRoomId) {
+			const room = this.rooms.get(selectedRoomId);
+			if(room)
+				this.toggleRoom(room, {activateRoom: true, activateEntrance: true})
+		}
 	}
 
 	/**

@@ -11,13 +11,16 @@ interface MenuItemProps {
 	color?: Color;
 	text: string;
 	addText?: string;
-	size?: Size.S | Size.M
+	size?: Size.S | Size.M,
+	onClick?: () => void
 }
 
 const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
 
 	return (
-		<button className={classNames(cl.menuItem, {[cl.sizeS]: props.size === Size.S})} >
+		<button className={classNames(cl.menuItem, {[cl.sizeS]: props.size === Size.S})}
+			onClick={props.onClick}
+		>
 			{!props.isFirst && <div className={cl.divider}></div>}
 
 			<div className={cl.content}>

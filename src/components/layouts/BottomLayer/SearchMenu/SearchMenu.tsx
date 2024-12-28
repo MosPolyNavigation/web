@@ -2,14 +2,18 @@ import {FC, useEffect, useRef, useState} from 'react';
 import cl from './SearchMenu.module.scss';
 import {IconLink} from '../../../../constants/IconLink.ts';
 import Button from '../../../buttons/LargeButton/Button.tsx';
-import {Color, Size} from '../../../../constants/enums.ts';
+import {Color, Layout, Size} from '../../../../constants/enums.ts';
 import MenuItem from '../../../menuopmponents/MenuItem/MenuItem.tsx';
+import {useDataStore} from "../../../../store/useDataStore.ts";
+import {appStore} from "../../../../store/useAppStore.ts";
+import {RoomData} from "../../../../constants/types.ts";
 
 interface SearchMenuProps {
 	a?: boolean
 }
 
 const SearchMenu: FC<SearchMenuProps> = () => {
+	const rooms = useDataStore(state => state.rooms).sort(() => Math.random()-0.5)
 	const resultsRef = useRef<HTMLDivElement | null>(null)
 	const [results, setResults] = useState(false);
 
@@ -39,19 +43,19 @@ const SearchMenu: FC<SearchMenuProps> = () => {
 		}
 	}, [resultsRef, results]);
 
+	function menuItemClickHandler(room: RoomData) {
+		appStore().changeCurrentPlan(room.plan)
+		appStore().changeSelectedRoom(room.id)
+		appStore().changeLayout(Layout.PLAN)
+	}
+
 	return (
 		<div className={cl.searchMenu}>
 
 			<div ref={resultsRef} className={cl.results}>
-				<MenuItem text='Н 505' iconLink={IconLink.STUDY} {...resultProps} />
-				<MenuItem text='Н 409' addText='Приёмная комиссия' iconLink={IconLink.LEGAL} {...resultProps} />
-				<MenuItem text='Н 408' addText='Приём заявлений приёмной комиссии' iconLink={IconLink.LEGAL} {...resultProps} />
-				<MenuItem text='Н 407' addText='' iconLink={IconLink.LEGAL} {...resultProps} />
-				<MenuItem text='Н 416' addText='Библиотека' iconLink={IconLink.BOOK} {...resultProps} />
-				<MenuItem text='Н 406' iconLink={IconLink.STUDY} {...resultProps} />
-				<MenuItem text='Н 405' iconLink={IconLink.STUDY} {...resultProps} />
-				<MenuItem isFirst text='Н 402' iconLink={IconLink.LEGAL} addText='Волонтерский центр' {...resultProps} />
-
+				{rooms.map((room, index) =>
+					<MenuItem onClick={() => menuItemClickHandler(room)} text={room.title} addText={room.subTitle} iconLink={room.icon} isFirst={index === 0} {...resultProps}/>
+				)}
 			</div>
 
 			<div className={cl.quickActions}>

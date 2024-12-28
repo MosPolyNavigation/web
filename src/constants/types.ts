@@ -1,4 +1,5 @@
 import {RawVertex} from "../store/useDataStore.ts";
+import {IconLink} from "./IconLink.ts";
 
 export type LocationData = {
 	id: string
@@ -26,6 +27,19 @@ export type PlanData = {
 	entrances: PlanEntrances[],
 	corpus: CorpusData,
 }
+
+export type RoomData = {
+	id: string,
+	type: RoomType,
+	available: boolean,
+	title: string,
+	subTitle: string,
+	icon: IconLink | null,
+	plan: PlanData | null
+}
+
+export type RoomType = string | null | 'Пока не известно' | 'Лифт' | 'Лестница' | 'Переход между корпусами' | 'Учебная аудитория' | 'Лекторий' | 'Лаборатория' | 'Общественное пространство / актовый или концертный зал' | 'Коворкинг' | 'Администрация' | 'Вход в здание' | 'Приёмная комиссия' | 'Женский туалет' | 'Мужской туалет' | 'Общий туалет' | 'Столовая / кафе' | 'Библиотека / читальный зал' | 'Клуб / секция / внеучебка' | 'Спортивный зал' | 'Гардероб / раздевалка' | 'Не используется' | 'Служебное помещение'
+
 
 export type Id = string
 

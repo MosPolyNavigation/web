@@ -5,7 +5,7 @@
   &:not(.initialColor) {
     mask-position: center;
     mask-repeat: no-repeat;
-    mask-size: cover;
+    mask-size: contain;
   }
 
   &.sizeM {
@@ -23,6 +23,6 @@
   &.initialColor {
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
   }
 }

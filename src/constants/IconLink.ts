@@ -34,5 +34,6 @@ export enum IconLink {
 	CROSSING = 'img/icons/plans/crossing.svg',
 	ELEVATOR = 'img/icons/plans/elevator.svg',
 	STAIR = 'img/icons/plans/stair.svg',
+	GARDEROB = 'img/icons/plans/garderob.svg',
 
 }

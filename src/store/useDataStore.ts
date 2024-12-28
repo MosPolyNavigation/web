@@ -1,9 +1,10 @@
 import {create} from 'zustand/react';
 import axios from 'axios';
 import {appStore} from './useAppStore.ts';
-import {CorpusData, LocationData, PlanData} from '../constants/types.ts';
+import {CorpusData, LocationData, PlanData, RoomData} from '../constants/types.ts';
 import {appConfig} from '../appConfig.ts';
 import {Graph} from "../models/Graph";
+import {Parser} from "../models/Parser.ts";
 
 const address = 'https://mospolynavigation.github.io/polyna-preprocess/locations.json';
 
@@ -21,6 +22,10 @@ type State = {
 	 */
 	plans: PlanData[]
 	/**
+	 * Хранит данные помещения с ссылкой на план
+	 */
+	rooms: RoomData[]
+	/**
 	 * Хранит граф
 	 */
 	graph: Graph | null
@@ -35,6 +40,7 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 	locations: [],
 	corpuses: [],
 	plans: [],
+	rooms: [],
 	graph: null,
 
 	fetchData: () => {
@@ -106,11 +112,21 @@ function fillData(data: initialLocationData[]) {
 						};
 
 						dataStore().plans.push(plan);
+
+						inPlan.rooms?.forEach((inRoom) => {
+
+
+							const room = Parser.fillRoomData(inRoom, plan)
+							if(room)
+								dataStore().rooms.push(room)
+						})
 					});
 				}
 			});
 		}
 	});
+	const rooms = dataStore().rooms.filter(room => room.plan.id === 'N-3')
+	console.log(rooms)
 	const firstPlan: PlanData | undefined = dataStore().plans.find(plan => plan.id === appConfig.firstPlan);
 	if (!appStore().currentPlan && firstPlan) {
 		appStore().changeCurrentPlan(firstPlan)
@@ -147,12 +163,22 @@ type initialCorpusData = {
 }
 
 type initialPlanData = {
+	rooms: initialRoomData[];
 	id: string
 	floor: string
 	available: boolean
 	wayToSvg: string
 	graph?: RawVertex[]
 	entrances: Array<[string, string]>
+}
+
+export type initialRoomData = {
+	id: string
+	type: string
+	available: boolean
+	numberOrTitle: string
+	tabletText: string
+	addInfo: string
 }
 
 export type RawVertex = {
