@@ -32,6 +32,10 @@ type State = {
 	 * Хранит id "Куда" и "Откуда", а также построенный маршрут
 	 */
 	queryService: QueryService
+	/**
+	 *
+	 */
+	searchQuery: string;
 }
 
 type Action = {
@@ -45,7 +49,8 @@ type Action = {
 		virtualSvg: SVGSVGElement | HTMLElement,
 		roomClickHandler: (room: RoomModel) => void,
 	) => void,
-	setQueryService: (query: QueryService) => void
+	setQueryService: (query: QueryService) => void,
+	setSearchQuery: (newSearchQuery: string) => void,
 }
 
 export function appStore() {
@@ -61,6 +66,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	planModel: null,
 	updateState: {},
 	queryService: new QueryService(),
+	searchQuery: '',
 
 
 	controlBtnClickHandler: (btnName) => {
@@ -85,6 +91,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 
 		else if (btnName === BtnName.SEARCH && activeLayout !== Layout.SEARCH) {
 			get().changeLayout(Layout.SEARCH);
+			get().setSearchQuery('')
 		} //Скрыть левое меню
 	},
 
@@ -136,5 +143,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	setQueryService: (query) => {
 		appStore().planModel.deHighlightRoomsForNextStep() //Снятие старых хайлайтов и слушателей на смену плана
 		set({queryService: query});
+	},
+	setSearchQuery: (newSearchQuery) => {
+		set({searchQuery: newSearchQuery})
 	}
 }));
