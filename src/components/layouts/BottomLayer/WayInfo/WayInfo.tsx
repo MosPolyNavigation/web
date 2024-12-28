@@ -4,6 +4,8 @@ import WaySelectorButton from "../../../buttons/WaySelectorButton/WaySelectorBut
 import {IconLink} from "../../../../constants/IconLink.ts";
 import {Color, Size} from "../../../../constants/enums.ts";
 import Icon from "../../../common/Icon/Icon.tsx";
+import {appStore} from "../../../../store/useAppStore.ts";
+import {QueryService} from "../../../../models/QueryService.ts";
 
 type Props = {
     fromWay: {fromIcon: IconLink, text: string},
@@ -17,7 +19,7 @@ function WayInfo(props: Props) {
             <div className={cl.wayInfoContent}>
                 <WaySelectorButton text={"H 405 (Аудитория)"} baseText={"Откуда"} icon={IconLink.STUDY}
                                    baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}/>
-                <button className={cl.swapButton} onClick={() => console.log("Нажатие на кнопку смены локаций")}>
+                <button className={cl.swapButton} onClick={() => appStore().setQueryService(new QueryService({swap: true}))}>
                     <Icon iconLink={IconLink.SWAP} color={Color.C3} size={Size.M}/>
                 </button>
 

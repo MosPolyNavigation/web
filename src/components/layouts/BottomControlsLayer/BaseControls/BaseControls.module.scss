@@ -1,0 +1,11 @@
+@import '../../../../styles/base';
+
+
+.favouriteBtn {
+  visibility: hidden;
+}
+
+.locationsBtn {
+  padding-left: calc($size-10 + toRem(0.5));
+  padding-right: calc($size-10 - toRem(2.5));
+}

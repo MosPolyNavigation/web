@@ -13,6 +13,7 @@ import {useDataStore} from '../../store/useDataStore.ts';
 import PlanLayout from '../../components/layouts/Plan/PlanLayout.tsx';
 import WayInfo from "../../components/layouts/BottomLayer/WayInfo/WayInfo.tsx";
 import {IconLink} from "../../constants/IconLink.ts";
+import Toast from "../../components/common/Toast/Toast.tsx";
 
 function App() {
 	const activeLayout = useAppStore(state => state.activeLayout);
@@ -42,6 +43,7 @@ function App() {
 			</BottomLayer>
 
 			<PlanLayout />
+			<Toast text={"К сожалению, никто не знает, что здесь"} />
 		</div>
 	);
 }

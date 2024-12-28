@@ -25,6 +25,7 @@
 
   height: toRem(34);
   width: 100%;
+  min-width: toRem(120);
   padding: toRem(10) 0 toRem(10) toRem(7);
   border-radius: $size-20;
   background-color: $color-1;

@@ -8,6 +8,7 @@ import {Layout} from '../../../constants/enums.ts';
 import {useDataStore} from '../../../store/useDataStore.ts';
 import {LocationData} from '../../../constants/types.ts';
 import {isApple} from '../../../functions/common/isApple.ts';
+import Toast from "../../common/Toast/Toast.tsx";
 
 const HomeLayer: FC = () => {
 	const activeLayout = useAppStore(state => state.activeLayout);

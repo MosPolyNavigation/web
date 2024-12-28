@@ -15,20 +15,10 @@
     translate: 0 toRem(-129);
   }
 
-  .favouriteBtn {
-    //transition: all $search-anim-dur ease;
-    visibility: hidden;
+  &.flexCenter {
+    justify-content: center;
   }
 
-  .backBtn {
-    margin-left: auto;
-
-    &.backBtnForceRight {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-  }
 
   &.searchOpen {
     z-index: 3;

@@ -1,0 +1,47 @@
+@import '../../../../styles/base';
+
+
+.waySelectorsControlsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  position: relative;
+  width: 100%;
+
+  .button {
+    width: toRem(40);
+  }
+}
+
+//@media (min-width: 450px) {
+//  .waySelectorsControlsWrapper {
+//    flex-direction: row-reverse;
+//    justify-content: center; /* Центрируем главный контент */
+//    position: relative;
+//
+//  }
+//
+//
+//  .waySelectorsControlsWrapper > button {
+//    position: absolute;
+//    bottom: 0;
+//    right: 0px; /* Располагаем кнопку в 10px от правого края */
+//  }
+//}
+
+.wayInfoContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: toRem(25);
+  width: 100%;
+}
+
+.swapButton {
+  min-width: toRem(40);
+  height: toRem(40);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
