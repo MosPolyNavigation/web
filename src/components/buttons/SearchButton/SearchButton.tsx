@@ -54,6 +54,7 @@ const SearchInput = (props: Props) => {
 		<label htmlFor="search"></label>
 		<input
 			ref={inputRef}
+			autoComplete="off"
 			placeholder={'Поиск...'}
 			type="text"
 			name="search"

@@ -27,7 +27,7 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 		} else {
 			setBottomCardState(CardState.HIDDEN)
 		}
-	}, [selectedRoomId, activeLayout]);
+	}, [selectedRoomId, activeLayout, queryService]);
 
 	const [isRemoved, removerAnimationEndHandler] = useOnHideRemover(bottomCardState);
 
@@ -39,19 +39,18 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 		}, 50);
 	}, [bottomCardState]);
 
-	if (isRemoved) {
-		return null;
-	}
+	// if (isRemoved) {
+	// 	return null;
+	// }
 
 	//TODO: переделать на навешивание классов через время
 	const layerClassNames = classNames(cl.bottomLayer, {
 		[cl.hidden]: (bottomCardState === CardState.HIDDEN),
-		[cl.expandedFromMiddle]: (previousState.current === CardState.COLLAPSED && bottomCardState === CardState.EXPANDED),
-		[cl.expandedFromHidden]: (previousState.current === CardState.HIDDEN && bottomCardState === CardState.EXPANDED),
+		[cl.expanded]: (bottomCardState === CardState.EXPANDED),
 	});
 
 	return (
-		<div onAnimationEnd={removerAnimationEndHandler} className={layerClassNames}>
+		<div className={layerClassNames}>
 			<div className={cl.slider}></div>
 			{(activeLayout !== Layout.SEARCH && !queryService.steps) &&
 				<IconButton

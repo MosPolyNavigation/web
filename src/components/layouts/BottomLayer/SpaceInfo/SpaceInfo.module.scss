@@ -11,6 +11,10 @@
     @extend %text-3;
     margin-right: toRem(30);
 
+    @media (min-width: 900px) {
+      order: unset;
+    }
+
     .spaceIcon {
       display: inline-block;
       margin-right: $size-10;

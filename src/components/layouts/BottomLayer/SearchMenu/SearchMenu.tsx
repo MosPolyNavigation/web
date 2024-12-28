@@ -61,8 +61,8 @@ const SearchMenu: FC<SearchMenuProps> = () => {
 				{
 					searchQuery &&
 					rooms.filter(room => (
-						room.title.toLowerCase().replaceAll(' ','').replaceAll('-','').includes(searchQuery)
-						|| room.subTitle.toLowerCase().replaceAll(' ','').replaceAll('-','').includes(searchQuery))
+						room.title.toLowerCase().replaceAll(' ','').replaceAll('-','').includes(finalSearchQuery)
+						|| room.subTitle.toLowerCase().replaceAll(' ','').replaceAll('-','').includes(finalSearchQuery))
 					).sort((a, b) => b.title.length - a.title.length)
 						.map((room, index) =>
 					<MenuItem onClick={() => menuItemClickHandler(room)} text={room.title} addText={room.subTitle}
