@@ -9,6 +9,9 @@
 
   display: flex;
   flex-direction: column;
+  @media (width > 900px) {
+    flex-direction: column-reverse;
+  }
   justify-content: space-between;
   gap: $size-20;
 
@@ -17,12 +20,18 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column-reverse;
+    padding-bottom: $size-20;
+    @media (width > 900px) {
+      flex-direction: column;
+    }
     overflow-y: scroll;
+
     //background-color: #1D253A;
   }
 
   .quickActions {
-    display: flex;
+    display: none;
+    //display: flex;
     gap: $size-10;
     flex-wrap: nowrap;
     height: fit-content;

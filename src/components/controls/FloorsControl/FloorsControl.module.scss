@@ -19,7 +19,14 @@
 	scrollbar-width: none;
 	position: relative;
 	pointer-events: auto;
-	transition: opacity 250ms ease;
+	left: 0;
+	transition: opacity 250ms ease, left 500ms ease;
+
+	@media (width > 900px) {
+		&.bottomCardExpanded {
+			left: toRem(350);
+		}
+	}
 
 	&.invisible {
 		opacity: 0;

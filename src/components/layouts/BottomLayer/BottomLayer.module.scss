@@ -27,12 +27,27 @@
     border-bottom: none;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+
+    &.hidden {
+      translate: 0 100dvh;
+      box-shadow: none;
+    }
+
+    &.expanded {
+      translate: 0 calc($size-20);
+      transition: all ease 500ms;
+
+      @media (orientation: portrait) {
+        -moz-transition: none;
+      }
+    }
   }
   
   @media (width > 900px) {
-    width: toRem(300);
-    height: 40%;
-    top: toRem(80) !important;
+    width: toRem(340);
+    height: toRem(180);
+    overflow-y: scroll;
+    top: toRem(130) !important;
     left: $size-10;
     translate: 0 ;
     transition: all 500ms ease;
@@ -50,21 +65,6 @@
       }
     }
 
-  }
-
-
-  &.hidden {
-    translate: 0 100dvh;
-    box-shadow: none;
-  }
-
-  &.expanded {
-    translate: 0 calc($size-20);
-    transition: all ease 500ms;
-
-    @media (orientation: portrait) {
-      -moz-transition: none;
-    }
   }
 
   .slider {

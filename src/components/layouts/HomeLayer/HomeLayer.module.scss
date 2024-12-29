@@ -28,6 +28,16 @@
   animation: show ease-out 400ms;
   transition: all ease 400ms;
 
+  @media (width > 900px) {
+    border: $color-3 1px solid;
+    //border: $color-3 toRem(1) solid;
+    border-radius: $size-20;
+    inset: toRem(130) auto auto $size-10;
+    width: toRem(340);
+    height: toRem(700);
+    //width: toRem(900px);
+  }
+
   &.hidden {
     opacity: 0;
     scale: 1.05;

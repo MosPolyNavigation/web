@@ -12,7 +12,8 @@
     margin-right: toRem(30);
 
     @media (min-width: 900px) {
-      order: unset;
+      order: 2;
+      margin-top: $size-20;
     }
 
     .spaceIcon {
@@ -26,6 +27,10 @@
   .location {
     color: $color-4;
     margin-bottom: $size-15;
+
+    @media (min-width: 900px) {
+      display: none;
+    }
   }
 
   .actions {

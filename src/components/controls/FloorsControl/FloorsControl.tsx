@@ -4,10 +4,12 @@ import classNames from 'classnames';
 import {appStore, useAppStore} from '../../../store/useAppStore.ts';
 import {getSortedPlansByCorpus} from '../../../functions/placesFunctions.ts';
 import {PlanData} from '../../../constants/types.ts';
+import {Layout} from "../../../constants/enums.ts";
 
 const FloorsControl: FC = () => {
 	const currentPlan = useAppStore(state => state.currentPlan);
 	const queryService = useAppStore(state => state.queryService);
+	const activeLayout = useAppStore(state => state.activeLayout);
 
 	const [floorsPlans, setFloorsPlans] = useState<PlanData[] | null>(null);
 
@@ -44,7 +46,8 @@ const FloorsControl: FC = () => {
 
 	return (
 		<div className={classNames(cl.floorControl, {
-			[cl.invisible]: queryService.steps
+			[cl.invisible]: queryService.steps,
+			[cl.bottomCardExpanded]: activeLayout === Layout.SEARCH
 		})}>
 			{floorsPlans &&
 				floorsPlans.map((plan: PlanData) => {

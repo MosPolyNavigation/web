@@ -46,6 +46,8 @@
   animation: onLoadAnimation 50ms 100ms forwards, scaleAnimation 400ms 100ms forwards ease-out;
   @extend %cardTransition;
 
+
+
   &.disabled {
     .titleWrapper {
       color: $color-3;
