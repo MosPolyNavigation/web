@@ -5,6 +5,7 @@ import Icon from '../../common/Icon/Icon.tsx';
 import {IconLink} from '../../../constants/IconLink.ts';
 import {Color} from '../../../constants/enums.ts';
 import classNames from 'classnames';
+import {appStore, useAppStore} from "../../../store/useAppStore.ts";
 
 interface SearchButtonProps {
 	onClick: () => void,
@@ -32,19 +33,20 @@ const SearchButton: FC<SearchButtonProps> = ({onClick, classNameExt, expanded}) 
 	);
 };
 
-interface SearchInputProps {
+type Props = {
 	expanded: boolean;
 }
 
-const SearchInput = ({expanded}: SearchInputProps) => {
+const SearchInput = (props: Props) => {
+	const searchQuery = useAppStore(state => state.searchQuery);
 
 	useEffect(() => {
-		if(expanded) {
+		if(props.expanded) {
 			setTimeout(() => {
 				inputRef.current.focus();
 			}, 175);
 		}
-	}, [expanded]);
+	}, [props.expanded]);
 
 	const inputRef = useRef(null);
 
@@ -52,10 +54,13 @@ const SearchInput = ({expanded}: SearchInputProps) => {
 		<label htmlFor="search"></label>
 		<input
 			ref={inputRef}
+			autoComplete="off"
 			placeholder={'Поиск...'}
 			type="text"
 			name="search"
 			id="search"
+			onChange={(e) => appStore().setSearchQuery(e.target.value)}
+			value={searchQuery}
 		/>
 	</>;
 };

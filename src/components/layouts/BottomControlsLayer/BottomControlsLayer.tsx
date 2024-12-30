@@ -29,7 +29,7 @@ const BottomControlsLayer: FC = () => {
 	return (
 		<div
 			className={classNames(cl.bottomControlsLayer, {
-				[cl.centered]: !!selectedRoomId && activeLayout !== Layout.SEARCH,
+				[cl.centered]: (!!selectedRoomId || queryService.steps) && activeLayout !== Layout.SEARCH,
 				[cl.searchOpen]: activeLayout === Layout.SEARCH,
 				[cl.flexCenter]: (queryService.from || queryService.to) && !(queryService.from && queryService.to)
 			})}

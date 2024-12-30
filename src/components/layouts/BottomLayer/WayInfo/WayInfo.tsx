@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import cl from './WayInfo.module.scss'
 import WaySelectorButton from "../../../buttons/WaySelectorButton/WaySelectorButton.tsx";
 import {IconLink} from "../../../../constants/IconLink.ts";
@@ -6,6 +6,8 @@ import {Color, Size} from "../../../../constants/enums.ts";
 import Icon from "../../../common/Icon/Icon.tsx";
 import {appStore} from "../../../../store/useAppStore.ts";
 import {QueryService} from "../../../../models/QueryService.ts";
+import {useDataStore} from "../../../../store/useDataStore.ts";
+import {useAppStore} from "../../../../store/useAppStore.ts";
 
 type Props = {
     fromWay: {fromIcon: IconLink, text: string},
@@ -14,17 +16,29 @@ type Props = {
 }
 
 function WayInfo(props: Props) {
+    const rooms = useDataStore(state => state.rooms);
+    const queryService = useAppStore(state => state.queryService);
+    const roomFrom = useMemo(() => rooms.find(room => room.id === queryService.from), [queryService, rooms]);
+    const roomTo = useMemo(() => rooms.find(room => room.id === queryService.to), [queryService, rooms]);
+
     return (
         <div className={cl.wayInfoWrapper}>
             <div className={cl.wayInfoContent}>
                 <WaySelectorButton text={"H 405 (Аудитория)"} baseText={"Откуда"} icon={IconLink.STUDY}
                                    baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}/>
+        
+                <button className={cl.swapButton} onClick={() => appStore().setQueryService(new QueryService({swap: true}))}>
+                <WaySelectorButton text={roomFrom.title} baseText={"Откуда"} icon={roomFrom.icon}
+                                   baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}
+                />
+
                 <button className={cl.swapButton} onClick={() => appStore().setQueryService(new QueryService({swap: true}))}>
                     <Icon iconLink={IconLink.SWAP} color={Color.C3} size={Size.M}/>
                 </button>
 
-                <WaySelectorButton text={"H 405 (Аудитория)"} baseText={"Откуда"} icon={IconLink.STUDY}
-                                   baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку КУДА")}/>
+                <WaySelectorButton text={roomTo.title} baseText={"Откуда"} icon={roomTo.icon}
+                                   baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку КУДА")}
+                />
             </div>
             {/*<div className={cl.wayInfoContent}>*/}
             {/*    <WaySelectorButton baseText={"Откуда"} baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}/>*/}

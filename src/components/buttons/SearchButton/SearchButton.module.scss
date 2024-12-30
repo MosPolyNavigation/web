@@ -10,6 +10,10 @@
   .filler {
     flex-grow: 0.5;
 
+    @media (width > 900px) {
+      display: none;
+    }
+
     transition: flex-grow $search-anim-dur ease-out;
 
     &.fillerInner {
@@ -20,6 +24,9 @@
   .searchButton {
     height: $size-40;
     width: toRem(140);
+    @media (width > 900px) {
+      width: toRem(290);
+    }
     @extend %border-default;
     @extend %shadow-default;
     background-color: $color-1;

@@ -5,7 +5,7 @@ import {IconLink} from '../../../constants/IconLink.ts';
 import classNames from 'classnames';
 import {Layout, CardState} from '../../../constants/enums.ts';
 import useOnHideRemover from '../../../hooks/useOnHideRemover.ts';
-import {useAppStore} from '../../../store/useAppStore.ts';
+import {appStore, useAppStore} from '../../../store/useAppStore.ts';
 
 interface BottomLayerProps {
 	children?: ReactNode,
@@ -13,21 +13,21 @@ interface BottomLayerProps {
 
 const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 	const activeLayout = useAppStore(state => state.activeLayout)
-	const [selectedRoom, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
+	const selectedRoomId = useAppStore(state => state.selectedRoomId);
+	const queryService = useAppStore(state => state.queryService);
 
 	const [bottomCardState, setBottomCardState] = useState<CardState>(CardState.HIDDEN);
 	const previousState = useRef<CardState>(bottomCardState);
-	const queryService = useAppStore(state => state.queryService);
 
 	useEffect(() => {
-		if (activeLayout === Layout.SEARCH)  {
+		if (activeLayout === Layout.SEARCH) {
 			setBottomCardState(CardState.EXPANDED)
-		} else if (selectedRoom  || queryService.steps) {
+		} else if (selectedRoomId || queryService.steps) {
 			setBottomCardState(CardState.COLLAPSED)
 		} else {
 			setBottomCardState(CardState.HIDDEN)
 		}
-	}, [selectedRoom, activeLayout]);
+	}, [selectedRoomId, activeLayout, queryService]);
 
 	const [isRemoved, removerAnimationEndHandler] = useOnHideRemover(bottomCardState);
 
@@ -39,25 +39,26 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 		}, 50);
 	}, [bottomCardState]);
 
-	if (isRemoved) {
-		return null;
-	}
+	// if (isRemoved) {
+	// 	return null;
+	// }
 
 	//TODO: переделать на навешивание классов через время
 	const layerClassNames = classNames(cl.bottomLayer, {
 		[cl.hidden]: (bottomCardState === CardState.HIDDEN),
-		[cl.expandedFromMiddle]: (previousState.current === CardState.COLLAPSED && bottomCardState === CardState.EXPANDED),
-		[cl.expandedFromHidden]: (previousState.current === CardState.HIDDEN && bottomCardState === CardState.EXPANDED),
+		[cl.expanded]: (bottomCardState === CardState.EXPANDED),
 	});
 
 	return (
-		<div onAnimationEnd={removerAnimationEndHandler} className={layerClassNames}>
+		<div className={layerClassNames}>
 			<div className={cl.slider}></div>
-			{activeLayout !== Layout.SEARCH && <IconButton
-				onClick={() => changeSelectedRoom(null)}
-				className={cl.closeBtn}
-				iconLink={IconLink.CROSS}
-			/>}
+			{(activeLayout !== Layout.SEARCH && !queryService.steps) &&
+				<IconButton
+					onClick={() => appStore().changeSelectedRoom(null)}
+					className={cl.closeBtn}
+					iconLink={IconLink.CROSS}
+				/>
+			}
 			{children}
 		</div>
 	);

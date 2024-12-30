@@ -11,8 +11,17 @@
   transition: all 300ms ease;
   gap: $size-10;
 
-  &.centered {
-    translate: 0 toRem(-129);
+  @media (width > 900px) {
+    top: toRem(70);
+    bottom: unset;
+
+    width: toRem(340);
+  }
+
+  @media (width <= 900px) {
+    &.centered {
+      translate: 0 toRem(-129);
+    }
   }
 
   &.flexCenter {
