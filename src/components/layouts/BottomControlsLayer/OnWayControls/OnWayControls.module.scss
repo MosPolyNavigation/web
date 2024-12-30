@@ -1,0 +1,11 @@
+@import '../../../../styles/base';
+
+.backBtn {
+  margin-left: auto;
+
+  &.backBtnForceRight {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

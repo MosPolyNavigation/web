@@ -1,0 +1,28 @@
+@import '../../../styles/base';
+
+.toastWrapper {
+
+  background-color: $color-2;
+  border: 1px solid $color-3;
+  padding: toRem(8) toRem(20);
+  display: flex;
+  gap: toRem(15);
+  border-radius: toRem(20);
+  align-items: center;
+
+  // Чтобы просто было снизу пока добавил абсолютное позиционирование
+  position: absolute;
+  bottom: toRem(80);
+}
+
+.toastIcon {
+  min-width: toRem(30);
+  min-height: toRem(30);
+}
+
+.toastText {
+  color: $color-5;
+
+  font-size: toRem(14);
+  font-weight: 500;
+}

@@ -4,6 +4,8 @@ import WaySelectorButton from "../../../buttons/WaySelectorButton/WaySelectorBut
 import {IconLink} from "../../../../constants/IconLink.ts";
 import {Color, Size} from "../../../../constants/enums.ts";
 import Icon from "../../../common/Icon/Icon.tsx";
+import {appStore} from "../../../../store/useAppStore.ts";
+import {QueryService} from "../../../../models/QueryService.ts";
 import {useDataStore} from "../../../../store/useDataStore.ts";
 import {useAppStore} from "../../../../store/useAppStore.ts";
 
@@ -22,11 +24,15 @@ function WayInfo(props: Props) {
     return (
         <div className={cl.wayInfoWrapper}>
             <div className={cl.wayInfoContent}>
+                <WaySelectorButton text={"H 405 (Аудитория)"} baseText={"Откуда"} icon={IconLink.STUDY}
+                                   baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}/>
+        
+                <button className={cl.swapButton} onClick={() => appStore().setQueryService(new QueryService({swap: true}))}>
                 <WaySelectorButton text={roomFrom.title} baseText={"Откуда"} icon={roomFrom.icon}
                                    baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}
                 />
 
-                <button className={cl.swapButton} onClick={() => console.log("Нажатие на кнопку смены локаций")}>
+                <button className={cl.swapButton} onClick={() => appStore().setQueryService(new QueryService({swap: true}))}>
                     <Icon iconLink={IconLink.SWAP} color={Color.C3} size={Size.M}/>
                 </button>
 
