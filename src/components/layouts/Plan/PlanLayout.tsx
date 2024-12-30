@@ -3,10 +3,9 @@ import cl from './PlanLayout.module.scss';
 import {appStore, useAppStore} from '../../../store/useAppStore.ts';
 import {appConfig} from '../../../appConfig.ts';
 import axios from 'axios';
-import {getSvgLink} from '../../../functions/planFunctions.ts';
-import {RoomModel} from '../../../constants/types.ts';
-import {Vertex} from "../../../models/Graph.ts";
 import classNames from "classnames";
+import {RoomModel} from "../../../constants/types.ts";
+import {getSvgLink} from "../../../functions/planFunctions.ts";
 
 const PlanLayout: FC = () => {
 	const planSvgRef = useRef<null | SVGSVGElement>(null)

@@ -21,7 +21,6 @@ const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
 		<button className={classNames(cl.menuItem, {[cl.sizeS]: props.size === Size.S})}
 			onClick={props.onClick}
 		>
-			{!props.isFirst && <div className={cl.divider}></div>}
 
 			<div className={cl.content}>
 
@@ -35,6 +34,7 @@ const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
 				</div>}
 
 			</div>
+			{!props.isFirst && <div className={cl.divider}></div>}
 		</button>
 	);
 };
