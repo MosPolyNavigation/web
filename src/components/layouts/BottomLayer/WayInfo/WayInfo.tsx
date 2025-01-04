@@ -23,31 +23,18 @@ function WayInfo(props: Props) {
 
     return (
         <div className={cl.wayInfoWrapper}>
+
             <div className={cl.wayInfoContent}>
-                <WaySelectorButton text={"H 405 (Аудитория)"} baseText={"Откуда"} icon={IconLink.STUDY}
-                                   baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}/>
-        
-                <button className={cl.swapButton} onClick={() => appStore().setQueryService(new QueryService({swap: true}))}>
                 <WaySelectorButton text={roomFrom.title} baseText={"Откуда"} icon={roomFrom.icon}
                                    baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}
                 />
-
                 <button className={cl.swapButton} onClick={() => appStore().setQueryService(new QueryService({swap: true}))}>
                     <Icon iconLink={IconLink.SWAP} color={Color.C3} size={Size.M}/>
                 </button>
-
                 <WaySelectorButton text={roomTo.title} baseText={"Откуда"} icon={roomTo.icon}
                                    baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку КУДА")}
                 />
             </div>
-            {/*<div className={cl.wayInfoContent}>*/}
-            {/*    <WaySelectorButton baseText={"Откуда"} baseIcon={IconLink.FROM} onClick={() => console.log("Нажатие на кнопку ОТКУДА")}/>*/}
-            {/*    <button className={cl.swapButton} onClick={() => console.log("Нажатие на кнопку смены локаций")}>*/}
-            {/*        <Icon iconLink={IconLink.SWAP} color={Color.C3} size={Size.M}/>*/}
-            {/*    </button>*/}
-
-            {/*    <WaySelectorButton baseText={"Куда"} baseIcon={IconLink.TO} onClick={() => console.log("Нажатие на кнопку КУДА")}/>*/}
-            {/*</div>*/}
 
             <div className={cl.waySteps}>
                 <ul className={cl.wayStepsList}>
@@ -67,6 +54,7 @@ function WayInfo(props: Props) {
                     </li>
                 </ul>
             </div>
+
         </div>
     );
 }

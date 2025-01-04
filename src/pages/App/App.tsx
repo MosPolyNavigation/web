@@ -38,7 +38,9 @@ function App() {
 				{/*TODO: По идее надо добавить в стор сосотояния для открытого SpaceInfo и WayInfo чтобы вот так костыльно не делать*/}
 				{activeLayout !== Layout.SEARCH && queryService.steps === undefined && <SpaceInfo />}
 				{activeLayout !== Layout.SEARCH &&
-					queryService.steps ? <WayInfo fromWay={{fromIcon: IconLink.STUDY, text: "Н 405 (Аудитория)"}} toWay={{toIcon: IconLink.STUDY, text: "Н 519 (Аудитория)"}} steps={[{stepIcon: IconLink.STEP1, stepText: "Дойти до лестницы, подняться на 5-й этаж"}, {stepIcon: IconLink.STEP1, stepText: "Дойти до аудитории"}]} /> : ""
+					queryService.steps ?
+					<WayInfo fromWay={{fromIcon: IconLink.STUDY, text: "Н 405 (Аудитория)"}} toWay={{toIcon: IconLink.STUDY, text: "Н 519 (Аудитория)"}} steps={[{stepIcon: IconLink.STEP1, stepText: "Дойти до лестницы, подняться на 5-й этаж"}, {stepIcon: IconLink.STEP1, stepText: "Дойти до аудитории"}]} />
+					: null
 				}
 			</BottomLayer>
 

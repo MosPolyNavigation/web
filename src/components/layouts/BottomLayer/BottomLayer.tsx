@@ -20,17 +20,14 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 	const previousState = useRef<CardState>(bottomCardState);
 
 	useEffect(() => {
-		if (activeLayout === Layout.SEARCH) {
+		if (activeLayout === Layout.SEARCH || queryService.steps) {
 			setBottomCardState(CardState.EXPANDED)
-		} else if (selectedRoomId || queryService.steps) {
+		} else if (selectedRoomId) {
 			setBottomCardState(CardState.COLLAPSED)
 		} else {
 			setBottomCardState(CardState.HIDDEN)
 		}
 	}, [selectedRoomId, activeLayout, queryService]);
-
-	const [isRemoved, removerAnimationEndHandler] = useOnHideRemover(bottomCardState);
-
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -38,10 +35,6 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 			previousState.current = bottomCardState;
 		}, 50);
 	}, [bottomCardState]);
-
-	// if (isRemoved) {
-	// 	return null;
-	// }
 
 	//TODO: переделать на навешивание классов через время
 	const layerClassNames = classNames(cl.bottomLayer, {

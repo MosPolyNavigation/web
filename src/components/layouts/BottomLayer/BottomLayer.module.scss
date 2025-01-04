@@ -45,7 +45,8 @@
   
   @media (width > 900px) {
     width: toRem(340);
-    height: toRem(180);
+    //height: toRem(180);
+    height: 60%;
     overflow-y: scroll;
     top: toRem(130) !important;
     left: $size-10;
