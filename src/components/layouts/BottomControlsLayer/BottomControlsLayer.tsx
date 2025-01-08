@@ -13,18 +13,9 @@ import WaySelectorsControls from "./WaySelectorsControls/WaySelectorsControls.ts
 
 const BottomControlsLayer: FC = () => {
 
-	const [activeLayout, controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
-	const [selectedRoomId, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
+	const activeLayout = useAppStore(state => state.activeLayout)
+	const selectedRoomId = useAppStore(state => state.selectedRoomId)
 	const queryService = useAppStore(state => state.queryService);
-	const query = useAppStore(state => state.queryService);
-
-	const heartBtnClickHandler = () => {
-		if (!selectedRoomId) {
-			changeSelectedRoom('n-405')
-		} else {
-			changeSelectedRoom(null)
-		}
-	};
 
 	return (
 		<div
@@ -34,14 +25,12 @@ const BottomControlsLayer: FC = () => {
 				[cl.flexCenter]: (queryService.from || queryService.to) && !(queryService.from && queryService.to)
 			})}
 		>
-			{/*Если выбоано только откуда или только куда то компонент WatSelectorsControl, если нет то проверяем либо выбрано откуда и куда вместе(отдаем компонент OnWayControls) либо вообще ничего не выбрано(BaseControls) */}
-			{console.log(queryService.from, queryService.to, queryService.steps)}
-			{(queryService.from || queryService.to) && !(queryService.from && queryService.to)
-				?
-				<WaySelectorsControls fromWay={queryService.from} toWay={queryService.to} />
 
-				: (queryService.from && queryService.to) ? <OnWayControls />
-						:  <BaseControls />
+			{((queryService.from || queryService.to) && !(queryService.from && queryService.to) && activeLayout !== Layout.SEARCH)
+				? <WaySelectorsControls/>
+				: (queryService.from && queryService.to && activeLayout !== Layout.SEARCH)
+					? <OnWayControls/>
+					: <BaseControls/>
 			}
 		</div>
 	);

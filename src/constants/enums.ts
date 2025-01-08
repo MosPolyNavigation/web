@@ -53,3 +53,9 @@ export enum Layout {
 	SEARCH = 'SEARCH',
 	MENU = 'MENU'
 }
+
+export enum SearchIndent {
+	SELECT = 'SELECT',
+	SET_FROM = 'SET_FROM',
+	SET_TO = 'SET_TO',
+}

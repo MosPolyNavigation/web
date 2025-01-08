@@ -8,7 +8,7 @@ interface IconProps {
 	iconLink: IconLink,
 	color: Color,
 	classNameExt?: string,
-	size?: Size.M | Size.S,
+	size?: Size.M | Size.S | Size.L,
 }
 
 const Icon: FC<IconProps> = ({iconLink, color, classNameExt = '', size = Size.M}) => {

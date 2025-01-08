@@ -14,6 +14,11 @@ type Props = {
 }
 
 function WaySelectorButton(props: Props) {
+
+    function onCrossBtnClick(e: React.MouseEvent<HTMLDivElement>) {
+        e.stopPropagation()
+        props.onCrossClick()
+    }
     return (
         <div className={cl.waySelectorButtonWrapper}>
             {
@@ -24,7 +29,7 @@ function WaySelectorButton(props: Props) {
                         <Icon classNameExt={cl.waySelectorIcon} iconLink={props.icon} color={Color.INITIAL}/>
                         <div className={cl.buttonText}>{props.text}</div>
                     </div>
-                    <div className={cl.clearButton} onClick={(e) => e.stopPropagation() || console.log("Очистка поля локации")} >
+                    <div className={cl.clearButton} onClick={(e) => onCrossBtnClick(e)} >
                         <Icon classNameExt={cl.waySelectorIcon} iconLink={IconLink.CROSS} color={Color.C3} size={Size.S}/>
                     </div>
                 </button>

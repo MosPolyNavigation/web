@@ -1,5 +1,5 @@
 import {create} from 'zustand/react';
-import {BtnName, Layout} from '../constants/enums.ts';
+import {BtnName, Layout, SearchIndent} from '../constants/enums.ts';
 
 import {PlanData, RoomModel} from '../constants/types.ts';
 import {PlanModel} from '../models/Plan/PlanModel.ts';
@@ -36,6 +36,10 @@ type State = {
 	 *
 	 */
 	searchQuery: string;
+	/**
+	 *
+	 */
+	searchIndent: SearchIndent;
 }
 
 type Action = {
@@ -51,6 +55,7 @@ type Action = {
 	) => void,
 	setQueryService: (query: QueryService) => void,
 	setSearchQuery: (newSearchQuery: string) => void,
+	setSearchIndent: (searchIndent: SearchIndent) => void
 }
 
 export function appStore() {
@@ -67,6 +72,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	updateState: {},
 	queryService: new QueryService(),
 	searchQuery: '',
+	searchIndent: SearchIndent.SELECT,
 
 
 	controlBtnClickHandler: (btnName) => {
@@ -90,6 +96,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 		} //Показать левое меню
 
 		else if (btnName === BtnName.SEARCH && activeLayout !== Layout.SEARCH) {
+			get().setSearchIndent(SearchIndent.SELECT)
 			get().changeLayout(Layout.SEARCH);
 			get().setSearchQuery('')
 		} //Скрыть левое меню
@@ -146,5 +153,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	},
 	setSearchQuery: (newSearchQuery) => {
 		set({searchQuery: newSearchQuery})
+	},
+	setSearchIndent: (searchIndent) => {
+		set({searchIndent: searchIndent});
 	}
 }));

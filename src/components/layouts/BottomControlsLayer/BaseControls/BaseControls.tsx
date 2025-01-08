@@ -6,18 +6,16 @@ import {BtnName, Layout} from "../../../../constants/enums.ts";
 import SearchButton from "../../../buttons/SearchButton/SearchButton.tsx";
 import {useAppStore} from "../../../../store/useAppStore.ts";
 import classNames from "classnames";
+import {useStore} from "../../../../store/rootStoreContext.ts";
 
 
 function BaseControls() {
     const [activeLayout, controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
     const [selectedRoomId, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
+    const {appStore} = useStore()
 
     const heartBtnClickHandler = () => {
-        if (!selectedRoomId) {
-            changeSelectedRoom('n-405')
-        } else {
-            changeSelectedRoom(null)
-        }
+        appStore.toast.showForTime()
     };
 
     const rightBtnClass = classNames({

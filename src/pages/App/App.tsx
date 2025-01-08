@@ -14,6 +14,8 @@ import PlanLayout from '../../components/layouts/Plan/PlanLayout.tsx';
 import WayInfo from "../../components/layouts/BottomLayer/WayInfo/WayInfo.tsx";
 import {IconLink} from "../../constants/IconLink.ts";
 import Toast from "../../components/common/Toast/Toast.tsx";
+import {RootStoreContext} from "../../store/rootStoreContext.ts";
+import rootStore from "../../store/RootStore.ts";
 
 function App() {
 	const activeLayout = useAppStore(state => state.activeLayout);
@@ -24,6 +26,9 @@ function App() {
 	}, []);
 
 	return (
+		<RootStoreContext.Provider value={rootStore} >
+
+
 		<div className={cl.app}>
 			<BottomControlsLayer />
 
@@ -45,8 +50,9 @@ function App() {
 			</BottomLayer>
 
 			<PlanLayout />
-			<Toast text={"К сожалению, никто не знает, что здесь"} />
+			<Toast />
 		</div>
+		</RootStoreContext.Provider>
 	);
 }
 

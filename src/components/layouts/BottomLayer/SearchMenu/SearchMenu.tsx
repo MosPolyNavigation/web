@@ -2,11 +2,13 @@ import {FC, useEffect, useMemo, useRef, useState} from 'react';
 import cl from './SearchMenu.module.scss';
 import {IconLink} from '../../../../constants/IconLink.ts';
 import Button from '../../../buttons/LargeButton/Button.tsx';
-import {Color, Layout, Size} from '../../../../constants/enums.ts';
+import {Color, Layout, SearchIndent, Size} from '../../../../constants/enums.ts';
 import MenuItem from '../../../menuopmponents/MenuItem/MenuItem.tsx';
 import {dataStore, useDataStore} from "../../../../store/useDataStore.ts";
 import {appStore, useAppStore} from "../../../../store/useAppStore.ts";
-import {PlanData, RoomData, RoomType} from "../../../../constants/types.ts";
+import {RoomData, RoomType} from "../../../../constants/types.ts";
+import {QueryService} from "../../../../models/QueryService.ts";
+import {Logger} from "sass";
 
 interface SearchMenuProps {
 	a?: boolean
@@ -62,9 +64,20 @@ const SearchMenu: FC<SearchMenuProps> = () => {
 	}, [resultsRef, results]);
 
 	function menuItemClickHandler(room: RoomData) {
+		const searchIndent = appStore().searchIndent
+
+		if(searchIndent === SearchIndent.SELECT) {
 		appStore().changeCurrentPlan(room.plan)
-		appStore().changeSelectedRoom(room.id)
-		appStore().changeLayout(Layout.PLAN)
+			appStore().changeSelectedRoom(room.id)
+		}
+		else if(searchIndent === SearchIndent.SET_FROM) {
+			appStore().setQueryService(new QueryService({from: room.id}))
+		}
+		else if(searchIndent === SearchIndent.SET_TO) {
+			console.log(1123)
+			appStore().setQueryService(new QueryService({to: room.id}))
+		}
+			appStore().changeLayout(Layout.PLAN)
 	}
 
 	function getTitle(room: RoomData): string {

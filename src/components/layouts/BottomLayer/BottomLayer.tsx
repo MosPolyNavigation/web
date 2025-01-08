@@ -20,9 +20,9 @@ const BottomLayer: FC<BottomLayerProps> = ({children}) => {
 	const previousState = useRef<CardState>(bottomCardState);
 
 	useEffect(() => {
-		if (activeLayout === Layout.SEARCH || queryService.steps) {
+		if (activeLayout === Layout.SEARCH ) {
 			setBottomCardState(CardState.EXPANDED)
-		} else if (selectedRoomId) {
+		} else if (selectedRoomId || queryService.steps) {
 			setBottomCardState(CardState.COLLAPSED)
 		} else {
 			setBottomCardState(CardState.HIDDEN)

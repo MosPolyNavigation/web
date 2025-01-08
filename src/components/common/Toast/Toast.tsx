@@ -1,25 +1,26 @@
-import React from 'react';
 import cl from "./Toast.module.scss";
 import Icon from "../Icon/Icon.tsx";
 import {IconLink} from "../../../constants/IconLink.ts";
 import {Color, Size} from "../../../constants/enums.ts";
+import {useStore} from "../../../store/rootStoreContext.ts";
+import {observer} from "mobx-react-lite";
+import classNames from "classnames";
 
-type Props = {
-    text?: string,
-}
+const Toast = observer(() => {
+	{
+		const {appStore} = useStore()
 
-function Toast(props) {
-    return (
-        <div
-            className={cl.toastWrapper}
-        >
-            <Icon size={Size.L} classNameExt={cl.toastIcon} iconLink={IconLink.SMILE_SAD} color={Color.INITIAL}/>
-            {props.text ?
-                <p className={cl.toastText}>{props.text}</p>
-                :
-                <p className={cl.toastText}>К сожалению, что-то пошло не так</p>}
-        </div>
-    );
-}
+		const componentCl = classNames(cl.toast, {
+			[cl.hidden]: !appStore.toast.isVisible
+		})
+
+		return (
+			<div className={componentCl}>
+				<Icon size={Size.L} classNameExt={cl.toastIcon} iconLink={IconLink.SMILE_SAD} color={Color.INITIAL}/>
+				<p className={cl.toastText}>К сожалению, мы пока не знаем, что здесь</p>
+			</div>
+		)
+	}
+})
 
 export default Toast;
