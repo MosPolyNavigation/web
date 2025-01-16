@@ -76,6 +76,7 @@
   }
 
   .closeBtn {
+    z-index: 1;
     position: absolute;
     top: $size-20;
     right: $size-20;

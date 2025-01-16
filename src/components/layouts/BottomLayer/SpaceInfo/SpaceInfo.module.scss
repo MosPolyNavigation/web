@@ -2,6 +2,7 @@
 
 .spaceInfo {
   width: 100%;
+  position: relative;
 
   display: flex;
   flex-direction: column;
@@ -39,6 +40,13 @@
 
     .heartBtn {
       margin-right: auto;
+    }
+
+    @media (width <= 900px) {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: $size-40;
     }
 
     @media (min-width: 992px) {
