@@ -45,7 +45,7 @@ function OnWayControls() {
 
     return <>
         <Button iconLink={IconLink.CROSS} onClick={() => appStore().setQueryService(new QueryService({from: Pointer.NOTHING, to: Pointer.NOTHING}))}/>
-        {currentStepIndex !== 0 && <Button iconLink={IconLink.ARROW_LEFT}
+        {currentStepIndex !== 0 && <Button iconLink={IconLink.BACK}
 		                                   classNameExt={classNames(cl.backBtn, {
                                                [cl.backBtnForceRight]: isLastStep,
                                            })}

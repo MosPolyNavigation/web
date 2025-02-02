@@ -40,6 +40,8 @@ type State = {
 	 *
 	 */
 	searchIndent: SearchIndent;
+	/** Функции изменения масштаба */
+	controlsFunctions: null | {zoomIn: () => void, zoomOut: () => void}
 }
 
 type Action = {
@@ -55,7 +57,8 @@ type Action = {
 	) => void,
 	setQueryService: (query: QueryService) => void,
 	setSearchQuery: (newSearchQuery: string) => void,
-	setSearchIndent: (searchIndent: SearchIndent) => void
+	setSearchIndent: (searchIndent: SearchIndent) => void,
+	setControlsFunctions: (functions: {zoomIn: () => void, zoomOut: () => void}) => void
 }
 
 export function appStore() {
@@ -73,7 +76,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	queryService: new QueryService(),
 	searchQuery: '',
 	searchIndent: SearchIndent.SELECT,
-
+	controlsFunctions: null,
 
 	controlBtnClickHandler: (btnName) => {
 		const activeLayout = get().activeLayout;
@@ -156,5 +159,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	},
 	setSearchIndent: (searchIndent) => {
 		set({searchIndent: searchIndent});
+	},
+	setControlsFunctions: (functions) => {
+		set({controlsFunctions: functions})
 	}
 }));

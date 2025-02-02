@@ -6,12 +6,15 @@ import axios from 'axios';
 import classNames from "classnames";
 import {RoomModel} from "../../../constants/types.ts";
 import {getSvgLink} from "../../../functions/planFunctions.ts";
+import {TransformComponent, TransformWrapper, useTransformContext} from "react-zoom-pan-pinch";
+import Button from "../../buttons/LargeButton/Button.tsx";
 
 const PlanLayout: FC = () => {
 	const planSvgRef = useRef<null | SVGSVGElement>(null)
 	const currentPlan = useAppStore(state => state.currentPlan)
 	const planModel = useAppStore(state => state.planModel)
 	const query = useAppStore(state => state.queryService);
+	const transformWrapperRef = useRef(null);
 
 	const svgLink = useMemo<string | null>(() => {
 		if (currentPlan) {
@@ -36,6 +39,9 @@ const PlanLayout: FC = () => {
 					// Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
 					const parsedSvgDomEl = (new DOMParser()).parseFromString(response.data, 'image/svg+xml').documentElement as SVGSVGElement | HTMLElement;
 					appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl, roomClickHandler) //Установка новой модели-плана в стор приложения
+					transformWrapperRef.current.resetTransform(1)
+					// setTimeout(() => {
+					// }, 1000)
 				});
 		}
 	}, [currentPlan]);
@@ -83,9 +89,17 @@ const PlanLayout: FC = () => {
 		}
 	}, [wayAnimationClass]);
 
+	useEffect(() => {
+		appStore().setControlsFunctions({
+			zoomIn: transformWrapperRef.current.zoomIn,
+			zoomOut: transformWrapperRef.current.zoomOut
+		})
+	}, [transformWrapperRef]);
 
 	return (
 		<div className={cl.planWrapper}>
+				<TransformWrapper ref={transformWrapperRef} maxScale={5} disablePadding={true} >
+					<TransformComponent wrapperClass={cl.transformWrapper}>
 			{svgLink && <div className={cl.planWrapperInner}>
 				<svg className={cl.planSvg} ref={planSvgRef}></svg>
 				<svg className={cl.planAddingObjects} viewBox={viewBox}>
@@ -99,7 +113,6 @@ const PlanLayout: FC = () => {
 						<marker id="way-end-arrow" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="22"
 						        refX="15" refY="11" viewBox="0 0 20 22" fill="none" orient="auto-start-reverse"
 						>
-							{/*<path key={primaryWayPathD} className={classNames(cl.endArrow, wayAnimationClass)}>*/}
 							<path key={primaryWayPathD} className={classNames(cl.endArrow, wayAnimationClass)}>
 							</path>
 						</marker>
@@ -111,6 +124,8 @@ const PlanLayout: FC = () => {
 					</defs>
 				</svg>
 			</div>}
+					</TransformComponent>
+				</TransformWrapper>
 		</div>
 	);
 };
