@@ -3,7 +3,7 @@ export enum IconLink {
 	PLUS = 'img/icons/ui/plus.svg',
 	CROSS = 'img/icons/ui/cross.svg',
 	MINUS = 'img/icons/ui/minus.svg',
-	BACK = 'public/img/icons/ui/back.svg',
+	BACK = 'img/icons/ui/back.svg',
 	SEARCH = 'img/icons/ui/search.svg',
 	MENU = 'img/icons/ui/menu.svg',
 	FROM = 'img/icons/ui/from.svg',

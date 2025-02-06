@@ -8,7 +8,6 @@ import {dataStore, useDataStore} from "../../../../store/useDataStore.ts";
 import {appStore, useAppStore} from "../../../../store/useAppStore.ts";
 import {RoomData, RoomType} from "../../../../constants/types.ts";
 import {QueryService} from "../../../../models/QueryService.ts";
-import {Logger} from "sass";
 
 interface SearchMenuProps {
 	a?: boolean
