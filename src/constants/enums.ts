@@ -51,7 +51,8 @@ export enum Layout {
 	PLAN = 'PLAN',
 	LOCATIONS = 'LOCATIONS',
 	SEARCH = 'SEARCH',
-	MENU = 'MENU'
+	MENU = 'MENU',
+	REPORT = "REPORT"
 }
 
 export enum SearchIndent {
