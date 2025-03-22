@@ -6,27 +6,27 @@ import {Graph} from "../models/Graph";
 import {getDataFromServerAndParse} from '../models/data/getDataFromServerAndParse.ts'
 
 type State = {
-	/**
-	 * Хранит локации (кампусы)
-	 */
-	locations: LocationData[]
-	/**
-	 * Хранит корпусы с ссылками на локации
-	 */
-	corpuses: CorpusData[]
-	/**
-	 * Хранит планы с ссылками на корпусы
-	 */
-	plans: PlanData[]
-	/**
-	 * Хранит данные помещения с ссылкой на план
-	 */
-	rooms: RoomData[]
-	/**
-	 * Хранит граф
-	 */
-	graph: Graph | null
-}
+    /**
+     * Хранит локации (кампусы)
+     */
+    locations: LocationData[];
+    /**
+     * Хранит корпусы с ссылками на локации
+     */
+    corpuses: CorpusData[];
+    /**
+     * Хранит планы с ссылками на корпусы
+     */
+    plans: PlanData[];
+    /**
+     * Хранит данные помещения с ссылкой на план
+     */
+    rooms: RoomData[];
+    /**
+     * Хранит граф
+     */
+    graph: Graph | null;
+};
 
 type Action = {
 	init: () => void,
@@ -34,11 +34,11 @@ type Action = {
 }
 
 export const useDataStore = create<State & Action>()((set, get) => ({
-	locations: [],
-	corpuses: [],
-	plans: [],
-	rooms: [],
-	graph: null,
+    locations: [],
+    corpuses: [],
+    plans: [],
+    rooms: [],
+    graph: null,
 
 	init: () => {
 		//TODO включить обратно
@@ -64,11 +64,11 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 		})
 	},
 
-	setGraphForLocation: (location: LocationData) => {
-		set({graph: new Graph(location)})
-	}
+    setGraphForLocation: (location: LocationData) => {
+        set({ graph: new Graph(location) });
+    },
 }));
 
 export function dataStore() {
-	return useDataStore.getState()
+    return useDataStore.getState();
 }
