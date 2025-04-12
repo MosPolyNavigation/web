@@ -1,4 +1,5 @@
 export const appConfig = {
+	firstPlanSettingDate: Number(localStorage.getItem('first-plan-setting-date')),
 	firstPlan: localStorage.getItem('last-plan') ?? 'A-1',
 	svgSource: 'https://mospolynavigation.github.io/navigationData/',
 	plan: {

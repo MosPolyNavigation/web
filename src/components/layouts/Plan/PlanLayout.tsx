@@ -6,8 +6,7 @@ import axios from 'axios';
 import classNames from "classnames";
 import {RoomModel} from "../../../constants/types.ts";
 import {getSvgLink} from "../../../functions/planFunctions.ts";
-import {TransformComponent, TransformWrapper, useTransformContext} from "react-zoom-pan-pinch";
-import Button from "../../buttons/LargeButton/Button.tsx";
+import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 
 const PlanLayout: FC = () => {
 	const planSvgRef = useRef<null | SVGSVGElement>(null)
@@ -41,6 +40,7 @@ const PlanLayout: FC = () => {
 					appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl, roomClickHandler) //Установка новой модели-плана в стор приложения
 					//Сохранение текущего плана в LocalStorage
 					localStorage.setItem('last-plan', currentPlan.id)
+					localStorage.setItem('first-plan-setting-date', String(Date.now()))
 					transformWrapperRef.current.resetTransform(1)
 					// setTimeout(() => {
 					// }, 1000)
