@@ -39,6 +39,8 @@ const PlanLayout: FC = () => {
 					// Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
 					const parsedSvgDomEl = (new DOMParser()).parseFromString(response.data, 'image/svg+xml').documentElement as SVGSVGElement | HTMLElement;
 					appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl, roomClickHandler) //Установка новой модели-плана в стор приложения
+					//Сохранение текущего плана в LocalStorage
+					localStorage.setItem('last-plan', currentPlan.id)
 					transformWrapperRef.current.resetTransform(1)
 					// setTimeout(() => {
 					// }, 1000)

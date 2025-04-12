@@ -1,12 +1,9 @@
 import {create} from 'zustand/react';
-import axios from 'axios';
 import {appStore} from './useAppStore.ts';
 import {CorpusData, LocationData, PlanData, RoomData} from '../constants/types.ts';
 import {appConfig} from '../appConfig.ts';
 import {Graph} from "../models/Graph";
-import {Parser} from "../models/Parser.ts";
-
-const address = 'https://mospolynavigation.github.io/polyna-preprocess/locations.json';
+import {getDataFromServerAndParse} from '../models/data/getDataFromServerAndParse.ts'
 
 type State = {
 	/**
@@ -32,7 +29,7 @@ type State = {
 }
 
 type Action = {
-	fetchData: () => void,
+	init: () => void,
 	setGraphForLocation: (location: LocationData) => void
 }
 
@@ -43,24 +40,28 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 	rooms: [],
 	graph: null,
 
-	fetchData: () => {
+	init: () => {
 		//TODO включить обратно
 
-		axios.get(address)
-			.then(response => {
-				const data: initialLocationData[] = response.data;
-				console.log('Данные загружены с сервера');
-				fillData(data);
+		getDataFromServerAndParse().then(data => {
+			set({
+				locations: data.locations,
+				corpuses: data.corpuses,
+				plans: data.plans,
+				rooms: data.rooms,
 			})
-			.catch(e => {
-				console.error('Не удалось загрузить данные с сервера', e);
 
-				axios.get('/mpunav/data/mainData.json').then(response => {
-					const data: initialLocationData[] = response.data;
-					console.log('Данные загружены из приложения');
-					fillData(data);
-				})
-			})
+			//TODO: добавить сохранение плана в LS
+			const firstPlan: PlanData | undefined = dataStore().plans.find(plan => plan.id === appConfig.firstPlan);
+			if (!appStore().currentPlan && firstPlan) {
+				appStore().changeCurrentPlan(firstPlan)
+				const graphInitLocation = firstPlan.corpus.location;
+				if(graphInitLocation) {
+					dataStore().setGraphForLocation(graphInitLocation)
+					// new Way('a-210', 'a-412')
+				}
+			}
+		})
 	},
 
 	setGraphForLocation: (location: LocationData) => {
@@ -70,121 +71,4 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 
 export function dataStore() {
 	return useDataStore.getState()
-}
-
-
-function fillData(data: initialLocationData[]) {
-	console.log('Начинается обработка загруженных данных')
-	data.forEach(inLocation => {
-		const location: LocationData = {
-			id: inLocation.id,
-			title: inLocation.title,
-			short: inLocation.short,
-			address: inLocation.address,
-			available: inLocation.available,
-			crossings: inLocation.crossings ?? []
-		};
-
-		dataStore().locations.push(location);
-
-		if (location.available) {
-
-			inLocation.corpuses?.forEach(inCorpus => {
-				const corpus: CorpusData = {
-					id: inCorpus.id,
-					available: inCorpus.available,
-					title: inCorpus.title,
-					location: dataStore().locations.find(location => location.id === inLocation.id) as LocationData,
-					stairs: inCorpus.stairs ?? []
-				};
-
-				dataStore().corpuses.push(corpus);
-				if (corpus.available) {
-					inCorpus.plans?.forEach(inPlan => {
-						const plan: PlanData = {
-							id: inPlan.id,
-							floor: parseInt(inPlan.floor),
-							available: inPlan.available,
-							wayToSvg: inPlan.wayToSvg,
-							graph: inPlan.graph ?? [],
-							entrances: inPlan.entrances ?? [],
-							corpus: dataStore().corpuses.find(corpus => corpus.id === inCorpus.id) as CorpusData,
-						};
-
-						dataStore().plans.push(plan);
-
-						inPlan.rooms?.forEach((inRoom) => {
-
-
-							const room = Parser.fillRoomData(inRoom, plan)
-							if(room)
-								dataStore().rooms.push(room)
-						})
-					});
-				}
-			});
-		}
-	});
-	const rooms = dataStore().rooms.filter(room => room.plan.id === 'N-3')
-	console.log(rooms)
-	const firstPlan: PlanData | undefined = dataStore().plans.find(plan => plan.id === appConfig.firstPlan);
-	if (!appStore().currentPlan && firstPlan) {
-		appStore().changeCurrentPlan(firstPlan)
-		const graphInitLocation = firstPlan.corpus.location;
-		if(graphInitLocation) {
-			dataStore().setGraphForLocation(graphInitLocation)
-			// new Way('a-210', 'a-412')
-		}
-	}
-	console.log('Данные заполнены', {
-		locations: dataStore().locations,
-		corpuses: dataStore().corpuses,
-		plans: dataStore().plans
-	})
-}
-
-
-type initialLocationData = {
-	id: string
-	title: string
-	short: string
-	available: boolean
-	address: string
-	corpuses?: initialCorpusData[]
-	crossings?: Array<[string, string, number]>
-}
-
-type initialCorpusData = {
-	id: string
-	title: string
-	available: boolean
-	plans?: initialPlanData[]
-	stairs?: Array<string[]>
-}
-
-type initialPlanData = {
-	rooms: initialRoomData[];
-	id: string
-	floor: string
-	available: boolean
-	wayToSvg: string
-	graph?: RawVertex[]
-	entrances: Array<[string, string]>
-}
-
-export type initialRoomData = {
-	id: string
-	type: string
-	available: boolean
-	numberOrTitle: string
-	tabletText: string
-	addInfo: string
-}
-
-export type RawVertex = {
-	id: string
-	x: number
-	y: number
-	type: string
-	neighborData: Array<[string, number]>
 }

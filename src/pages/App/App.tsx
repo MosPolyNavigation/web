@@ -14,6 +14,7 @@ import PlanLayout from '../../components/layouts/Plan/PlanLayout.tsx';
 import WayInfo from "../../components/layouts/BottomLayer/WayInfo/WayInfo.tsx";
 import {IconLink} from "../../constants/IconLink.ts";
 import Toast from "../../components/common/Toast/Toast.tsx";
+import {getDataFromServerAndParse} from '../../models/data/getDataFromServerAndParse.ts'
 
 function App() {
 	const activeLayout = useAppStore(state => state.activeLayout);
@@ -21,7 +22,7 @@ function App() {
 	const appRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
-		useDataStore.getState().fetchData();
+		useDataStore.getState().init();
 		// Удаляем возможность параномирования пальцами
 		appRef.current.addEventListener("touchmove", (e) => {
 			e.preventDefault()
