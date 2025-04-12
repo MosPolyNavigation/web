@@ -2,7 +2,6 @@ import {Id, PlanData, RoomModel} from '../../constants/types.ts';
 import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts';
 import cl from '../../components/layouts/Plan/PlanLayout.module.scss';
 import {appStore} from "../../store/useAppStore.ts";
-import rootStore, {appStoreMobX} from "../../store/RootStore.ts";
 
 export class PlanModel {
 	readonly rooms: Map<Id, RoomModel>;
@@ -24,7 +23,7 @@ export class PlanModel {
 
 		function addUnknownToastClick(spaceEl: Element) {
 			spaceEl.addEventListener('click', () => {
-				appStoreMobX.toast.showForTime()
+				appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
 			})
 		}
 

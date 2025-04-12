@@ -14,9 +14,6 @@ import PlanLayout from '../../components/layouts/Plan/PlanLayout.tsx';
 import WayInfo from "../../components/layouts/BottomLayer/WayInfo/WayInfo.tsx";
 import {IconLink} from "../../constants/IconLink.ts";
 import Toast from "../../components/common/Toast/Toast.tsx";
-import {RootStoreContext} from "../../store/rootStoreContext.ts";
-import rootStore from "../../store/RootStore.ts";
-import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 
 function App() {
 	const activeLayout = useAppStore(state => state.activeLayout);
@@ -32,9 +29,6 @@ function App() {
 	}, []);
 
 	return (
-		<RootStoreContext.Provider value={rootStore} >
-
-
 		<div className={cl.app} ref={appRef}>
 			<BottomControlsLayer />
 
@@ -62,7 +56,6 @@ function App() {
 			{/*	<h1>asl;dkj</h1>*/}
 			{/*</div>*/}
 		</div>
-		</RootStoreContext.Provider>
 	);
 }
 

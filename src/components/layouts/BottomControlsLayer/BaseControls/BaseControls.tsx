@@ -4,18 +4,15 @@ import cl from "../BottomControlsLayer.module.scss";
 import {IconLink} from "../../../../constants/IconLink.ts";
 import {BtnName, Layout} from "../../../../constants/enums.ts";
 import SearchButton from "../../../buttons/SearchButton/SearchButton.tsx";
-import {useAppStore} from "../../../../store/useAppStore.ts";
+import {appStore, useAppStore} from '../../../../store/useAppStore.ts'
 import classNames from "classnames";
-import {useStore} from "../../../../store/rootStoreContext.ts";
 
 
 function BaseControls() {
     const [activeLayout, controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
-    const [selectedRoomId, changeSelectedRoom] = [useAppStore(state => state.selectedRoomId), useAppStore(state => state.changeSelectedRoom)]
-    const {appStore} = useStore()
 
     const heartBtnClickHandler = () => {
-        appStore.toast.showForTime()
+        appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
     };
 
     const rightBtnClass = classNames({

@@ -1,10 +1,11 @@
-import {create} from 'zustand/react';
+import {create} from 'zustand';
 import {BtnName, Layout, SearchIndent} from '../constants/enums.ts';
 
 import {PlanData, RoomModel} from '../constants/types.ts';
 import {PlanModel} from '../models/Plan/PlanModel.ts';
 import {QueryService} from "../models/QueryService";
 import chalk from "chalk";
+import {Toast} from '../models/Toast.ts'
 
 type State = {
 	/**
@@ -42,6 +43,8 @@ type State = {
 	searchIndent: SearchIndent;
 	/** Функции изменения масштаба */
 	controlsFunctions: null | {zoomIn: () => void, zoomOut: () => void}
+	/**  */
+	toast: Toast
 }
 
 type Action = {
@@ -77,6 +80,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	searchQuery: '',
 	searchIndent: SearchIndent.SELECT,
 	controlsFunctions: null,
+	toast: new Toast(),
 
 	controlBtnClickHandler: (btnName) => {
 		const activeLayout = get().activeLayout;

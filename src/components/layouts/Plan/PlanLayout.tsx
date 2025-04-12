@@ -76,7 +76,7 @@ const PlanLayout: FC = () => {
 					primaryWayLength: currentStep.distance
 				}
 			}
-		}
+		}  
 		return {
 			primaryWayPathD: '',
 			primaryWayLength: null
