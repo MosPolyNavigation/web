@@ -1,4 +1,4 @@
-import { create } from "zustand/react";
+import { create } from "zustand";
 import axios from "axios";
 import { appStore } from "./useAppStore.ts";
 import {
@@ -15,25 +15,10 @@ const address =
     "https://mospolynavigation.github.io/polyna-preprocess/locations.json";
 
 type State = {
-    /**
-     * Хранит локации (кампусы)
-     */
     locations: LocationData[];
-    /**
-     * Хранит корпусы с ссылками на локации
-     */
     corpuses: CorpusData[];
-    /**
-     * Хранит планы с ссылками на корпусы
-     */
     plans: PlanData[];
-    /**
-     * Хранит данные помещения с ссылкой на план
-     */
     rooms: RoomData[];
-    /**
-     * Хранит граф
-     */
     graph: Graph | null;
 };
 
@@ -50,14 +35,12 @@ export const useDataStore = create<State & Action>()((set, get) => ({
     graph: null,
 
     fetchData: () => {
-        //TODO включить обратно
-
         axios
             .get(address)
             .then((response) => {
                 const data: initialLocationData[] = response.data;
                 console.log("Данные загружены с сервера");
-                fillData(data);
+                fillData(data, set);
             })
             .catch((e) => {
                 console.error("Не удалось загрузить данные с сервера", e);
@@ -65,7 +48,7 @@ export const useDataStore = create<State & Action>()((set, get) => ({
                 axios.get("/mpunav/data/mainData.json").then((response) => {
                     const data: initialLocationData[] = response.data;
                     console.log("Данные загружены из приложения");
-                    fillData(data);
+                    fillData(data, set);
                 });
             });
     },
@@ -79,8 +62,14 @@ export function dataStore() {
     return useDataStore.getState();
 }
 
-function fillData(data: initialLocationData[]) {
+function fillData(data: initialLocationData[], set) {
     console.log("Начинается обработка загруженных данных");
+
+    const locations: LocationData[] = [];
+    const corpuses: CorpusData[] = [];
+    const plans: PlanData[] = [];
+    const rooms: RoomData[] = [];
+
     data.forEach((inLocation) => {
         const location: LocationData = {
             id: inLocation.id,
@@ -90,8 +79,7 @@ function fillData(data: initialLocationData[]) {
             available: inLocation.available,
             crossings: inLocation.crossings ?? [],
         };
-
-        dataStore().locations.push(location);
+        locations.push(location);
 
         if (location.available) {
             inLocation.corpuses?.forEach((inCorpus) => {
@@ -99,13 +87,11 @@ function fillData(data: initialLocationData[]) {
                     id: inCorpus.id,
                     available: inCorpus.available,
                     title: inCorpus.title,
-                    location: dataStore().locations.find(
-                        (location) => location.id === inLocation.id
-                    ) as LocationData,
+                    location: location,
                     stairs: inCorpus.stairs ?? [],
                 };
+                corpuses.push(corpus);
 
-                dataStore().corpuses.push(corpus);
                 if (corpus.available) {
                     inCorpus.plans?.forEach((inPlan) => {
                         const plan: PlanData = {
@@ -115,39 +101,43 @@ function fillData(data: initialLocationData[]) {
                             wayToSvg: inPlan.wayToSvg,
                             graph: inPlan.graph ?? [],
                             entrances: inPlan.entrances ?? [],
-                            corpus: dataStore().corpuses.find(
-                                (corpus) => corpus.id === inCorpus.id
-                            ) as CorpusData,
+                            corpus: corpus,
                         };
-
-                        dataStore().plans.push(plan);
+                        plans.push(plan);
 
                         inPlan.rooms?.forEach((inRoom) => {
                             const room = Parser.fillRoomData(inRoom, plan);
-                            if (room) dataStore().rooms.push(room);
+                            if (room) rooms.push(room);
                         });
                     });
                 }
             });
         }
     });
-    const rooms = dataStore().rooms.filter((room) => room.plan.id === "N-3");
-    console.log(rooms);
-    const firstPlan: PlanData | undefined = dataStore().plans.find(
+
+    set({
+        locations,
+        corpuses,
+        plans,
+        rooms,
+    });
+
+    const firstPlan: PlanData | undefined = plans.find(
         (plan) => plan.id === appConfig.firstPlan
     );
     if (!appStore().currentPlan && firstPlan) {
         appStore().changeCurrentPlan(firstPlan);
         const graphInitLocation = firstPlan.corpus.location;
         if (graphInitLocation) {
-            dataStore().setGraphForLocation(graphInitLocation);
-            // new Way('a-210', 'a-412')
+            set({ graph: new Graph(graphInitLocation) });
         }
     }
+
     console.log("Данные заполнены", {
-        locations: dataStore().locations,
-        corpuses: dataStore().corpuses,
-        plans: dataStore().plans,
+        locations,
+        corpuses,
+        plans,
+        rooms,
     });
 }
 
@@ -160,7 +150,6 @@ type initialLocationData = {
     corpuses?: initialCorpusData[];
     crossings?: Array<[string, string, number]>;
 };
-
 type initialCorpusData = {
     id: string;
     title: string;
@@ -168,7 +157,6 @@ type initialCorpusData = {
     plans?: initialPlanData[];
     stairs?: Array<string[]>;
 };
-
 type initialPlanData = {
     rooms: initialRoomData[];
     id: string;
@@ -178,7 +166,6 @@ type initialPlanData = {
     graph?: RawVertex[];
     entrances: Array<[string, string]>;
 };
-
 export type initialRoomData = {
     id: string;
     type: string;
@@ -187,7 +174,6 @@ export type initialRoomData = {
     tabletText: string;
     addInfo: string;
 };
-
 export type RawVertex = {
     id: string;
     x: number;
@@ -195,3 +181,4 @@ export type RawVertex = {
     type: string;
     neighborData: Array<[string, number]>;
 };
+
