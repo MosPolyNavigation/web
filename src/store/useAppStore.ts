@@ -1,11 +1,12 @@
-import {create} from 'zustand';
-import {BtnName, Layout, SearchIndent} from '../constants/enums.ts';
+import {create} from 'zustand'
+import {BtnName, Layout, SearchIndent} from '../constants/enums.ts'
 
-import {PlanData, RoomModel} from '../constants/types.ts';
-import {PlanModel} from '../models/Plan/PlanModel.ts';
-import {QueryService} from "../models/QueryService";
-import chalk from "chalk";
+import {PlanData, RoomModel} from '../constants/types.ts'
+import {PlanModel} from '../models/Plan/PlanModel.ts'
+import {QueryService} from '../models/QueryService'
+import chalk from 'chalk'
 import {Toast} from '../models/Toast.ts'
+import {dataStore} from './useDataStore.ts'
 
 type State = {
 	/**
@@ -114,6 +115,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	 * @param roomId id помещения которое надо выбрать или `null` чтобы снять выделение
 	 */
 	changeSelectedRoom: (roomId) => {
+		console.log(roomId)
 		if (get().selectedRoomId !== roomId) {
 			set(({selectedRoomId: roomId}));
 			const planModel = get().planModel;
@@ -137,8 +139,10 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 			appStore().changeSelectedRoom(null)
 			set(({previousPlan: get().currentPlan}));
 			set(({currentPlan: plan}));
-			console.log(`План изменен на ${chalk.underline(plan.id)}`,);
-			console.log();
+			console.log(`План изменен на ${chalk.underline(plan.id)}`);
+			//При смене локации заполняем новый граф
+			if(plan.corpus.location !== dataStore().graph?.location && dataStore().graph)
+				dataStore().setGraphForLocation(plan.corpus.location)
 		}
 	},
 
@@ -155,7 +159,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 	},
 
 	setQueryService: (query) => {
-		appStore().planModel.deHighlightRoomsForNextStep() //Снятие старых хайлайтов и слушателей на смену плана
+		appStore().planModel?.deHighlightRoomsForNextStep() //Снятие старых хайлайтов и слушателей на смену плана
 		set({queryService: query});
 	},
 	setSearchQuery: (newSearchQuery) => {

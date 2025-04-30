@@ -7,6 +7,8 @@ export class PlanModel {
 	readonly rooms: Map<Id, RoomModel>;
 
 	constructor(public plan: PlanData, public planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement | HTMLElement, roomClickHandler: (room: RoomModel) => void) {
+		// @ts-expect-error TS2339
+		window.planModel = this
 		this.rooms = new Map();
 
 		virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove(); //Удаление фона (прямоугольника) верхней вложенности, если он есть
@@ -119,7 +121,7 @@ export class PlanModel {
 				if (options.hideRooms) {
 					room.roomEl.classList.remove(cl.selected);
 				}
-				if (options.hideEntrances) {
+				if (options.hideEntrances && room.entranceEl) {
 					room.entranceEl.classList.remove(cl.selected);
 				}
 			}
@@ -127,7 +129,7 @@ export class PlanModel {
 		if (options.activateRoom && room) {
 			room.roomEl.classList.add(cl.selected);
 		}
-		if (options.activateEntrance && room) {
+		if (options.activateEntrance && room && room.entranceEl) {
 			room.entranceEl.classList.add(cl.selected);
 		}
 	}
@@ -137,7 +139,11 @@ export class PlanModel {
 	 * @param room
 	 * @param last Последний ли это план в маршруте, если нет, добавляет слушатель на переключения плана на следующий в маршруте
 	 */
-	public highlightRoomForNextStep(room: RoomModel, last: boolean) {
+	public highlightRoomForNextStep(room: RoomModel | undefined, last: boolean) {
+		if(!room) {
+			console.log(`Попытка подсветить помещение, которого нет`, room)
+			return
+		}
 		room.roomEl.classList.add(cl.highlight)
 		if (!last) {
 			const nextStepClickHandler = () => {

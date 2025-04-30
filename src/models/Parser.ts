@@ -1,9 +1,9 @@
-import {PlanData, RoomData, RoomType} from "../constants/types.ts";
-import {initialRoomData} from "../store/useDataStore.ts";
-import {IconLink} from "../constants/IconLink.ts";
+import {PlanData, RoomData, RoomType} from '../constants/types.ts'
+import {IconLink} from '../constants/IconLink.ts'
+import {RoomDto} from './data/types/dto.ts'
 
 export class Parser {
-	static fillRoomData(inRoom: initialRoomData, plan: PlanData): RoomData | null {
+	static fillRoomData(inRoom: RoomDto, plan: PlanData): RoomData | null {
 		const type = inRoom.type as RoomType
 		const icon: IconLink | null = function () {
 			switch (type) {
@@ -51,7 +51,7 @@ export class Parser {
 		}()
 		const {title, subTitle}: { title: string, subTitle: string } = function () {
 			function getCorpusFloorSubtitle() {
-				return `Корпус ${plan.corpus.title}, ${plan.floor}-й этаж`;
+				return `${plan.corpus.location.short}, Корпус ${plan.corpus.title}, ${plan.floor}-й этаж`;
 			}
 
 			if (inRoom.tabletText && inRoom.tabletText !== '') {
@@ -86,12 +86,11 @@ export class Parser {
 				subTitle: ''
 			}
 		}()
-
 		if (!inRoom.id.startsWith('!'))
 			return {
 				id: inRoom.id,
-				title: title,
-				subTitle: subTitle,
+				title: title ?? '-',
+				subTitle: subTitle ?? '-',
 				plan: plan,
 				type: type,
 				icon: icon,

@@ -30,11 +30,11 @@ const SpaceInfo: FC = () => {
 	return (
 		<div className={cl.spaceInfo}>
 			<div className={cl.title}>
-				{room.icon && <Icon color={Color.INITIAL} classNameExt={cl.spaceIcon} iconLink={room.icon}/>}
-				<span>{room.title}</span>
+				{room && room.icon && <Icon color={Color.INITIAL} classNameExt={cl.spaceIcon} iconLink={room.icon}/>}
+				<span>{(room && room.title) ?? (<span>&nbsp;</span>)}</span>
 			</div>
 
-			<div className={cl.location}>{room.subTitle == '' ? <span>&nbsp;</span> : room.subTitle}</div>
+			<div className={cl.location}>{room && room.subTitle == '' ? <span>&nbsp;</span> : room && room.subTitle}</div>
 
 			<div className={cl.actions}>
 				<Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={IconLink.HEART}/>

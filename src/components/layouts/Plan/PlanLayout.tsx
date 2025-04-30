@@ -6,14 +6,15 @@ import axios from 'axios';
 import classNames from "classnames";
 import {RoomModel} from "../../../constants/types.ts";
 import {getSvgLink} from "../../../functions/planFunctions.ts";
-import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
+import {ReactZoomPanPinchContentRef, TransformComponent, TransformWrapper} from 'react-zoom-pan-pinch'
+import {PlanModel} from '../../../models/Plan/PlanModel.ts'
 
 const PlanLayout: FC = () => {
 	const planSvgRef = useRef<null | SVGSVGElement>(null)
 	const currentPlan = useAppStore(state => state.currentPlan)
 	const planModel = useAppStore(state => state.planModel)
 	const query = useAppStore(state => state.queryService);
-	const transformWrapperRef = useRef(null);
+	const transformWrapperRef = useRef<ReactZoomPanPinchContentRef>(null);
 
 	const svgLink = useMemo<string | null>(() => {
 		if (currentPlan) {
@@ -41,7 +42,7 @@ const PlanLayout: FC = () => {
 					//Сохранение текущего плана в LocalStorage
 					localStorage.setItem('last-plan', currentPlan.id)
 					localStorage.setItem('first-plan-setting-date', String(Date.now()))
-					transformWrapperRef.current.resetTransform(1)
+					if(transformWrapperRef.current) transformWrapperRef.current.resetTransform(1)
 					// setTimeout(() => {
 					// }, 1000)
 				});
@@ -49,7 +50,8 @@ const PlanLayout: FC = () => {
 	}, [currentPlan]);
 
 	const viewBox = useMemo(() => {
-		if (planModel) return planModel.planSvgEl.getAttribute('viewBox')
+		if (planModel)
+			return (planModel.planSvgEl.getAttribute('viewBox') ?? '0 0 0 0')
 		else return '0 0 0 0'
 	}, [planModel])
 
@@ -57,15 +59,17 @@ const PlanLayout: FC = () => {
 
 	const [wayAnimationClass, setWayAnimationClass] = useState(cl.wayAnimation)
 	const {primaryWayPathD, primaryWayLength} = useMemo(() => {
-		const queryService = appStore().queryService;
-		const steps = queryService.steps
-		const currentStepIndex = queryService.currentStepIndex
+		if(
+			!query.steps || !(typeof query.currentStepIndex === 'number') || !planModel
+		) return {primaryWayPathD: '', primaryWayLength: 0}
+		const steps = query.steps
+		const currentStepIndex = query.currentStepIndex
 		if (steps && steps[currentStepIndex].plan === planModel.plan) {
 			const currentStep = steps[currentStepIndex]
 			if (currentStep.plan === currentPlan) {
 				planModel.highlightRoomForNextStep(
-					planModel.rooms.get(currentStep.way.at(-1).id),
-					!(queryService.steps.length > currentStepIndex + 1)
+					planModel.rooms.get(currentStep.way.at(-1)?.id ?? ''),
+					!(query.steps.length > currentStepIndex + 1)
 				) //Добавление новых хайлайтов на конечное на текущем плане помещение и слушателей кликап на смену плана на следующий в маршруте
 
 				const vertexesOfWay = currentStep.way
@@ -81,7 +85,7 @@ const PlanLayout: FC = () => {
 		}  
 		return {
 			primaryWayPathD: '',
-			primaryWayLength: null
+			primaryWayLength: 0
 		}
 	}, [planModel, query])
 
@@ -92,10 +96,11 @@ const PlanLayout: FC = () => {
 	}, [wayAnimationClass]);
 
 	useEffect(() => {
-		appStore().setControlsFunctions({
-			zoomIn: transformWrapperRef.current.zoomIn,
-			zoomOut: transformWrapperRef.current.zoomOut
-		})
+		if(transformWrapperRef.current)
+			appStore().setControlsFunctions({
+				zoomIn: transformWrapperRef.current.zoomIn,
+				zoomOut: transformWrapperRef.current.zoomOut
+			})
 	}, [transformWrapperRef]);
 
 	return (

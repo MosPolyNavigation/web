@@ -54,7 +54,6 @@
 
 	.circle {
 		position: absolute;
-		top: toRem(2);
 		left: toRem(2);
 		width: toRem(34);
 		height: toRem(34);
@@ -62,28 +61,8 @@
 		border-radius: 50%;
 		z-index: 0;
 		transition: top 500ms ease;
-
-		&.floor0 {
-			top: toRem(2)
-		}
-		&.floor1 {
-			top: toRem(2 + (34 + 5) * 1)
-		}
-		&.floor2 {
-			top: toRem(2 + (34 + 5) * 2)
-		}
-		&.floor3 {
-			top: toRem(2 + (34 + 5) * 3)
-		}
-		&.floor4 {
-			top: toRem(2 + (34 + 5) * 4)
-		}
-		&.floor5 {
-			top: toRem(2 + (34 + 5) * 5)
-		}
-		&.floor6 {
-			top: toRem(2 + (34 + 5) * 6)
-		}
+		----floors-circle-offset-step: 0;
+		top: calc(toRem(2) + toRem(34 + 5) * var(--floors-circle-offset-step));
 	}
 }
 

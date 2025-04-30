@@ -28,12 +28,12 @@ export type PlanDto = {
 	readonly floor:     string;
 	readonly available: boolean;
 	readonly wayToSvg:  string;
-	readonly graph:     GraphDto[];
+	readonly graph:     GraphRecordDto[];
 	readonly entrances: Array<[string, string]>;
 	readonly nearest:   NearestDto;
 }
 
-export type GraphDto = {
+export type GraphRecordDto = {
 	readonly id:           string;
 	readonly x:            number;
 	readonly y:            number;

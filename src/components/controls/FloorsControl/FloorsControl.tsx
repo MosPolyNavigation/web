@@ -28,16 +28,6 @@ const FloorsControl: FC = () => {
 		}
 	}, [currentPlan, floorsPlans]);
 
-	const circleClasses = classNames(cl.circle, {
-		[cl.floor0]: circleOffsetStep === 0,
-		[cl.floor1]: circleOffsetStep === 1,
-		[cl.floor2]: circleOffsetStep === 2,
-		[cl.floor3]: circleOffsetStep === 3,
-		[cl.floor4]: circleOffsetStep === 4,
-		[cl.floor5]: circleOffsetStep === 5,
-		[cl.floor6]: circleOffsetStep === 6,
-	});
-
 
 	function floorBtnHandler(plan: PlanData) {
 		appStore().changeCurrentPlan(plan)
@@ -45,10 +35,17 @@ const FloorsControl: FC = () => {
 
 
 	return (
-		<div className={classNames(cl.floorControl, {
+		<div
+			className={classNames(cl.floorControl, {
 			[cl.invisible]: queryService.steps,
 			[cl.bottomCardExpanded]: activeLayout === Layout.SEARCH
-		})}>
+		})}
+			style={{
+				// @ts-expect-error TS2353
+				//Эта переменная указывает шаг отступа и используется в CSS для вычисления отступа
+				'--floors-circle-offset-step': String(circleOffsetStep ?? 0)
+			}}
+		>
 			{floorsPlans &&
 				floorsPlans.map((plan: PlanData) => {
 					const floorClasses = classNames(cl.floorNumber, {[cl.current]: (plan === currentPlan)});
@@ -58,7 +55,7 @@ const FloorsControl: FC = () => {
 					);
 				})
 			}
-			<div className={circleClasses}></div>
+			<div className={cl.circle}></div>
 		</div>
 	);
 };

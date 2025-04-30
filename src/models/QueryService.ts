@@ -11,7 +11,7 @@ export class QueryService {
 	to?: string//Айди помещению "Сюда"
 	steps?: Step[]
 	currentStepIndex?: number
-	fullDistance: number;
+	fullDistance?: number;
 
 	constructor(args?: { from?: string | null | Pointer.NOTHING, to?: string | null | Pointer.NOTHING, swap?: boolean}) {
 		//Если инициализация или сброс куда откуда, то просто ставим null
@@ -49,8 +49,8 @@ export class QueryService {
 			console.log(fullDistance)
 			console.log(`Построен маршрут от ${chalk.underline(this.from)} до ${chalk.underline(this.to)} общей длиной ${chalk.bold(this.fullDistance)}`, this.steps)
 			if(this.steps.length > 0) {
-				const firstPlan = dataStore().plans.find(plan => plan === this.steps[0].plan)
-				if(appStore().currentPlan !== firstPlan) {
+				const firstPlan = dataStore().plans.find(plan => plan === steps[0].plan)
+				if(appStore().currentPlan !== firstPlan && firstPlan) {
 					appStore().changeCurrentPlan(firstPlan)
 				}
 				// if(firstPlan)
@@ -67,16 +67,18 @@ export class QueryService {
 	}
 
 	 public nextStep() {
+		if(typeof this.currentStepIndex !== 'number' || !this.steps) return
 		 this.currentStepIndex++
 		 appStore().changeCurrentPlan(
-			 appStore().queryService.steps[this.currentStepIndex].plan
+			 this.steps[this.currentStepIndex].plan
 		 )
 	 }
 
 	previousStep() {
+		if(typeof this.currentStepIndex !== 'number' || !this.steps) return
 		this.currentStepIndex--
 		appStore().changeCurrentPlan(
-			appStore().queryService.steps[this.currentStepIndex].plan
+			this.steps[this.currentStepIndex].plan
 		)
 	}
 }

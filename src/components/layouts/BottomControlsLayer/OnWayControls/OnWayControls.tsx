@@ -16,12 +16,17 @@ function OnWayControls() {
 	const queryService = useAppStore(state => state.queryService);
 	const planModel = useAppStore(state => state.planModel)
 	const {steps, currentStepIndex} = queryService;
-	const isLastStep = steps.length <= currentStepIndex + 1
+	const isLastStep = steps && currentStepIndex && steps.length <= currentStepIndex + 1
 	const [nextBtnText, setNextBtnText] = useState<string>('')
-	const [nextBtnIcon, setNextBtnIcon] = useState<IconLink>(null)
+	const [nextBtnIcon, setNextBtnIcon] = useState<IconLink | null>(null)
 
 	useEffect(() => {
 		if (!isLastStep) {
+			if(!currentStepIndex || !steps) {
+				setNextBtnIcon(null)
+				setNextBtnText('')
+				return
+			}
 			const currentStep = steps[currentStepIndex];
 			const nextStep = steps[currentStepIndex + 1];
 			let nextBtnTextBuilder = 'Далее: '
@@ -40,7 +45,11 @@ function OnWayControls() {
 			}
 			setNextBtnText(nextBtnTextBuilder)
 		}
-	}, [planModel]);
+	}, [currentStepIndex, isLastStep, planModel, steps]);
+
+	if(!nextBtnIcon) {
+		return null
+	}
 
 
 	return <>

@@ -1,5 +1,5 @@
-import {RawVertex} from "../store/useDataStore.ts";
-import {IconLink} from "./IconLink.ts";
+import {IconLink} from './IconLink.ts'
+import {GraphRecordDto} from '../models/data/types/dto.ts'
 
 export type LocationData = {
 	id: string
@@ -23,7 +23,7 @@ export type PlanData = {
 	floor: number,
 	available: boolean,
 	wayToSvg: string,
-	graph: RawVertex[]
+	graph: GraphRecordDto[]
 	entrances: PlanEntrances[],
 	corpus: CorpusData,
 }
@@ -52,7 +52,7 @@ export type RoomModel = {
 	roomId: Id
 	roomEl: SVGRectElement | SVGPathElement
 	entranceId: Id
-	entranceEl: SVGCircleElement
+	entranceEl?: SVGCircleElement
 	/**
 	 * Слушатели события на клик для переключения на следующий план в маршруте
 	 */

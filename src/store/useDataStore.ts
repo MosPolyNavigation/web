@@ -50,8 +50,14 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 				plans: data.plans,
 				rooms: data.rooms,
 			})
+			// @ts-expect-error TS2339
+			window.data = {
+				locations: data.locations,
+				corpuses: data.corpuses,
+				plans: data.plans,
+				rooms: data.rooms,
+			}
 
-			//TODO: добавить сохранение плана в LS
 			const firstPlan: PlanData | undefined = dataStore().plans.find(plan => plan.id === appConfig.firstPlan);
 			if (!appStore().currentPlan && firstPlan) {
 				appStore().changeCurrentPlan(firstPlan)
@@ -66,6 +72,7 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 
 	setGraphForLocation: (location: LocationData) => {
 		set({graph: new Graph(location)})
+		console.log(`Установлен граф для локации ${get().graph?.location}`, get().graph)
 	}
 }));
 

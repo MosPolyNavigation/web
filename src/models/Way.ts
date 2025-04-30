@@ -3,7 +3,7 @@ import {dataStore} from "../store/useDataStore";
 import {Vertex} from "./Graph";
 
 export class Way {
-	steps: Step[]; //Это вернуть
+	steps: Step[] = []; //Это вернуть
 	to: string; //Вот тут будет не строка а RoomData
 	from: string; //и тут тоже
 	activeStep: number = 0
@@ -21,7 +21,9 @@ export class Way {
 			const wayAndDistance = graph.getShortestWayFromTo(this.from, this.to)
 			this.fullDistance = wayAndDistance.distance
 			// console.log(wayAndDistance)
-
+			if(!wayAndDistance.way) return
+			if(!wayAndDistance.way.every(v => v instanceof Vertex)) return
+			
 			const way = [...wayAndDistance.way];
 			const firstVertex = way.shift() as Vertex;
 			this.steps = [new Step(firstVertex.plan, firstVertex)];
@@ -31,7 +33,7 @@ export class Way {
 					lastStep.distance += graph.getDistanceBetween2Vertexes(
 						lastStep.way.at(-1) as Vertex,
 						wayVertex.id
-					);
+					) ?? 0;
 					lastStep.way.push(wayVertex);
 				} else {
 					this.steps.push(
@@ -44,12 +46,16 @@ export class Way {
 			}
 			const firstStep = this.steps[0]
 			if (firstStep.way.length === 1) {
-				firstStep.way.unshift( graph.findVertexById(firstStep.way[0].neighborData[0][0]) );
+				const nearestNeighborV = graph.findVertexById(firstStep.way[0].neighborData[0][0])
+				if(nearestNeighborV)
+					firstStep.way.unshift( nearestNeighborV );
 				firstStep.distance = firstStep.way[0].neighborData[0][1];
 			}
 			const lastStep = this.steps.at(-1)
 			if (lastStep && lastStep.way.length === 1) {
-				lastStep.way.push( graph.findVertexById(lastStep.way[0].neighborData[0][0] ));
+				const nearestNeighborV = graph.findVertexById(lastStep.way[0].neighborData[0][0])
+				if(nearestNeighborV)
+					lastStep.way.push( nearestNeighborV);
 				lastStep.distance = lastStep.way[0].neighborData[0][1];
 			}
 			//удаляем пустые этажи (обычно лестничный пролет)
