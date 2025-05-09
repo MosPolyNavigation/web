@@ -15,11 +15,37 @@ import WayInfo from '../../components/layouts/BottomLayer/WayInfo/WayInfo.tsx'
 import {IconLink} from '../../constants/IconLink.ts'
 import Toast from '../../components/common/Toast/Toast.tsx'
 import {appConfig} from '../../appConfig.ts'
+import { useUserStore } from '../../models/data/getUserStoreId.ts'
+import axios from "axios";
 
 function App() {
 	const activeLayout = useAppStore(state => state.activeLayout);
 	const queryService = useAppStore(state => state.queryService);
 	const appRef = useRef<HTMLDivElement>(null)
+	const { setUserId, userId } = useUserStore();
+
+	useEffect(() => {
+		const navigationEntries = performance.getEntriesByType('navigation');
+		const isReload = navigationEntries.length > 0 &&
+			(navigationEntries[0] as PerformanceNavigationTiming).type === 'reload';
+
+		if (!isReload || !!userId === false) {
+			const fetchData = async () => {
+				try {
+					const userIdResponse = await axios.get('https://mpunav.ru/api/get/user-id');
+					setUserId(userIdResponse.data.user_id);
+
+					await axios.post('https://mpunav.ru/api/site', {
+						user_id: userIdResponse.data.user_id
+					});
+				} catch (error) {
+					return error;
+				}
+			};
+
+			fetchData();
+		}
+	}, [setUserId, userId]);
 
 	useEffect(() => {
 		//Если пользователь не заходил на сайти или заходил больше 85 минут назад, показать начальный экран
