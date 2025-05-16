@@ -1,154 +1,215 @@
-import {FC, useEffect, useMemo, useRef, useState} from 'react';
-import cl from './PlanLayout.module.scss';
-import {appStore, useAppStore} from '../../../store/useAppStore.ts';
-import {appConfig} from '../../../appConfig.ts';
-import axios from 'axios';
+import { FC, useEffect, useMemo, useRef, useState } from "react";
+import cl from "./PlanLayout.module.scss";
+import { appStore, useAppStore } from "../../../store/useAppStore.ts";
+import { appConfig } from "../../../appConfig.ts";
+import axios from "axios";
 import classNames from "classnames";
-import {RoomModel} from "../../../constants/types.ts";
-import {getSvgLink} from "../../../functions/planFunctions.ts";
-import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
+import { RoomModel } from "../../../constants/types.ts";
+import { getSvgLink } from "../../../functions/planFunctions.ts";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { useUserStore } from "../../../models/data/getUserStoreId.ts";
 
 const PlanLayout: FC = () => {
-	const planSvgRef = useRef<null | SVGSVGElement>(null)
-	const currentPlan = useAppStore(state => state.currentPlan)
-	const planModel = useAppStore(state => state.planModel)
-	const query = useAppStore(state => state.queryService);
-	const transformWrapperRef = useRef(null);
+  const planSvgRef = useRef<null | SVGSVGElement>(null);
+  const currentPlan = useAppStore((state) => state.currentPlan);
+  const planModel = useAppStore((state) => state.planModel);
+  const query = useAppStore((state) => state.queryService);
+  const { userId } = useUserStore();
+  const transformWrapperRef = useRef(null);  
 
-	const svgLink = useMemo<string | null>(() => {
-		if (currentPlan) {
-			return appConfig.svgSource + currentPlan?.wayToSvg;
-		}
-		return null;
-	}, [currentPlan]);
+  const svgLink = useMemo<string | null>(() => {
+    if (currentPlan) {
+      return appConfig.svgSource + currentPlan?.wayToSvg;
+    }
+    return null;
+  }, [currentPlan]);
 
-	function roomClickHandler(room: RoomModel) {
-		if (appStore().selectedRoomId !== room.roomId) {
-			appStore().changeSelectedRoom(room.roomId)
-		} else {
-			appStore().changeSelectedRoom(null)
-		}
-	}
+  async function roomClickHandler(room: RoomModel) {
+    if (appStore().selectedRoomId !== room.roomId) {
+      appStore().changeSelectedRoom(room.roomId);
 
-	useEffect(() => {
-		if (currentPlan) {
-			axios.get(getSvgLink(currentPlan))
-				.then(response => {
-					if (!planSvgRef.current) return; //Если вдруг нет свгшки на странице, пропустить
-					// Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
-					const parsedSvgDomEl = (new DOMParser()).parseFromString(response.data, 'image/svg+xml').documentElement as SVGSVGElement | HTMLElement;
-					appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl, roomClickHandler) //Установка новой модели-плана в стор приложения
-					//Сохранение текущего плана в LocalStorage
-					localStorage.setItem('last-plan', currentPlan.id)
-					localStorage.setItem('first-plan-setting-date', String(Date.now()))
-					transformWrapperRef.current.resetTransform(1)
-					// setTimeout(() => {
-					// }, 1000)
-				});
-		}
-	}, [currentPlan]);
+      try {
+        await axios.put(
+          "https://mpunav.ru/api/stat/select-aud",
+          {
+            auditory_id: room.roomId,
+            user_id: userId
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (error) {
+        return error
+      }
+    } else {
+      appStore().changeSelectedRoom(null);
+    }
+  }
 
-	const viewBox = useMemo(() => {
-		if (planModel) return planModel.planSvgEl.getAttribute('viewBox')
-		else return '0 0 0 0'
-	}, [planModel])
+  useEffect(() => {
+    if (currentPlan) {
+      axios.get(getSvgLink(currentPlan)).then((response) => {
+        if (!planSvgRef.current) return; //Если вдруг нет свгшки на странице, пропустить
+        // Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
+        const parsedSvgDomEl = new DOMParser().parseFromString(
+          response.data,
+          "image/svg+xml"
+        ).documentElement as SVGSVGElement | HTMLElement;
+        appStore().changePlanModel(
+          currentPlan,
+          planSvgRef.current,
+          parsedSvgDomEl,
+          roomClickHandler
+        ); //Установка новой модели-плана в стор приложения
+        //Сохранение текущего плана в LocalStorage
+        localStorage.setItem("last-plan", currentPlan.id);
+        localStorage.setItem("first-plan-setting-date", String(Date.now()));
+        transformWrapperRef.current.resetTransform(1);
+        // setTimeout(() => {
+        // }, 1000)
+      });
+    }
+  }, [currentPlan, roomClickHandler]);
 
-	const endArrowAnimationEl = useRef<null | SVGAnimateElement>(null)
+  const viewBox = useMemo(() => {
+    if (planModel) return planModel.planSvgEl.getAttribute("viewBox");
+    else return "0 0 0 0";
+  }, [planModel]);
 
-	const [wayAnimationClass, setWayAnimationClass] = useState(cl.wayAnimation)
-	const {primaryWayPathD, primaryWayLength} = useMemo(() => {
-		const queryService = appStore().queryService;
-		const steps = queryService.steps
-		const currentStepIndex = queryService.currentStepIndex
-		if (steps && steps[currentStepIndex].plan === planModel.plan) {
-			const currentStep = steps[currentStepIndex]
-			if (currentStep.plan === currentPlan) {
-				planModel.highlightRoomForNextStep(
-					planModel.rooms.get(currentStep.way.at(-1).id),
-					!(queryService.steps.length > currentStepIndex + 1)
-				) //Добавление новых хайлайтов на конечное на текущем плане помещение и слушателей кликап на смену плана на следующий в маршруте
+  const endArrowAnimationEl = useRef<null | SVGAnimateElement>(null);
 
-				const vertexesOfWay = currentStep.way
-				setWayAnimationClass('')
-				setTimeout(() => {
-					if (endArrowAnimationEl.current) endArrowAnimationEl.current.beginElement()
-				}, 850)
-				return {
-					primaryWayPathD: generatePathD(vertexesOfWay),
-					primaryWayLength: currentStep.distance
-				}
-			}
-		}  
-		return {
-			primaryWayPathD: '',
-			primaryWayLength: null
-		}
-	}, [planModel, query])
+  const [wayAnimationClass, setWayAnimationClass] = useState(cl.wayAnimation);
+  const { primaryWayPathD, primaryWayLength } = useMemo(() => {
+    const queryService = appStore().queryService;
+    const steps = queryService.steps;
+    const currentStepIndex = queryService.currentStepIndex;
+    if (steps && steps[currentStepIndex].plan === planModel.plan) {
+      const currentStep = steps[currentStepIndex];
+      if (currentStep.plan === currentPlan) {
+        planModel.highlightRoomForNextStep(
+          planModel.rooms.get(currentStep.way.at(-1).id),
+          !(queryService.steps.length > currentStepIndex + 1)
+        ); //Добавление новых хайлайтов на конечное на текущем плане помещение и слушателей кликап на смену плана на следующий в маршруте
 
-	useEffect(() => {
-		if (wayAnimationClass === '') {
-			setWayAnimationClass(cl.wayAnimation)
-		}
-	}, [wayAnimationClass]);
+        const vertexesOfWay = currentStep.way;
+        setWayAnimationClass("");
+        setTimeout(() => {
+          if (endArrowAnimationEl.current)
+            endArrowAnimationEl.current.beginElement();
+        }, 850);
+        return {
+          primaryWayPathD: generatePathD(vertexesOfWay),
+          primaryWayLength: currentStep.distance,
+        };
+      }
+    }
+    return {
+      primaryWayPathD: "",
+      primaryWayLength: null,
+    };
+  }, [planModel, query, currentPlan]);
 
-	useEffect(() => {
-		appStore().setControlsFunctions({
-			zoomIn: transformWrapperRef.current.zoomIn,
-			zoomOut: transformWrapperRef.current.zoomOut
-		})
-	}, [transformWrapperRef]);
+  useEffect(() => {
+    if (wayAnimationClass === "") {
+      setWayAnimationClass(cl.wayAnimation);
+    }
+  }, [wayAnimationClass]);
 
-	return (
-		<div className={cl.planWrapper}>
-				<TransformWrapper ref={transformWrapperRef} maxScale={5} disablePadding={true} >
-					<TransformComponent wrapperClass={cl.transformWrapper}>
-			{svgLink && <div className={cl.planWrapperInner}>
-				<svg className={cl.planSvg} ref={planSvgRef}></svg>
-				<svg className={cl.planAddingObjects} viewBox={viewBox}>
-					{primaryWayPathD &&
-						<path d={primaryWayPathD} className={classNames(cl.way, wayAnimationClass)}
-						      style={{strokeDasharray: primaryWayLength, strokeDashoffset: primaryWayLength}}
-						      markerStart="url(#way-start-circle)" markerEnd="url(#way-end-arrow)"
-						/>
-					}
-					<defs>
-						<marker id="way-end-arrow" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="22"
-						        refX="15" refY="11" viewBox="0 0 20 22" fill="none" orient="auto-start-reverse"
-						>
-							<path key={primaryWayPathD} className={classNames(cl.endArrow, wayAnimationClass)}>
-							</path>
-						</marker>
-						<marker id="way-start-circle" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="20"
-						        refX="10" refY="10" viewBox="0 0 20 20" fill="none"
-						>
-							<circle fill="white" cx="10" cy="10" className={classNames(cl.startCircle, wayAnimationClass)}/>
-						</marker>
-					</defs>
-				</svg>
-			</div>}
-					</TransformComponent>
-				</TransformWrapper>
-		</div>
-	);
+  useEffect(() => {
+    appStore().setControlsFunctions({
+      zoomIn: transformWrapperRef.current.zoomIn,
+      zoomOut: transformWrapperRef.current.zoomOut,
+    });
+  }, [transformWrapperRef]);
+
+  return (
+    <div className={cl.planWrapper}>
+      <TransformWrapper
+        ref={transformWrapperRef}
+        maxScale={5}
+        disablePadding={true}
+      >
+        <TransformComponent wrapperClass={cl.transformWrapper}>
+          {svgLink && (
+            <div className={cl.planWrapperInner}>
+              <svg className={cl.planSvg} ref={planSvgRef}></svg>
+              <svg className={cl.planAddingObjects} viewBox={viewBox}>
+                {primaryWayPathD && (
+                  <path
+                    d={primaryWayPathD}
+                    className={classNames(cl.way, wayAnimationClass)}
+                    style={{
+                      strokeDasharray: primaryWayLength,
+                      strokeDashoffset: primaryWayLength,
+                    }}
+                    markerStart="url(#way-start-circle)"
+                    markerEnd="url(#way-end-arrow)"
+                  />
+                )}
+                <defs>
+                  <marker
+                    id="way-end-arrow"
+                    markerUnits="userSpaceOnUse"
+                    markerWidth="20"
+                    markerHeight="22"
+                    refX="15"
+                    refY="11"
+                    viewBox="0 0 20 22"
+                    fill="none"
+                    orient="auto-start-reverse"
+                  >
+                    <path
+                      key={primaryWayPathD}
+                      className={classNames(cl.endArrow, wayAnimationClass)}
+                    ></path>
+                  </marker>
+                  <marker
+                    id="way-start-circle"
+                    markerUnits="userSpaceOnUse"
+                    markerWidth="20"
+                    markerHeight="20"
+                    refX="10"
+                    refY="10"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      fill="white"
+                      cx="10"
+                      cy="10"
+                      className={classNames(cl.startCircle, wayAnimationClass)}
+                    />
+                  </marker>
+                </defs>
+              </svg>
+            </div>
+          )}
+        </TransformComponent>
+      </TransformWrapper>
+    </div>
+  );
 };
 
 export default PlanLayout;
 
 function generatePathD(points: Point[]) {
-	if (!points || points.length === 0) {
-		return '';
-	}
+  if (!points || points.length === 0) {
+    return "";
+  }
 
-	let d = `M ${points[0].x} ${points[0].y}`;
+  let d = `M ${points[0].x} ${points[0].y}`;
 
-	for (let i = 1; i < points.length; i++) {
-		d += ` L ${points[i].x} ${points[i].y}`;
-	}
+  for (let i = 1; i < points.length; i++) {
+    d += ` L ${points[i].x} ${points[i].y}`;
+  }
 
-	return d;
+  return d;
 }
 
 type Point = {
-	x: number,
-	y: number
-}
+  x: number;
+  y: number;
+};

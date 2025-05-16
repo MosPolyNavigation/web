@@ -7,19 +7,22 @@ import Button from '../../../buttons/LargeButton/Button.tsx';
 import {appStore, useAppStore} from '../../../../store/useAppStore.ts';
 import {QueryService} from "../../../../models/QueryService.ts";
 import {useDataStore} from "../../../../store/useDataStore.ts";
+import { useUserStore } from '../../../../models/data/getUserStoreId.ts';
 
 const SpaceInfo: FC = () => {
 	const selectedRoomId = useAppStore(state => state.selectedRoomId);
 	const rooms = useDataStore(state => state.rooms);
 	const room = useMemo(() => rooms.find(room => room.id === selectedRoomId), [selectedRoomId, rooms]);
+	const { userId } = useUserStore();
+	
 
 	function fromBtnHandler() {
-		appStore().setQueryService(new QueryService({from: selectedRoomId}))
+		appStore().setQueryService(new QueryService({from: selectedRoomId, userId: userId}))
 		appStore().changeSelectedRoom(null)
 	}
 
 	function toBtnHandler() {
-		appStore().setQueryService(new QueryService({to: selectedRoomId}))
+		appStore().setQueryService(new QueryService({to: selectedRoomId, userId: userId}))
 		appStore().changeSelectedRoom(null)
 	}
 
