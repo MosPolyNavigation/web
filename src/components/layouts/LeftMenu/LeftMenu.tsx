@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react'
 import cl from './LeftMenu.module.scss';
 import MenuItem from '../../menuopmponents/MenuItem/MenuItem.tsx';
 import {IconLink} from '../../../constants/IconLink.ts';
@@ -7,27 +7,45 @@ import {BtnName, Color, Layout} from '../../../constants/enums.ts';
 import IconButton from '../../buttons/IconButton/IconButton.tsx';
 import useOnHideRemover from '../../../hooks/useOnHideRemover.ts';
 import {useAppStore} from '../../../store/useAppStore.ts';
+import {userStore, useUserStore} from '../../../store/useUserStore.ts'
 
 
 const LeftMenu: FC = () => {
 	const [activeLayout,controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
+	// Тапы для выключения/включения статистики
+	const [taps, setTaps] = useState(0)
+	const isDevelopMode = useUserStore(state => state.isDevelopMode)
 
 	const isVisible = useMemo(() => activeLayout === Layout.MENU, [activeLayout])
 	const [isRemoved, removerAnimationEndHandler] = useOnHideRemover(isVisible);
 
-	if(isRemoved) {
-		return null;
-	}
+
+	useEffect(() => {
+		if(!isVisible)
+			setTaps(0)
+	}, [isVisible])
 
 	const leftMenuClasses = classNames({
 		[cl.leftMenu]: true,
 		[cl.hidden]: !isVisible,
 	});
 
+	function handleTechnicalClick() {
+		setTaps(prev => prev + 1)
+		if(taps >= 4) {
+			userStore().toggleDevelopMode()
+			setTaps(0)
+		}
+	}
+
+	if(isRemoved) {
+		return null;
+	}
+
 	return (
 		<div className={leftMenuClasses} onAnimationEnd={removerAnimationEndHandler}>
 			<div className={cl.top}>
-				<img src="img/logo.png" alt="" className={cl.topLogo}/>
+				<img src="img/logo.png" alt="" className={cl.topLogo} onClick={handleTechnicalClick}/>
 				<div className={cl.title}>Политех <br/> Навигация</div>
 				<IconButton
 					// onClick={() => toggleMenu(ActionName.HIDE)}
@@ -46,6 +64,11 @@ const LeftMenu: FC = () => {
 					<br />
 					“Политех-Навигация (ПолиНа)”
 			</div>
+			{isDevelopMode && (
+				<div>
+					<b>Режим разработчика</b>
+				</div>
+			)}
 		</div>
 	);
 };

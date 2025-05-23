@@ -3,6 +3,7 @@ import {userStore} from '../store/useUserStore.ts'
 
 export const statisticApi = {
 	sendChangePlan: async (planId: string, first: boolean | undefined) => {
+		if(userStore().isDevelopMode) return
 		if(first) {
 			const navigationEntries = performance.getEntriesByType('navigation');
 			const isReload = navigationEntries.length > 0 && (navigationEntries[0] as PerformanceNavigationTiming).type === 'reload';
@@ -22,6 +23,7 @@ export const statisticApi = {
 	},
 
 	sendSelectRoom: async (roomId: string, success: boolean) => {
+		if(userStore().isDevelopMode) return
 		void axios.put(
 			"https://mpunav.ru/api/stat/select-aud",
 			{
@@ -38,6 +40,7 @@ export const statisticApi = {
 	},
 
 	sendSiteVisit: async () => {
+		if(userStore().isDevelopMode) return
 		const navigationEntries = performance.getEntriesByType('navigation');
 		const isReload = navigationEntries.length > 0 && (navigationEntries[0] as PerformanceNavigationTiming).type === 'reload';
 		if (isReload)
@@ -48,6 +51,7 @@ export const statisticApi = {
 	},
 
 	sendStartWay: (from: string, to: string, success: boolean) => {
+		if(userStore().isDevelopMode) return
 		void axios.put(
 			"https://mpunav.ru/api/stat/start-way",
 			{

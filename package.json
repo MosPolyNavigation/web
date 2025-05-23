@@ -5,7 +5,7 @@
   "type": "module",
   "homepage": "https://mospolynavigation.github.io/web",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite --host --open",
     "devshare": "vite --host --port 3000",
     "build": "tsc -b && vite build",
     "forcebuild": "vite build",
