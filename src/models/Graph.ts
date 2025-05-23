@@ -32,7 +32,6 @@ export class Graph {
 					rawVertex.neighborData,
 					plan
 				))
-				plan.graph = []
 			})
 		});
 	}

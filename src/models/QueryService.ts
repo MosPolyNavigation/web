@@ -47,6 +47,9 @@ export class QueryService {
 		if (this.to && this.from) {
 			try {
 				const {steps, fullDistance} = new Way(this.from, this.to)
+				if(steps.length === 0 || isNaN(fullDistance)) {
+					throw new Error(`Не удалось построить маршрут ${this.from} ${this.to}`, )
+				}
 				void statisticApi.sendStartWay(this.from, this.to, true)
 				this.steps = steps
 				this.currentStepIndex = 0
@@ -65,6 +68,8 @@ export class QueryService {
 				console.error(e)
 				void statisticApi.sendStartWay(this.from, this.to, false)
 				appStore().toast.showForTime('К сожалению, не удалось построить маршрут')
+				this.from = undefined
+				this.to = undefined
 			}
 		}
 	}
