@@ -12,7 +12,7 @@ function BaseControls() {
     const [activeLayout, controlBtnClickHandler] = [useAppStore(state => state.activeLayout), useAppStore(state => state.controlBtnClickHandler)]
 
     const heartBtnClickHandler = () => {
-        appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
+        // appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
     };
 
     const rightBtnClass = classNames({
@@ -30,6 +30,7 @@ function BaseControls() {
                 classNameExt={cl.favouriteBtn}
                 iconLink={IconLink.HEART}
                 onClick={heartBtnClickHandler}
+                style={{visibility: 'hidden', pointerEvents: 'none'}}
                 //КНОПКА С СЕРДЕЧКОМ
             />
             {activeLayout === Layout.PLAN &&

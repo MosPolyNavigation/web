@@ -27,7 +27,8 @@ const LeftMenu: FC = () => {
 	return (
 		<div className={leftMenuClasses} onAnimationEnd={removerAnimationEndHandler}>
 			<div className={cl.top}>
-				<div>Политех Навигация</div>
+				<img src="img/logo.png" alt="" className={cl.topLogo}/>
+				<div className={cl.title}>Политех <br/> Навигация</div>
 				<IconButton
 					// onClick={() => toggleMenu(ActionName.HIDE)}
 					onClick={() => controlBtnClickHandler(BtnName.MENU_CLOSE)}
@@ -41,12 +42,9 @@ const LeftMenu: FC = () => {
 				<MenuItem text="Настройки" color={Color.BLUE} iconLink={IconLink.SETTINGS} />
 			</div>
 			<div className={cl.bottom}>
-				<div className={cl.logo}></div>
-				<div>
 					Сделано студентами проекта
 					<br />
 					“Политех-Навигация (ПолиНа)”
-				</div>
 			</div>
 		</div>
 	);

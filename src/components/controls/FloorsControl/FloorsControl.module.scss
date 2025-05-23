@@ -12,7 +12,7 @@
 	@extend %border-default;
 	@extend %shadow-default;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	align-items: center;
 	gap: $size-5;
 	overflow-y: scroll;
@@ -60,9 +60,9 @@
 		background-color: $ext-color-blue;
 		border-radius: 50%;
 		z-index: 0;
-		transition: top 500ms ease;
+		transition: bottom 500ms ease;
 		----floors-circle-offset-step: 0;
-		top: calc(toRem(2) + toRem(34 + 5) * var(--floors-circle-offset-step));
+		bottom: calc(toRem(2) + toRem(34 + 5) * var(--floors-circle-offset-step));
 	}
 }
 

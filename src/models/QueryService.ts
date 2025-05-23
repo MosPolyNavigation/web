@@ -2,6 +2,9 @@ import {appStore} from "../store/useAppStore";
 import {Step, Way} from "./Way.ts";
 import chalk from "chalk";
 import {dataStore} from "../store/useDataStore.ts";
+import axios from 'axios'
+import {userStore} from '../store/useUserStore.ts'
+import {statisticApi} from '../api/statisticApi.ts'
 
 /**
  * Класс, представляющий **Сервис выбора куда и откуда**, хранится в состоянии приложения и при задании новых "куда" и "откуда" начинает новый маршрут
@@ -42,21 +45,27 @@ export class QueryService {
 		//Если нет текущего маршрута или у текущего маршрута не совпадают куда откуда с query-вскими
 		//Если указано откуда и куда строить маршрут то построить новый маршрут и запомнить его
 		if (this.to && this.from) {
-			const {steps, fullDistance} = new Way(this.from, this.to)
-			this.steps = steps
-			this.currentStepIndex = 0
-			this.fullDistance = fullDistance
-			console.log(fullDistance)
-			console.log(`Построен маршрут от ${chalk.underline(this.from)} до ${chalk.underline(this.to)} общей длиной ${chalk.bold(this.fullDistance)}`, this.steps)
-			if(this.steps.length > 0) {
-				const firstPlan = dataStore().plans.find(plan => plan === steps[0].plan)
-				if(appStore().currentPlan !== firstPlan && firstPlan) {
-					appStore().changeCurrentPlan(firstPlan)
+			try {
+				const {steps, fullDistance} = new Way(this.from, this.to)
+				void statisticApi.sendStartWay(this.from, this.to, true)
+				this.steps = steps
+				this.currentStepIndex = 0
+				this.fullDistance = fullDistance
+				console.log(steps, fullDistance)
+				console.log(`Построен маршрут от ${chalk.underline(this.from)} до ${chalk.underline(this.to)} общей длиной ${chalk.bold(this.fullDistance)}`, this.steps)
+				if(this.steps.length > 0) {
+					const firstPlan = dataStore().plans.find(plan => plan === steps[0].plan)
+					if(appStore().currentPlan !== firstPlan && firstPlan) {
+						appStore().changeCurrentPlan(firstPlan)
+					}
+					// if(firstPlan)
+					// useAppStore().changeCurrentPlan(dataStore().plans)
 				}
-				// if(firstPlan)
-				// useAppStore().changeCurrentPlan(dataStore().plans)
+			} catch (e) {
+				console.error(e)
+				void statisticApi.sendStartWay(this.from, this.to, false)
+				appStore().toast.showForTime('К сожалению, не удалось построить маршрут')
 			}
-			//то построить маршрут , а дальше посмотрим
 		}
 	}
 

@@ -7,6 +7,7 @@ import {QueryService} from '../models/QueryService'
 import chalk from 'chalk'
 import {Toast} from '../models/Toast.ts'
 import {dataStore} from './useDataStore.ts'
+import {statisticApi} from '../api/statisticApi.ts'
 
 type State = {
 	/**
@@ -49,10 +50,18 @@ type State = {
 }
 
 type Action = {
+	/**
+	 * Выбрать (выделить) помещение, влияет на подсветку помещения и состояние приложения `selectedRoomId`, а также на отображение нижней карточки с инфо о помещении
+	 * @param roomId id помещения, которое надо выбрать, или `null`, чтобы снять выделение
+	 */
 	changeSelectedRoom: (roomId: null | string) => void;
+	/**
+	 *
+	 * @param btnName
+	 */
 	controlBtnClickHandler: (btnName: BtnName) => void
 	changeLayout: (layout: Layout) => void
-	changeCurrentPlan: (plan: PlanData | null) => void
+	changeCurrentPlan: (plan: PlanData | null, first?: boolean) => void
 	changePlanModel: (
 		planInf: PlanData,
 		planSvgEl: SVGSVGElement,
@@ -110,14 +119,13 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 		} //Скрыть левое меню
 	},
 
-	/**
-	 * Выбрать (выделить) помещение, влияет на подсветку помещения и состояние приложения `selectedRoomId`, а также на отображение нижней карточки с инфо о помещении
-	 * @param roomId id помещения которое надо выбрать или `null` чтобы снять выделение
-	 */
 	changeSelectedRoom: (roomId) => {
 		console.log(roomId)
 		if (get().selectedRoomId !== roomId) {
 			set(({selectedRoomId: roomId}));
+			if(roomId) {
+				void statisticApi.sendSelectRoom(roomId, true)
+			}
 			const planModel = get().planModel;
 			if (planModel) {
 				planModel.toggleRoom(null, {hideRooms: true, hideEntrances: true});
@@ -134,16 +142,18 @@ export const useAppStore = create<State & Action>()((set, get) => ({
 		// else console.log(`Снят выбор помещения`)
 	},
 
-	changeCurrentPlan: (plan) => {
+	changeCurrentPlan: (plan, first) => {
 		if (get().currentPlan !== plan && plan) {
 			appStore().changeSelectedRoom(null)
 			set(({previousPlan: get().currentPlan}));
 			set(({currentPlan: plan}));
 			console.log(`План изменен на ${chalk.underline(plan.id)}`);
+			void statisticApi.sendChangePlan(plan.id, first)
 			//При смене локации заполняем новый граф
 			if(plan.corpus.location !== dataStore().graph?.location && dataStore().graph)
 				dataStore().setGraphForLocation(plan.corpus.location)
 		}
+
 	},
 
 	changeLayout: (layout) => {

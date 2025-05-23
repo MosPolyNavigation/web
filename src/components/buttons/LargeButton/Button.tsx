@@ -1,4 +1,4 @@
-import React, {Attributes, FC} from 'react';
+import React, {Attributes, CSSProperties, FC} from 'react'
 import {IconLink} from '../../../constants/IconLink.ts';
 import cl from './Button.module.scss';
 import Icon from '../../common/Icon/Icon.tsx';
@@ -15,10 +15,11 @@ interface ButtonProps extends Attributes {
 	classNameExt?: string,
 	disabled?: boolean,
 	current?: boolean
-	textPosition?: Pos.LEFT | Pos.RIGHT
+	textPosition?: Pos.LEFT | Pos.RIGHT,
+	style?: CSSProperties
 }
 
-const Button = (props: ButtonProps) => {
+const Button: FC<ButtonProps> = (props) => {
 	let size = props.size
 	if(!props.size) size = Size.M;
 
@@ -38,6 +39,7 @@ const Button = (props: ButtonProps) => {
 			disabled={props.disabled}
 			className={buttonClasses}
 			onClick={props.onClick}
+			style={props.style}
 		>
 			{props.text && props.textPosition === Pos.LEFT && <span style={textStyle} className={cl.text}>{props.text}</span>}
 			{props.iconLink && <Icon color={props.color ? props.color : Color.C4} size={props.size} iconLink={props.iconLink} />}

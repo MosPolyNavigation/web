@@ -63,6 +63,7 @@ const SearchMenu: FC<SearchMenuProps> = () => {
 	}, [resultsRef, results]);
 
 	function menuItemClickHandler(room: RoomData) {
+		console.log(room.title, room.subTitle)
 		const searchIndent = appStore().searchIndent
 
 		if(searchIndent === SearchIndent.SELECT) {

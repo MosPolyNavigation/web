@@ -60,7 +60,7 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 
 			const firstPlan: PlanData | undefined = dataStore().plans.find(plan => plan.id === appConfig.firstPlan);
 			if (!appStore().currentPlan && firstPlan) {
-				appStore().changeCurrentPlan(firstPlan)
+				appStore().changeCurrentPlan(firstPlan, true)
 				const graphInitLocation = firstPlan.corpus.location;
 				if(graphInitLocation) {
 					dataStore().setGraphForLocation(graphInitLocation)

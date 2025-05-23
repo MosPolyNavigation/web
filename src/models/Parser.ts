@@ -5,6 +5,15 @@ import {RoomDto} from './data/types/dto.ts'
 export class Parser {
 	static fillRoomData(inRoom: RoomDto, plan: PlanData): RoomData | null {
 		const type = inRoom.type as RoomType
+		const tabletText = (() => {
+			if(!inRoom.tabletText || inRoom.tabletText === '-' || inRoom.tabletText === '—') return ''
+			return inRoom.tabletText
+		})()
+		const numberOrTitle = (() => {
+			if(!inRoom.numberOrTitle || inRoom.numberOrTitle === '-' || inRoom.numberOrTitle === '—') return ''
+			return inRoom.numberOrTitle
+		})()
+
 		const icon: IconLink | null = function () {
 			switch (type) {
 				case "Администрация":
@@ -54,10 +63,10 @@ export class Parser {
 				return `${plan.corpus.location.short}, Корпус ${plan.corpus.title}, ${plan.floor}-й этаж`;
 			}
 
-			if (inRoom.tabletText && inRoom.tabletText !== '') {
+			if (tabletText) {
 				let title = ''
-				if (inRoom.numberOrTitle && inRoom.numberOrTitle !== '-') title = inRoom.numberOrTitle
-				title += ` — ${inRoom.tabletText}`
+				if (numberOrTitle) title = numberOrTitle
+				title += ` — ${tabletText}`
 				return {
 					title: title,
 					subTitle: inRoom.addInfo ? inRoom.addInfo.trim() : ''
@@ -70,7 +79,7 @@ export class Parser {
 				}
 			if (inRoom.type === 'Лестница') {
 				let title = ''
-				if (inRoom.numberOrTitle && inRoom.numberOrTitle !== '-') title = `${inRoom.numberOrTitle} лестница`
+				if (numberOrTitle && numberOrTitle !== '-') title = `${numberOrTitle} лестница`
 				else title = 'Лестница'
 				return {
 					title: title,
@@ -82,10 +91,11 @@ export class Parser {
 				subTitle: ''
 			}
 			return {
-				title: inRoom.numberOrTitle,
+				title: numberOrTitle,
 				subTitle: ''
 			}
 		}()
+
 		if (!inRoom.id.startsWith('!'))
 			return {
 				id: inRoom.id,

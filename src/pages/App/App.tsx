@@ -15,6 +15,9 @@ import WayInfo from '../../components/layouts/BottomLayer/WayInfo/WayInfo.tsx'
 import {IconLink} from '../../constants/IconLink.ts'
 import Toast from '../../components/common/Toast/Toast.tsx'
 import {appConfig} from '../../appConfig.ts'
+import {userStore} from '../../store/useUserStore.ts'
+import axios from 'axios'
+import {statisticApi} from '../../api/statisticApi.ts'
 
 function App() {
 	const activeLayout = useAppStore(state => state.activeLayout);
@@ -28,9 +31,22 @@ function App() {
 		}
 		useDataStore.getState().init();
 		// Удаляем возможность параномирования пальцами
-		appRef.current.addEventListener("touchmove", (e) => {
-			e.preventDefault()
-		})
+		if(appRef.current)
+			appRef.current.addEventListener("touchmove", (e) => {
+				e.preventDefault()
+			})
+	}, []);
+
+	useEffect(() => {
+		(async () => {
+
+			if(!userStore().userId) {
+				const userId = await statisticApi.getUserToken()
+				userStore().setUserId(userId)
+			}
+			void statisticApi.sendSiteVisit()
+
+		})()
 	}, []);
 
 	return (

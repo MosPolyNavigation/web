@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 interface MenuItemProps {
 	isFirst?: boolean;
-	iconLink?: IconLink;
+	iconLink?: IconLink | null;
 	color?: Color;
 	text: string;
 	addText?: string;

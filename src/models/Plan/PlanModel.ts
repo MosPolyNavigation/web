@@ -1,7 +1,9 @@
-import {Id, PlanData, RoomModel} from '../../constants/types.ts';
-import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts';
-import cl from '../../components/layouts/Plan/PlanLayout.module.scss';
-import {appStore} from "../../store/useAppStore.ts";
+import {Id, PlanData, RoomModel} from '../../constants/types.ts'
+import {copyAttribute, virtualCircleSVGEl} from '../../functions/planFunctions.ts'
+import cl from '../../components/layouts/Plan/PlanLayout.module.scss'
+import {appStore} from '../../store/useAppStore.ts'
+import {statisticApi} from '../../api/statisticApi.ts'
+import React from 'react'
 
 export class PlanModel {
 	readonly rooms: Map<Id, RoomModel>;
@@ -24,7 +26,14 @@ export class PlanModel {
 		});
 
 		function addUnknownToastClick(spaceEl: Element) {
-			spaceEl.addEventListener('click', () => {
+			spaceEl.addEventListener('click', (e) => {
+				//Если есть активный маршрут, аудитория не выделяется
+				if(appStore().queryService.steps)
+					return
+				const elementId = (e?.target as HTMLElement)?.id
+				if(elementId) {
+					void statisticApi.sendSelectRoom(elementId, false)
+				}
 				appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
 			})
 		}

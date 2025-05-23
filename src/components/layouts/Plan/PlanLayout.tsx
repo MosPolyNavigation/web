@@ -8,6 +8,8 @@ import {RoomModel} from "../../../constants/types.ts";
 import {getSvgLink} from "../../../functions/planFunctions.ts";
 import {ReactZoomPanPinchContentRef, TransformComponent, TransformWrapper} from 'react-zoom-pan-pinch'
 import {PlanModel} from '../../../models/Plan/PlanModel.ts'
+import {userStore} from '../../../store/useUserStore.ts'
+import {statisticApi} from '../../../api/statisticApi.ts'
 
 const PlanLayout: FC = () => {
 	const planSvgRef = useRef<null | SVGSVGElement>(null)
@@ -23,7 +25,10 @@ const PlanLayout: FC = () => {
 		return null;
 	}, [currentPlan]);
 
-	function roomClickHandler(room: RoomModel) {
+	async function roomClickHandler(room: RoomModel) {
+		//Если есть активный маршрут, аудитория не выделяется
+		if(appStore().queryService.steps)
+			return
 		if (appStore().selectedRoomId !== room.roomId) {
 			appStore().changeSelectedRoom(room.roomId)
 		} else {
@@ -41,7 +46,7 @@ const PlanLayout: FC = () => {
 					appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl, roomClickHandler) //Установка новой модели-плана в стор приложения
 					//Сохранение текущего плана в LocalStorage
 					localStorage.setItem('last-plan', currentPlan.id)
-					localStorage.setItem('first-plan-setting-date', String(Date.now()))
+					localStorage.setItem('last-plan-setting-date', String(Date.now()))
 					if(transformWrapperRef.current) transformWrapperRef.current.resetTransform(1)
 					// setTimeout(() => {
 					// }, 1000)
@@ -82,7 +87,7 @@ const PlanLayout: FC = () => {
 					primaryWayLength: currentStep.distance
 				}
 			}
-		}  
+		}
 		return {
 			primaryWayPathD: '',
 			primaryWayLength: 0
