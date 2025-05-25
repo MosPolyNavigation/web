@@ -1,0 +1,58 @@
+@import '../../../../styles/base';
+
+.spaceInfo {
+  width: 100%;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+
+  .title {
+    @extend %text-3;
+    margin-right: toRem(30);
+
+    @media (min-width: 900px) {
+      order: 2;
+      margin-top: $size-20;
+    }
+
+    .spaceIcon {
+      display: inline-block;
+      margin-right: $size-10;
+      position: relative;
+      top: 3px;
+    }
+  }
+
+  .location {
+    color: $color-4;
+    margin-bottom: $size-15;
+
+    @media (min-width: 900px) {
+      display: none;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: $size-10;
+
+    .heartBtn {
+      margin-right: auto;
+    }
+
+    @media (width <= 900px) {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: $size-40;
+    }
+
+    @media (min-width: 992px) {
+      .heartBtn {
+        margin: unset;
+      }
+    }
+  }
+}

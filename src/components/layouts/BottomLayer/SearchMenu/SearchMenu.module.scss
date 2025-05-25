@@ -1,0 +1,47 @@
+@import '../../../../styles/base';
+
+.searchMenu {
+  margin-bottom: calc($size-10 * 7);
+  width: 100%;
+  height: 100%;
+
+  //background-color: $color-1;
+
+  display: flex;
+  flex-direction: column;
+  @media (width > 900px) {
+    flex-direction: column-reverse;
+  }
+  justify-content: space-between;
+  gap: $size-20;
+
+  .results {
+    height: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    padding-bottom: $size-20;
+    @media (width > 900px) {
+      flex-direction: column;
+    }
+    overflow-y: scroll;
+
+    //background-color: #1D253A;
+  }
+
+  .quickActions {
+    display: none;
+    //display: flex;
+    gap: $size-10;
+    flex-wrap: nowrap;
+    height: fit-content;
+
+    //background-color: #63E3D4;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    @media (max-width: 992px) {
+      scrollbar-width: none;
+    }
+  }
+}

@@ -1,0 +1,84 @@
+@import '../../../styles/base';
+
+.bottomLayer {
+  //noinspection CssInvalidPropertyValue
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  //noinspection CssInvalidPropertyValue
+  top: calc(100dvh - toRem(129));
+  pointer-events: auto;
+  @extend %shadow-default;
+  transition: all ease 300ms;
+  background-color: $color-2;
+  @extend %border-default;
+  display: flex;
+  flex-direction: column;
+  padding: 0 $size-20;
+
+  @media (width <= 900px) {
+    inset: 0;
+    height: 100%;
+    min-height: calc(100dvh - $size-20);
+    //noinspection CssInvalidPropertyValue
+    translate: 0 calc(100dvh - toRem(120));
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    &.hidden {
+      translate: 0 100dvh;
+      box-shadow: none;
+    }
+
+    &.expanded {
+      translate: 0 calc($size-20);
+      transition: all ease 500ms;
+
+      @media (orientation: portrait) {
+        -moz-transition: none;
+      }
+    }
+  }
+  
+  @media (width > 900px) {
+    width: toRem(340);
+    //height: toRem(180);
+    height: 60%;
+    overflow-y: scroll;
+    top: toRem(130) !important;
+    left: $size-10;
+    translate: 0 ;
+    transition: all 500ms ease;
+
+    &.expanded {
+      height: 60%;
+    }
+
+    &.hidden {
+      height: 0;
+      border: none;
+
+      * {
+        visibility: hidden;
+      }
+    }
+
+  }
+
+  .slider {
+    width: $size-40;
+    height: toRem(3);
+    margin: $size-10 auto toRem(7) auto;
+    background-color: $color-3;
+  }
+
+  .closeBtn {
+    z-index: 1;
+    position: absolute;
+    top: $size-20;
+    right: $size-20;
+  }
+}

@@ -1,0 +1,8 @@
+@use "sass:math";
+
+@function toRem($value) {
+  //$remValue: math.div($value, 8) + rem;
+  //TODO вернуть 14
+  $remValue: math.div($value, 14) + rem;
+  @return $remValue;
+}

@@ -1,0 +1,40 @@
+@import '../../../styles/base';
+
+.toast {
+  position: absolute;
+  bottom: toRem(80);
+  z-index: 2;
+
+  background-color: $color-2;
+  //border: 1px solid $color-3;
+  @extend %border-default;
+  @extend %shadow-default;
+  padding: toRem(8) toRem(20);
+  display: flex;
+  gap: toRem(15);
+  //border-radius: toRem(20);
+  align-items: center;
+
+  // Чтобы просто было снизу пока добавил абсолютное позиционирование
+
+  transition: all 300ms ease;
+
+  &.hidden {
+    translate: 0 toRem(15);
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.toastIcon {
+  min-width: toRem(30);
+  min-height: toRem(30);
+}
+
+.toastText {
+  color: $color-5;
+
+  font-size: toRem(14);
+  font-weight: 500;
+}

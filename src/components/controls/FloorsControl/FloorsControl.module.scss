@@ -1,0 +1,73 @@
+@import '../../../styles/base';
+
+.floorControl {
+	width: $size-40;
+	height: fit-content;
+	//min-height: toRem(40 * 3.5);
+	//TODO: Сделать чтобы было адаптивно макс высота при маленьких экранах
+	//max-height: toRem(40 * 4.5);
+	background: $color-2;
+	color: $color-4;
+	padding: toRem(2);
+	@extend %border-default;
+	@extend %shadow-default;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	gap: $size-5;
+	overflow-y: scroll;
+	scrollbar-width: none;
+	position: relative;
+	pointer-events: auto;
+	left: 0;
+	transition: opacity 250ms ease, left 500ms ease;
+
+	@media (width > 900px) {
+		&.bottomCardExpanded {
+			left: toRem(350);
+		}
+	}
+
+	&.invisible {
+		opacity: 0;
+		user-select: none;
+		pointer-events: none;
+	}
+
+	.floorNumber {
+		width: toRem(34);
+		height: toRem(34);
+		border-radius: 50%;
+		color: $color-4;
+		font-size: toRem(20);
+		line-height: toRem(20);
+		font-weight: 400;
+		padding: toRem(7);
+		text-align: center;
+		z-index: 1;
+		transition: color 500ms ease, background-color 150ms ease;
+
+		&.current {
+			color: $color-2;
+		}
+	}
+
+	.circle {
+		position: absolute;
+		left: toRem(2);
+		width: toRem(34);
+		height: toRem(34);
+		background-color: $ext-color-blue;
+		border-radius: 50%;
+		z-index: 0;
+		transition: bottom 500ms ease;
+		----floors-circle-offset-step: 0;
+		bottom: calc(toRem(2) + toRem(34 + 5) * var(--floors-circle-offset-step));
+	}
+}
+
+@media (hover: hover) {
+	.floorNumber:hover:not(.current) {
+		background-color: $color-hover;
+	}
+}

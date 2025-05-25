@@ -1,0 +1,90 @@
+@import '../../../styles/base';
+
+.button {
+  @extend %border-default;
+  @extend %shadow-default;
+  background-color: $color-2;
+  transition: all 150ms ease, opacity 250ms ease;
+  pointer-events: auto;
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-wrap: nowrap;
+
+
+
+  &:disabled {
+    color: $color-4;
+    pointer-events: none;
+  }
+
+  &.invisible {
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &.sizeL {
+    height: $size-40;
+    //min-width: $size-40;
+    //width: fit-content;'
+    flex-basis: $size-40;
+    padding: calc($size-10 - toRem(1));
+    gap: $size-5;
+    @extend %text-3;
+  }
+
+  &.sizeS {
+    height: calc($size-40 - $size-10);
+    padding: 0 toRem(6);
+    @extend %text-2;
+    gap: $size-5;
+
+    &:has(.text) {
+      padding-left: toRem(13);
+      padding-right: toRem(13);
+
+      @media (min-width: 992px) {
+        .text {
+          top: -1px;
+        }
+      }
+    }
+  }
+
+  &.current {
+    background-color: $color-active;
+    border-color: #47567B;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .text {
+    position: relative;
+    top: 0.4px;
+
+    left: 0.4px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background-color: $color-hover;
+
+    &.current {
+
+      background-color: #252f4b;
+    }
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .button:active {
+    background-color: $color-hover;
+    scale: 0.95;
+  }
+}

@@ -1,0 +1,43 @@
+@import "functions";
+
+/*        COLORS        */
+
+
+$color-1: #131416; //background
+$color-2: #1C1F26; //dark
+$color-active: #1D253A;
+$color-hover: #2B2E36;
+$color-3: #4C515C; //highlight
+$color-4: #A0A4AD; //light
+$color-5: #D9D9D9; //white
+
+/*        EXTENDS COLORS        */
+
+$ext-color-blue: #9CBBFF;
+$ext-color-cyan: #63E3D4;
+$ext-color-way: #6CDEA7;
+$ext-color-green: #9CD9BC;
+
+/*        SIZES        */
+
+$size-5: toRem(5);
+$size-10: toRem(10);
+$size-15: toRem(15);
+$size-20: toRem(20);
+$size-40: toRem(40);
+$inf: 10000px;
+
+/*        INHERITANCE EXTENDS        */
+//InheritanceExtends
+%border-default {
+  border: $color-3 1px solid;
+  //border: $color-3 toRem(1) solid;
+  border-radius: $size-20;
+}
+
+%shadow-default {
+  box-shadow: 0 0 8px 0 rgba(19, 20, 22, 0.50);
+}
+
+/*        DURATION        */
+$search-anim-dur: 500ms
