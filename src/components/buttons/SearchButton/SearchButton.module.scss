@@ -37,7 +37,6 @@
 
     transition: all $search-anim-dur ease;
 
-
     .secondStroke {
       position: relative;
       border: $color-2 toRem(2) solid;
@@ -120,7 +119,7 @@
         }
         to {
           //visibility: visible;
-           opacity: 1;
+          opacity: 1;
         }
       }
     }

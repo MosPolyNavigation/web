@@ -4,16 +4,15 @@
   @extend %border-default;
   @extend %shadow-default;
   background-color: $color-2;
-  transition: all 150ms ease, opacity 250ms ease;
+  transition:
+    all 150ms ease,
+    opacity 250ms ease;
   pointer-events: auto;
-
 
   display: flex;
   justify-content: center;
   align-items: center;
   text-wrap: nowrap;
-
-
 
   &:disabled {
     color: $color-4;
@@ -56,7 +55,7 @@
 
   &.current {
     background-color: $color-active;
-    border-color: #47567B;
+    border-color: #47567b;
     pointer-events: none;
     user-select: none;
   }
@@ -76,7 +75,6 @@
     background-color: $color-hover;
 
     &.current {
-
       background-color: #252f4b;
     }
   }

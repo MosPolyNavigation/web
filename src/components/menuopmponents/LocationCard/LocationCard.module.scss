@@ -43,10 +43,10 @@
   justify-content: center;
   gap: 0;
 
-  animation: onLoadAnimation 50ms 100ms forwards, scaleAnimation 400ms 100ms forwards ease-out;
+  animation:
+    onLoadAnimation 50ms 100ms forwards,
+    scaleAnimation 400ms 100ms forwards ease-out;
   @extend %cardTransition;
-
-
 
   &.disabled {
     .titleWrapper {
@@ -94,8 +94,6 @@
       }
     }
   }
-
-
 }
 
 .locationCard.expanded {
@@ -111,5 +109,4 @@
       flex-grow: 0;
     }
   }
-
 }

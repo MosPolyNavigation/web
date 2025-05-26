@@ -1,22 +1,21 @@
-@import "functions";
+@import 'functions';
 
 /*        COLORS        */
 
-
 $color-1: #131416; //background
-$color-2: #1C1F26; //dark
-$color-active: #1D253A;
-$color-hover: #2B2E36;
-$color-3: #4C515C; //highlight
-$color-4: #A0A4AD; //light
-$color-5: #D9D9D9; //white
+$color-2: #1c1f26; //dark
+$color-active: #1d253a;
+$color-hover: #2b2e36;
+$color-3: #4c515c; //highlight
+$color-4: #a0a4ad; //light
+$color-5: #d9d9d9; //white
 
 /*        EXTENDS COLORS        */
 
-$ext-color-blue: #9CBBFF;
-$ext-color-cyan: #63E3D4;
-$ext-color-way: #6CDEA7;
-$ext-color-green: #9CD9BC;
+$ext-color-blue: #9cbbff;
+$ext-color-cyan: #63e3d4;
+$ext-color-way: #6cdea7;
+$ext-color-green: #9cd9bc;
 
 /*        SIZES        */
 
@@ -36,8 +35,8 @@ $inf: 10000px;
 }
 
 %shadow-default {
-  box-shadow: 0 0 8px 0 rgba(19, 20, 22, 0.50);
+  box-shadow: 0 0 8px 0 rgba(19, 20, 22, 0.5);
 }
 
 /*        DURATION        */
-$search-anim-dur: 500ms
+$search-anim-dur: 500ms;

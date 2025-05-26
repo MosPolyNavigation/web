@@ -29,7 +29,6 @@
     justify-content: center;
   }
 
-
   &.searchOpen {
     z-index: 3;
     justify-content: space-between;
@@ -44,5 +43,4 @@
     padding-left: calc($size-10 + toRem(0.5));
     padding-right: calc($size-10 - toRem(2.5));
   }
-
 }

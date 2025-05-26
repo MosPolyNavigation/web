@@ -16,11 +16,11 @@ $floor-animation-duration: 500ms;
     translate: 0 $size-40;
 
     &.toUp {
-      animation: toUp $floor-animation-duration ease-in-out forwards ;
+      animation: toUp $floor-animation-duration ease-in-out forwards;
     }
 
     &.toDown {
-      animation: toDown $floor-animation-duration ease-in-out forwards ;
+      animation: toDown $floor-animation-duration ease-in-out forwards;
     }
   }
 

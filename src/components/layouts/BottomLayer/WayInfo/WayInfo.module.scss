@@ -1,11 +1,9 @@
 @import '../../../../styles/base';
 
-
 .wayInfoWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
 }
 
 .wayInfoContent {
@@ -29,28 +27,28 @@
 }
 
 .wayStepsList {
-    display: flex;
-    flex-direction: column;
-    gap: toRem(15);
-    padding-bottom: toRem(10);
-    margin-top: toRem(5);
+  display: flex;
+  flex-direction: column;
+  gap: toRem(15);
+  padding-bottom: toRem(10);
+  margin-top: toRem(5);
 }
 
 .wayStepsItem {
-    display: flex;
-    gap: toRem(15);
-    height: toRem(35);
-    align-items: center;
-    position: relative;
+  display: flex;
+  gap: toRem(15);
+  height: toRem(35);
+  align-items: center;
+  position: relative;
 }
 
 .wayStepsIcon {
 }
 
 .wayStepsText {
-    color: $color-4;
-    font-size: toRem(14);
-    font-weight: 500;
+  color: $color-4;
+  font-size: toRem(14);
+  font-weight: 500;
 }
 
 .wayStepsItem::before,
@@ -67,14 +65,18 @@
   color: $color-3;
   top: -4px;
   left: 9px;
-  box-shadow: 0 0 0 0, 0 7px 0 0;
+  box-shadow:
+    0 0 0 0,
+    0 7px 0 0;
 }
 
 .wayStepsItem::after {
   color: $color-3;
   bottom: 0px;
   left: 9px;
-  box-shadow: 0 0 0 0, 0 7px 0 0;
+  box-shadow:
+    0 0 0 0,
+    0 7px 0 0;
 }
 
 .wayStepsItem:first-child {
@@ -82,7 +84,6 @@
     display: none;
   }
 }
-
 
 .wayStepsItem:last-child {
   &::after {

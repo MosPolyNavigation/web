@@ -1,6 +1,5 @@
 @import '../../../styles/base';
 
-
 .waySelectorButtonWrapper {
   display: flex;
   justify-content: center;
@@ -14,9 +13,7 @@
   pointer-events: auto;
   user-select: none;
   padding: toRem(2);
-
 }
-
 
 .waySelectorButton {
   display: flex;
@@ -33,7 +30,6 @@
   pointer-events: auto;
   user-select: none;
   overflow: hidden;
-
 }
 
 .waySelectorContent {
@@ -44,7 +40,8 @@
   width: 100%;
 }
 
-.waySelectorIcon {}
+.waySelectorIcon {
+}
 
 .buttonText {
   white-space: nowrap;
@@ -75,5 +72,3 @@
     pointer-events: none;
   }
 }
-
-

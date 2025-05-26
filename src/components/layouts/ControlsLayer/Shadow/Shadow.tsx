@@ -1,12 +1,8 @@
-import {FC} from 'react';
-import cl from './Shadow.module.scss';
+import { FC } from 'react'
+import cl from './Shadow.module.scss'
 
 const Shadow: FC = () => {
-	return (
-		<div className={cl.shadow}>
+  return <div className={cl.shadow}></div>
+}
 
-		</div>
-	);
-};
-
-export default Shadow;
+export default Shadow

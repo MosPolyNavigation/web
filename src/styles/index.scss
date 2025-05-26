@@ -1,6 +1,6 @@
-@use "sass:math";
+@use 'sass:math';
 @import './fonts';
-@import "./base";
+@import './base';
 
 * {
   margin: 0;
@@ -11,7 +11,16 @@
 }
 
 :root {
-  font-family: 'Gilroy', 'Inter', 'Segoe UI', 'Roboto', -apple-system, system-ui, Helvetica, Arial, sans-serif;
+  font-family:
+    'Gilroy',
+    'Inter',
+    'Segoe UI',
+    'Roboto',
+    -apple-system,
+    system-ui,
+    Helvetica,
+    Arial,
+    sans-serif;
   //TODO: ПЕРЕД ДЕПЛОЕМ/КОММИТОМ ОТКЛЮЧИТЬ
   font-size: 14px;
   line-height: math.div(18px, 14px) * 1rem;
@@ -34,8 +43,9 @@ html {
   height: 100dvh;
 }
 
-
-a, button, input {
+a,
+button,
+input {
   font: inherit;
   text-decoration: inherit;
   color: inherit;
@@ -51,9 +61,6 @@ button {
     outline: $ext-color-cyan toRem(2) solid;
   }
 }
-
-
-
 
 body {
   display: flex;

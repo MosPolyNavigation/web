@@ -31,8 +31,6 @@
   will-change: translate;
   animation: show ease 300ms;
 
-
-
   &.hidden {
     translate: -100%;
     box-shadow: none;
@@ -54,7 +52,6 @@
     display: flex;
     justify-content: start;
     gap: $size-10;
-
 
     .topLogo {
       margin-top: 0.3rem;
