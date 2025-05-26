@@ -10,6 +10,8 @@ import {ReactZoomPanPinchContentRef, TransformComponent, TransformWrapper} from 
 import {PlanModel} from '../../../models/Plan/PlanModel.ts'
 import {userStore} from '../../../store/useUserStore.ts'
 import {statisticApi} from '../../../api/statisticApi.ts'
+import {dataStore} from '../../../store/useDataStore.ts'
+import chalk from 'chalk'
 
 const PlanLayout: FC = () => {
 	const planSvgRef = useRef<null | SVGSVGElement>(null)
@@ -26,6 +28,15 @@ const PlanLayout: FC = () => {
 	}, [currentPlan]);
 
 	async function roomClickHandler(room: RoomModel) {
+		//Если аудитории нет в таблице помещений, то она не выделяется (кроме режима разработчика)
+		if(!dataStore().rooms.find(roomInfo => roomInfo.id === room.roomId)) {
+			appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь. Уже работаем над этим')
+			if(userStore().isDevelopMode) {
+				console.log(chalk.red(`Помещения с id ${chalk.underline(room.roomId)} нет в таблице помещений`))
+			} else {
+				return
+			}
+		}
 		//Если есть активный маршрут, аудитория не выделяется
 		if(appStore().queryService.steps)
 			return

@@ -48,6 +48,9 @@ type CircleId = Id
 
 export type PlanEntrances = [RoomId, CircleId]
 
+/**
+ * Тип, представляющий помещение **как элемент плана**, то есть его svg-элемент, кружочек входа
+ */
 export type RoomModel = {
 	roomId: Id
 	roomEl: SVGRectElement | SVGPathElement

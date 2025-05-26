@@ -21,7 +21,7 @@ export class PlanModel {
 
 		planSvgEl.innerHTML = virtualSvg.innerHTML; //Установка внутреннего содержимого отображаемого свг из спаршенного
 
-		['g#Walls', 'g#Textes', '#gEntrances', 'g#Icons'].forEach(selector => {
+		['g#Walls', 'g#Textes', 'g#Texts', '#gEntrances', 'g#Icons'].forEach(selector => {
 			this.planSvgEl.querySelector(selector)?.classList?.add(cl.noSelect);
 		});
 

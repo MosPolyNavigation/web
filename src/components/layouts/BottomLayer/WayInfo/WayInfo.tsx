@@ -21,12 +21,13 @@ function WayInfo(props: Props) {
 	const roomFrom = useMemo(() => rooms.find(room => room.id === queryService.from), [queryService, rooms]);
 	const roomTo = useMemo(() => rooms.find(room => room.id === queryService.to), [queryService, rooms]);
 
+	//TODO: добавить "неизвестно" для помещений которых нет в таблице
 	return (
 		<div className={cl.wayInfoWrapper}>
 
 			<div className={cl.wayInfoContent}>
 				<WaySelectorButton
-					text={roomFrom.title} baseText={"Откуда"} icon={roomFrom.icon}
+					text={roomFrom ? roomFrom.title : null} baseText={"Откуда"} icon={roomFrom ? roomFrom.icon : null}
 					baseIcon={IconLink.FROM}
 					onClick={() => {
 						appStore().controlBtnClickHandler(BtnName.SEARCH)
@@ -40,7 +41,7 @@ function WayInfo(props: Props) {
 				</button>
 
 				<WaySelectorButton
-					text={roomTo.title} baseText={"Откуда"} icon={roomTo.icon}
+					text={roomTo ? roomTo.title : null} baseText={"Откуда"} icon={roomTo ? roomTo.icon : null}
 					baseIcon={IconLink.FROM}
 					onClick={() => {
 						appStore().controlBtnClickHandler(BtnName.SEARCH)
