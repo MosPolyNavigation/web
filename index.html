@@ -10,19 +10,10 @@
 	<script defer>
 		let isTouch = false
 		
-		setInterval(() => {
-			window.visualViewport.scale = 1
-		}, 1000)
-		
 		window.visualViewport.addEventListener('resize', event => {
 			let height = event.target.height
 			let scale = event.target.scale
 			document.body.style.height = (height * scale) + 'px'
-			// document.getElementById('root').style.height = (height * scale) + 'px'
-			window.scrollTo(0,0)
-			setTimeout(() => {
-				window.scrollTo(0,0)
-			}, 1000)
 		})
 		
 		window.addEventListener('scroll', event => {
@@ -31,18 +22,18 @@
 			}
 		})
 		
-		// window.addEventListener('touchend', (e) => {
-		// 	if (e.touches.length === 0) {
-		// 		isTouch = false
-		// 	}
-		// 	window.scrollTo(0,0)
-		// })
+		window.addEventListener('touchend', (e) => {
+			if (e.touches.length === 0) {
+				isTouch = false
+			}
+			window.scrollTo(0,0)
+		})
 		
 		window.addEventListener('touchstart', () => {
 			isTouch = true
 		})
 	</script>
-  <script type="module" crossorigin src="/web/assets/index-B91BoNif.js"></script>
+  <script type="module" crossorigin src="/web/assets/index-CMve2WJ1.js"></script>
   <link rel="stylesheet" crossorigin href="/web/assets/index-DqjWGn7B.css">
 </head>
 <body>
