@@ -1,42 +1,42 @@
 <!doctype html>
 <html lang="ru">
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
- 	<meta name="yandex-verification" content="8755f23652bde319" />
-  	<meta name="google-site-verification" content="iwPZYvxDo8LAogQ2zxvP8Ae0gahegPP5hP1MIGtQ1n0" />
-	<title>mpu nav</title>
-	<link rel="shortcut icon" href="/web/img/logo.png" type="image/x-icon">
-	<script defer>
-		let isTouch = false
-		
-		window.visualViewport.addEventListener('resize', event => {
-			let height = event.target.height
-			let scale = event.target.scale
-			document.body.style.height = (height * scale) + 'px'
-		})
-		
-		window.addEventListener('scroll', event => {
-			if (!isTouch) {
-				window.scrollTo(0, 0)
-			}
-		})
-		
-		window.addEventListener('touchend', (e) => {
-			if (e.touches.length === 0) {
-				isTouch = false
-			}
-			window.scrollTo(0,0)
-		})
-		
-		window.addEventListener('touchstart', () => {
-			isTouch = true
-		})
-	</script>
-  <script type="module" crossorigin src="/web/assets/index-CtTtWGLf.js"></script>
-  <link rel="stylesheet" crossorigin href="/web/assets/index-DqjWGn7B.css">
-</head>
-<body>
-<div id="root"></div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="yandex-verification" content="8755f23652bde319" />
+    <meta name="google-site-verification" content="iwPZYvxDo8LAogQ2zxvP8Ae0gahegPP5hP1MIGtQ1n0" />
+    <title>mpu nav</title>
+    <link rel="shortcut icon" href="/web/img/logo.png" type="image/x-icon" />
+    <script defer>
+      let isTouch = false
+
+      window.visualViewport.addEventListener('resize', (event) => {
+        let height = event.target.height
+        let scale = event.target.scale
+        document.body.style.height = height * scale + 'px'
+      })
+
+      window.addEventListener('scroll', (event) => {
+        if (!isTouch) {
+          window.scrollTo(0, 0)
+        }
+      })
+
+      window.addEventListener('touchend', (e) => {
+        if (e.touches.length === 0) {
+          isTouch = false
+        }
+        window.scrollTo(0, 0)
+      })
+
+      window.addEventListener('touchstart', () => {
+        isTouch = true
+      })
+    </script>
+    <script type="module" crossorigin src="/web/assets/index-DRWYgqWt.js"></script>
+    <link rel="stylesheet" crossorigin href="/web/assets/index-BP-5D4Y0.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
