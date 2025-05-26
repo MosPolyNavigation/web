@@ -10,11 +10,11 @@
   .filler {
     flex-grow: 0.5;
 
+    transition: flex-grow $search-anim-dur ease-out;
+
     @media (width > 900px) {
       display: none;
     }
-
-    transition: flex-grow $search-anim-dur ease-out;
 
     &.fillerInner {
       transition: flex-grow 300ms ease;
@@ -24,9 +24,6 @@
   .searchButton {
     height: $size-40;
     width: toRem(140);
-    @media (width > 900px) {
-      width: toRem(290);
-    }
     @extend %border-default;
     @extend %shadow-default;
     background-color: $color-1;
@@ -36,6 +33,10 @@
     user-select: none;
 
     transition: all $search-anim-dur ease;
+
+    @media (width > 900px) {
+      width: toRem(290);
+    }
 
     .secondStroke {
       position: relative;

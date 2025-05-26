@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import cl from './IconButton.module.scss'
 import { IconLink } from '../../../constants/IconLink.ts'
 import Icon from '../../common/Icon/Icon.tsx'
@@ -9,7 +9,7 @@ interface IconButtonProps {
   iconLink: IconLink
   color?: Color
   className?: string
-  onClick?: (e) => void
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 // Можно добавить размеры

@@ -10,7 +10,7 @@ type Props = {
   baseIcon: IconLink
   icon: IconLink | null | undefined
   onClick?: () => void
-  onCrossClick?: () => void
+  onCrossClick: () => void
 }
 
 function WaySelectorButton(props: Props) {

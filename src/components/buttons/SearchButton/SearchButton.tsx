@@ -8,7 +8,7 @@ import classNames from 'classnames'
 import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 
 interface SearchButtonProps {
-  onClick: () => void
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
   classNameExt?: string
   expanded: boolean
 }
@@ -18,7 +18,12 @@ const SearchButton: FC<SearchButtonProps> = ({ onClick, classNameExt, expanded }
     <div className={classNames(cl.searchButtonWrapper, { [cl.expanded]: expanded })}>
       <div className={cl.filler}></div>
 
-      <button onClick={!expanded ? onClick : null} className={classNames(cl.searchButton, classNameExt)}>
+      <button
+        onClick={(e) => {
+          if (!expanded) onClick(e)
+        }}
+        className={classNames(cl.searchButton, classNameExt)}
+      >
         <div className={cl.secondStroke}>
           <div className={classNames(cl.filler, cl.fillerInner)}></div>
 
@@ -38,16 +43,15 @@ type Props = {
 
 const SearchInput = (props: Props) => {
   const searchQuery = useAppStore((state) => state.searchQuery)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (props.expanded) {
       setTimeout(() => {
-        inputRef.current.focus()
+        inputRef.current?.focus()
       }, 175)
     }
   }, [props.expanded])
-
-  const inputRef = useRef(null)
 
   return (
     <>
