@@ -5,5 +5,5 @@ export const appConfig = {
   plan: {
     auditoriumFillColor: '#3B3C41',
   },
-  dataUrl: '/web/data/locationsV2.json',
+  dataUrl: 'https://mospolynavigation.github.io/polyna-preprocess/locationsV2.json',
 }

@@ -20,7 +20,7 @@ export class Graph {
   }
 
   private fillVertexesByRawVertexes() {
-    const plansOfLocation = dataStore().plans.filter((plan) => plan.corpus.location === this.location)
+    const plansOfLocation = dataStore().plans.filter((plan) => plan.corpus?.location === this.location)
     plansOfLocation.forEach((plan) => {
       plan.graph.forEach((rawVertex) => {
         this.vertexes.push(
