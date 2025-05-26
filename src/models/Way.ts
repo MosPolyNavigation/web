@@ -18,6 +18,9 @@ export class Way {
 	buildWayAndGetSteps() {
 		const graph = dataStore().graph;
 		if (graph) {
+			if(!(graph.findVertexById(this.from) && graph.findVertexById(this.to))) {
+				throw new Error('В графе не найдена вершина одного из помещений (скорее всего они в разных локациях)')
+			}
 			const wayAndDistance = graph.getShortestWayFromTo(this.from, this.to)
 			this.fullDistance = wayAndDistance.distance
 			// console.log(wayAndDistance)
