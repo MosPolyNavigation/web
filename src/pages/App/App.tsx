@@ -30,10 +30,12 @@ function App() {
       appStore().changeLayout(Layout.LOCATIONS)
     }
     useDataStore.getState().init()
-    // Удаляем возможность параномирования пальцами
+    // TODO: дать возможность уменьшать
     if (appRef.current)
       appRef.current.addEventListener('touchmove', (e) => {
-        e.preventDefault()
+        if (e.touches.length > 1) {
+          e.preventDefault()
+        }
       })
   }, [])
 

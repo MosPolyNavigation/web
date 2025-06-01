@@ -19,6 +19,38 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   const [results, setResults] = useState(false)
   const searchQuery = useAppStore((state) => state.searchQuery)
   const planModel = useAppStore((state) => state.planModel)
+  const componentRef = useRef<HTMLDivElement>()
+  const buttonRef = useRef<HTMLButtonElement>()
+
+  const finalSearchQuery = useMemo(() => {
+    return searchQuery.toLowerCase().replaceAll(' ', '').replaceAll('-', '')
+  }, [searchQuery])
+
+  useEffect(() => {
+    //при скролле убираем фокус с инпута
+    componentRef.current?.addEventListener('touchmove', () => {
+      buttonRef.current?.focus()
+    })
+  }, [])
+
+  const roomsRenderList = useMemo(() => {
+    if (finalSearchQuery) {
+      return rooms
+        .filter(
+          (room) =>
+            room.title.toLowerCase().replaceAll(' ', '').replaceAll('-', '').includes(finalSearchQuery) ||
+            room.subTitle.toLowerCase().replaceAll(' ', '').replaceAll('-', '').includes(finalSearchQuery)
+        )
+        .sort((a, b) => b.title.length - a.title.length)
+      // .sort(
+      //   (a, b) =>
+      //     a.title.toLowerCase().replaceAll(' ', '').replaceAll('-', '').indexOf(finalSearchQuery) -
+      //     b.title.toLowerCase().replaceAll(' ', '').replaceAll('-', '').indexOf(finalSearchQuery)
+      // )
+    } else {
+      return []
+    }
+  }, [rooms, finalSearchQuery])
 
   const nearestRooms: Array<RoomData[]> = useMemo(() => {
     const currentPlan = planModel.plan
@@ -33,10 +65,6 @@ const SearchMenu: FC<SearchMenuProps> = () => {
     console.log(nearestRoomsByTypes)
     return nearestRoomsByTypes
   }, [planModel])
-
-  const finalSearchQuery = useMemo(() => {
-    return searchQuery.toLowerCase().replaceAll(' ', '').replaceAll('-', '')
-  }, [searchQuery])
 
   // Сбрасываем результаты через полсекунды
   useEffect(() => {
@@ -89,27 +117,31 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   }
 
   return (
-    <div className={cl.searchMenu}>
+    <div className={cl.searchMenu} ref={componentRef}>
       <div ref={resultsRef} className={cl.results}>
-        {searchQuery
-          ? rooms
-              .filter(
-                (room) =>
-                  room.title.toLowerCase().replaceAll(' ', '').replaceAll('-', '').includes(finalSearchQuery) ||
-                  room.subTitle.toLowerCase().replaceAll(' ', '').replaceAll('-', '').includes(finalSearchQuery)
-              )
-              .sort((a, b) => b.title.length - a.title.length)
-              .map((room, index) => (
-                <MenuItem
-                  onClick={() => menuItemClickHandler(room)}
-                  text={room.title}
-                  addText={room.subTitle}
-                  iconLink={room.icon}
-                  isFirst={index === 0}
-                  {...resultProps}
-                />
-              ))
-          : nearestRooms.map(
+        <>
+          {/*Кнопка на которую переходит фокус с текстового поля при скролле */}
+          <button ref={buttonRef} className={cl.fakeFocusBtn}>
+            buton
+          </button>
+        </>
+
+        {searchQuery ? (
+          <>
+            {roomsRenderList.map((room, index) => (
+              <MenuItem
+                onClick={() => menuItemClickHandler(room)}
+                text={room.title}
+                addText={room.subTitle}
+                iconLink={room.icon}
+                isFirst={index === 0}
+                {...resultProps}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {nearestRooms.map(
               (roomsByType, index) =>
                 roomsByType.length !== 0 && (
                   <MenuItem
@@ -122,6 +154,8 @@ const SearchMenu: FC<SearchMenuProps> = () => {
                   />
                 )
             )}
+          </>
+        )}
       </div>
 
       <div className={cl.quickActions}>

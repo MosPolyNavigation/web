@@ -1,31 +1,36 @@
 @import '../../../../styles/base';
 
 .searchMenu {
-  margin-bottom: calc($size-10 * 7);
+  margin-bottom: calc($size-40);
+  margin-top: calc($size-20 * 3);
   width: 100%;
   height: 100%;
 
-  //background-color: $color-1;
+  background-color: $color-1;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: $size-20;
 
-  @media (width > 900px) {
-    flex-direction: column-reverse;
+  @media (max-width: 900px) {
+    flex-direction: column;
   }
 
   .results {
     height: 0;
     flex-grow: 1;
     display: flex;
-    flex-direction: column-reverse;
     padding-bottom: $size-20;
     overflow-y: scroll;
+    flex-direction: column;
 
-    @media (width > 900px) {
-      flex-direction: column;
+    @media (max-width: 900px) {
+
+    }
+
+    @media (min-width: 900px) {
+
     }
   }
 
@@ -43,5 +48,11 @@
     @media (max-width: 992px) {
       scrollbar-width: none;
     }
+  }
+
+  .fakeFocusBtn {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
   }
 }

@@ -16,7 +16,7 @@
   flex-direction: column;
   padding: 0 $size-20;
 
-  @media (width <= 900px) {
+  @media (max-width: 900px) {
     inset: 0;
     height: 100%;
     min-height: calc(100dvh - $size-20);
@@ -43,7 +43,7 @@
     }
   }
 
-  @media (width > 900px) {
+  @media (min-width: 900px) {
     width: toRem(340);
     //height: toRem(180);
     height: 60%;

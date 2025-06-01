@@ -30,6 +30,8 @@
   }
 
   &.searchOpen {
+    top: toRem(40);
+    bottom: unset;
     z-index: 3;
     justify-content: space-between;
 

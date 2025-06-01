@@ -24,10 +24,6 @@ function MainLayout() {
 
   useEffect(() => {
     useDataStore.getState().fetchData()
-    appRef.current?.addEventListener('touchmove', (e) => {
-      e.preventDefault()
-    })
-    // если не надо, можно удалить этот обработчик
   }, [])
 
   return (
