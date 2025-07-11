@@ -17,15 +17,20 @@ import Toast from '../../components/common/Toast/Toast.tsx'
 import { appConfig } from '../../appConfig.ts'
 import { userStore } from '../../store/useUserStore.ts'
 import { statisticApi } from '../../api/statisticApi.ts'
+import { useSearchParams } from 'react-router'
 
 function App() {
   const activeLayout = useAppStore((state) => state.activeLayout)
   const queryService = useAppStore((state) => state.queryService)
   const appRef = useRef<HTMLDivElement>(null)
+  const [searchParams] = useSearchParams()
 
   useEffect(() => {
     //Если пользователь не заходил на сайти или заходил больше 85 минут назад, показать начальный экран
-    if (!appConfig.firstPlanSettingDate || Date.now() - appConfig.firstPlanSettingDate > 85 * 60 * 1000) {
+    if (
+      (!appConfig.firstPlanSettingDate || Date.now() - appConfig.firstPlanSettingDate > 85 * 60 * 1000) &&
+      !searchParams.get(appConfig.roomSearchParamName)
+    ) {
       appStore().changeLayout(Layout.LOCATIONS)
     }
     useDataStore.getState().init()
