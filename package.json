@@ -16,13 +16,14 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "1.8.2",
     "chalk": "^5.3.0",
     "classnames": "^2.5.1",
     "mobx": "^6.13.5",
     "mobx-react-lite": "^4.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router": "^7.6.3",
     "react-zoom-pan-pinch": "^3.7.0",
     "zustand": "^5.0.0"
   },
@@ -44,6 +45,6 @@
     "sass": "^1.79.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "6.3.4"
   }
 }

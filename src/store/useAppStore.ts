@@ -8,6 +8,7 @@ import chalk from 'chalk'
 import { Toast } from '../models/Toast.ts'
 import { dataStore } from './useDataStore.ts'
 import { statisticApi } from '../api/statisticApi.ts'
+import { appConfig } from '../appConfig.ts'
 
 type State = {
   /**
@@ -114,13 +115,19 @@ export const useAppStore = create<State & Action>()((set, get) => ({
     } //Скрыть левое меню
   },
 
-  changeSelectedRoom: (roomId) => {
+  changeSelectedRoom: (roomId: string | null) => {
     console.log(roomId)
     if (get().selectedRoomId !== roomId) {
       set({ selectedRoomId: roomId })
+      const url = new URL(window.location.href)
+      const params = new URLSearchParams(url.search)
       if (roomId) {
         void statisticApi.sendSelectRoom(roomId, true)
+        params.set(appConfig.roomSearchParamName, roomId)
+      } else {
+        params.delete(appConfig.roomSearchParamName)
       }
+      window.history.replaceState(null, '', `${url.pathname}?${params.toString()}`)
       const planModel = get().planModel
       if (planModel) {
         planModel.toggleRoom(null, { hideRooms: true, hideEntrances: true })
@@ -145,8 +152,9 @@ export const useAppStore = create<State & Action>()((set, get) => ({
       console.log(`План изменен на ${chalk.underline(plan.id)}`)
       void statisticApi.sendChangePlan(plan.id, first)
       //При смене локации заполняем новый граф
-      if (plan.corpus.location !== dataStore().graph?.location && dataStore().graph)
-        dataStore().setGraphForLocation(plan.corpus.location)
+      // if (plan.corpus.location !== dataStore().graph?.location && dataStore().graph)
+      // Посмотреть в перспективе нао ли это
+      if (plan.corpus.location !== dataStore().graph?.location) dataStore().setGraphForLocation(plan.corpus.location)
     }
   },
 

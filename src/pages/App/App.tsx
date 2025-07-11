@@ -16,7 +16,6 @@ import { IconLink } from '../../constants/IconLink.ts'
 import Toast from '../../components/common/Toast/Toast.tsx'
 import { appConfig } from '../../appConfig.ts'
 import { userStore } from '../../store/useUserStore.ts'
-import axios from 'axios'
 import { statisticApi } from '../../api/statisticApi.ts'
 
 function App() {

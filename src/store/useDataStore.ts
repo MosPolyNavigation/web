@@ -4,6 +4,7 @@ import { CorpusData, LocationData, PlanData, RoomData } from '../constants/types
 import { appConfig } from '../appConfig.ts'
 import { Graph } from '../models/Graph'
 import { getDataFromServerAndParse } from '../models/data/getDataFromServerAndParse.ts'
+import chalk from 'chalk'
 
 type State = {
   /**
@@ -58,15 +59,38 @@ export const useDataStore = create<State & Action>()((set, get) => ({
         rooms: data.rooms,
       }
 
-      const firstPlan: PlanData | undefined = dataStore().plans.find((plan) => plan.id === appConfig.firstPlan)
-      if (!appStore().currentPlan && firstPlan) {
-        appStore().changeCurrentPlan(firstPlan, true)
-        const graphInitLocation = firstPlan.corpus.location
-        if (graphInitLocation) {
-          dataStore().setGraphForLocation(graphInitLocation)
-          // new Way('a-210', 'a-412')
+      let firstPlan: PlanData | undefined = dataStore().plans.find((plan) => plan.id === appConfig.firstPlan)
+      const paramsString = window.location.search
+      const searchParams = new URLSearchParams(paramsString)
+      const roomIdSearchParam = searchParams.get(appConfig.roomSearchParamName)
+      const roomFromSearchParam = get().rooms.find((room) => room.id === roomIdSearchParam)
+      if (roomIdSearchParam) {
+        console.log(`Найден search параметр 'room'`)
+        if (roomFromSearchParam) {
+          console.log(
+            chalk.green.bold(`Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
+          )
+          firstPlan = roomFromSearchParam.plan ?? undefined
+        } else {
+          console.log(
+            chalk.red.bold(`Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
+          )
         }
       }
+      if (firstPlan) {
+        appStore().changeCurrentPlan(firstPlan, true)
+      } else {
+        console.log(chalk.red('Не найден firstPlan для установки'))
+      }
+      if (roomFromSearchParam) {
+        appStore().changeCurrentPlan(roomFromSearchParam.plan, true)
+        appStore().changeSelectedRoom(roomFromSearchParam.id)
+      }
+      // const graphInitLocation = firstPlan.corpus.location
+      // if (graphInitLocation) {
+      //   dataStore().setGraphForLocation(graphInitLocation)
+      //   // new Way('a-210', 'a-412')
+      // }
     })
   },
 
