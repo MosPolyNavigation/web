@@ -41,6 +41,16 @@
         -moz-transition: none;
       }
     }
+
+    &.fullscreen {
+      translate: 0 toRem(70);
+      height: calc(100% - toRem(70));
+      transition: all ease 500ms;
+    }
+
+    &.dragging {
+      transition: none;
+    }
   }
 
   @media (min-width: 900px) {
@@ -55,6 +65,14 @@
 
     &.expanded {
       height: 60%;
+    }
+
+    &.fullscreen {
+      height: calc(100% - toRem(70));
+      width: 100%;
+      top: toRem(70);
+      left: 0;
+      border-radius: 0;
     }
 
     &.hidden {
@@ -72,6 +90,12 @@
     height: toRem(3);
     margin: $size-10 auto toRem(7) auto;
     background-color: $color-3;
+    border-radius: toRem(2);
+    cursor: grab;
+    
+    &:active {
+      cursor: grabbing;
+    }
   }
 
   .closeBtn {
