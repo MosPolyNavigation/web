@@ -56,8 +56,8 @@
   &.current {
     background-color: $color-active;
     border-color: #47567b;
-    pointer-events: none;
-    user-select: none;
+    //pointer-events: none;
+    //user-select: none;
   }
 
   .text {
