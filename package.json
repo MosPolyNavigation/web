@@ -12,7 +12,6 @@
     "lint": "eslint .",
     "host": "vite preview --host",
     "hostshare": "vite preview --host --port 3000",
-    "deploy": "npm run forcebuild && gh-pages -d dist",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -39,7 +38,6 @@
     "eslint-plugin-prettier": "^5.5.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "gh-pages": "^6.3.0",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
     "sass": "^1.89.2",

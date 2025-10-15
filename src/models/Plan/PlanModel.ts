@@ -3,7 +3,8 @@ import { copyAttribute, virtualCircleSVGEl } from '../../functions/planFunctions
 import cl from '../../components/layouts/Plan/PlanLayout.module.scss'
 import { appStore } from '../../store/useAppStore.ts'
 import { statisticApi } from '../../api/statisticApi.ts'
-import React from 'react'
+import { dataStore } from '../../store/useDataStore.ts'
+import { userStore } from '../../store/useUserStore.ts'
 
 export class PlanModel {
   readonly rooms: Map<Id, RoomModel>
@@ -11,25 +12,45 @@ export class PlanModel {
   constructor(
     public plan: PlanData,
     public planSvgEl: SVGSVGElement,
-    virtualSvg: SVGSVGElement | HTMLElement,
-    roomClickHandler: (room: RoomModel) => void
+    virtualSvg: SVGSVGElement | HTMLElement
   ) {
     // @ts-expect-error TS2339
     window.planModel = this
     this.rooms = new Map()
 
-    virtualSvg.querySelector(`g#${plan.id} > rect`)?.remove() //Удаление фона (прямоугольника) верхней вложенности, если он есть
+    this.initializeSvgStructure(virtualSvg)
+    this.setupUnknownElements()
+    this.processSpaces()
+    this.processEntrances()
+    this.assignEntrancesToRooms()
+    this.setupRoomClickHandlers()
+    this.selectInitialRoom()
+  }
 
-    copyAttribute(planSvgEl, virtualSvg, 'viewBox') //Копирование атрибутов из спаршенного изображения в реф-свг на страницу
-    copyAttribute(planSvgEl, virtualSvg, 'xmlns')
-    planSvgEl.setAttribute('fill', 'none')
+  /**
+   * Инициализация структуры SVG
+   */
+  private initializeSvgStructure(virtualSvg: SVGSVGElement | HTMLElement) {
+    virtualSvg.querySelector(`g#${this.plan.id} > rect`)?.remove() //Удаление фона (прямоугольника) верхней вложенности, если он есть
 
-    planSvgEl.innerHTML = virtualSvg.innerHTML //Установка внутреннего содержимого отображаемого свг из спаршенного
-    ;['g#Walls', 'g#Textes', 'g#Texts', '#gEntrances', 'g#Icons'].forEach((selector) => {
+    copyAttribute(this.planSvgEl, virtualSvg, 'viewBox') //Копирование атрибутов из спаршенного изображения в реф-свг на страницу
+    copyAttribute(this.planSvgEl, virtualSvg, 'xmlns')
+    this.planSvgEl.setAttribute('fill', 'none')
+
+    this.planSvgEl.innerHTML = virtualSvg.innerHTML //Установка внутреннего содержимого отображаемого свг из спаршенного
+    
+    // Добавляем классы для элементов, которые не должны выделяться
+    const noSelectSelectors = ['g#Walls', 'g#Textes', 'g#Texts', '#gEntrances', 'g#Icons']
+    noSelectSelectors.forEach((selector) => {
       this.planSvgEl.querySelector(selector)?.classList?.add(cl.noSelect)
     })
+  }
 
-    function addUnknownToastClick(spaceEl: Element) {
+  /**
+   * Настройка обработчиков для неизвестных элементов
+   */
+  private setupUnknownElements() {
+    const addUnknownToastClick = (spaceEl: Element) => {
       spaceEl.addEventListener('click', (e) => {
         //Если есть активный маршрут, аудитория не выделяется
         if (appStore().queryService.steps) return
@@ -45,52 +66,82 @@ export class PlanModel {
     if (unexploredElement) {
       addUnknownToastClick(unexploredElement)
     }
+  }
 
-    for (const spaceEl of this.planSvgEl.getElementById('Spaces').children) {
+  /**
+   * Обработка пространств (помещений)
+   */
+  private processSpaces() {
+    const spacesElement = this.planSvgEl.getElementById('Spaces')
+    if (!spacesElement) return
+
+    for (const spaceEl of spacesElement.children) {
       if (spaceEl.id.startsWith('!')) {
-        addUnknownToastClick(spaceEl)
-      }
-      //Добавление помещения и его id в мап с помещениями
-      else if (['path', 'rect'].includes(spaceEl.tagName)) {
-        this.rooms.set(spaceEl.id, {
-          roomId: spaceEl.id,
-          roomEl: spaceEl as SVGPathElement | SVGCircleElement,
-          entranceEl: virtualCircleSVGEl(), //пусто чтобы не делать проверки
-          entranceId: 'null', //тоже пусто чтобы не делать проверки
-        })
-        spaceEl.removeAttribute('opacity') //Удаление оригинального атрибута, потому что с ним плохо работает transition
-        spaceEl.classList.add(cl.room) //добавляем помещению соответствующий класс, для подсветки
-        setTimeout(() => spaceEl.classList.add(cl.animated), 20) //Добавление класса анимации чуть позже, чтобы успели обновиться свойства
+        this.addUnknownToastClick(spaceEl)
+      } else if (['path', 'rect'].includes(spaceEl.tagName)) {
+        this.addRoom(spaceEl as SVGPathElement | SVGCircleElement)
       }
     }
+  }
 
-    const entrancesIdToEl: Map<Id, SVGCircleElement> = new Map()
-    for (const entranceEl of this.planSvgEl.getElementById('Entrances').children) {
-      // if(entranceEl.tagName === 'circle') {
-      entrancesIdToEl.set(entranceEl.id, entranceEl as SVGCircleElement)
+  /**
+   * Добавление обработчика для неизвестного элемента
+   */
+  private addUnknownToastClick(spaceEl: Element) {
+    spaceEl.addEventListener('click', (e) => {
+      if (appStore().queryService.steps) return
+      const elementId = (e?.target as HTMLElement)?.id
+      if (elementId) {
+        void statisticApi.sendSelectRoom(elementId, false)
+      }
+      appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
+    })
+  }
+
+  /**
+   * Добавление помещения в коллекцию
+   */
+  private addRoom(roomEl: SVGPathElement | SVGCircleElement) {
+    this.rooms.set(roomEl.id, {
+      roomId: roomEl.id,
+      roomEl: roomEl,
+      entranceEl: virtualCircleSVGEl(), //пусто чтобы не делать проверки
+      entranceId: 'null', //тоже пусто чтобы не делать проверки
+    })
+    roomEl.removeAttribute('opacity') //Удаление оригинального атрибута, потому что с ним плохо работает transition
+    roomEl.classList.add(cl.room) //добавляем помещению соответствующий класс, для подсветки
+    setTimeout(() => roomEl.classList.add(cl.animated), 20) //Добавление класса анимации чуть позже, чтобы успели обновиться свойства
+  }
+
+  /**
+   * Обработка входов
+   */
+  private processEntrances() {
+    const entrancesElement = this.planSvgEl.getElementById('Entrances')
+    if (!entrancesElement) return
+
+    for (const entranceEl of entrancesElement.children) {
       entranceEl.classList.add(cl.entrance)
       setTimeout(() => entranceEl.classList.add(cl.animated), 20)
-      // }
+    }
+  }
+
+  /**
+   * Назначение входов помещениям
+   */
+  private assignEntrancesToRooms() {
+    const entrancesIdToEl: Map<Id, SVGCircleElement> = new Map()
+    const entrancesElement = this.planSvgEl.getElementById('Entrances')
+    
+    if (entrancesElement) {
+      for (const entranceEl of entrancesElement.children) {
+        entrancesIdToEl.set(entranceEl.id, entranceEl as SVGCircleElement)
+      }
     }
 
-    function isEntranceOfRoom(
-      entranceEl: HTMLElement | SVGCircleElement,
-      roomEl: HTMLElement | SVGPathElement | SVGRectElement
-    ): boolean {
-      //Функция возвращает, является ли кружочек входа входом в данное помещение
-      const cx = Number(entranceEl.getAttribute('cx'))
-      const cy = Number(entranceEl.getAttribute('cy'))
-      const x = Number(roomEl.getAttribute('x'))
-      const y = Number(roomEl.getAttribute('y'))
-      const width = Number(roomEl.getAttribute('width'))
-      const height = Number(roomEl.getAttribute('height'))
-      return cx >= x && cx <= x + width && cy >= y && cy <= y + height
-    }
-
-    const entrancesFromData: Map<Id, Id> = new Map(plan.entrances) //Достаем данные о входах в помещения на плане из данных
+    const entrancesFromData: Map<Id, Id> = new Map(this.plan.entrances)
 
     for (const [roomId, roomData] of this.rooms) {
-      //заполнение входов в помещения
       if (entrancesFromData.get(roomId)) {
         //если вход задан в данных, взять оттуда
         roomData.entranceId = <string>entrancesFromData.get(roomId)
@@ -99,27 +150,84 @@ export class PlanModel {
         }
       } else {
         //Иначе вычислить (только для прямоугольников)
-        for (const [entranceId, entranceEl] of entrancesIdToEl) {
-          if (isEntranceOfRoom(entranceEl, roomData.roomEl)) {
-            roomData.entranceId = entranceId
-            roomData.entranceEl = entranceEl
-          }
-        }
+        this.findEntranceForRoom(roomData, entrancesIdToEl)
       }
     }
+  }
 
-    // this.testRoomsAndEntrances();
+  /**
+   * Поиск входа для помещения
+   */
+  private findEntranceForRoom(roomData: RoomModel, entrancesIdToEl: Map<Id, SVGCircleElement>) {
+    for (const [entranceId, entranceEl] of entrancesIdToEl) {
+      if (this.isEntranceOfRoom(entranceEl, roomData.roomEl)) {
+        roomData.entranceId = entranceId
+        roomData.entranceEl = entranceEl
+        break // Найден вход, выходим из цикла
+      }
+    }
+  }
 
+  /**
+   * Проверка, является ли вход входом в помещение
+   */
+  private isEntranceOfRoom(
+    entranceEl: HTMLElement | SVGCircleElement,
+    roomEl: HTMLElement | SVGPathElement | SVGRectElement
+  ): boolean {
+    const cx = Number(entranceEl.getAttribute('cx'))
+    const cy = Number(entranceEl.getAttribute('cy'))
+    const x = Number(roomEl.getAttribute('x'))
+    const y = Number(roomEl.getAttribute('y'))
+    const width = Number(roomEl.getAttribute('width'))
+    const height = Number(roomEl.getAttribute('height'))
+    return cx >= x && cx <= x + width && cy >= y && cy <= y + height
+  }
+
+  /**
+   * Настройка обработчиков клика для помещений
+   */
+  private setupRoomClickHandlers() {
     for (const [, room] of this.rooms) {
       room.roomEl.addEventListener('click', () => {
-        roomClickHandler(room)
+        this.handleRoomClick(room)
       })
     }
+  }
 
+  /**
+   * Выбор начального помещения
+   */
+  private selectInitialRoom() {
     const selectedRoomId = appStore().selectedRoomId
     if (selectedRoomId) {
       const room = this.rooms.get(selectedRoomId)
       if (room) this.toggleRoom(room, { activateRoom: true, activateEntrance: true })
+    }
+  }
+
+  /**
+   * Обработчик клика по помещению
+   * @param room Модель помещения, по которому кликнули
+   */
+  private handleRoomClick(room: RoomModel) {
+    //Если аудитории нет в таблице помещений, то она не выделяется (кроме режима разработчика)
+    if (!dataStore().rooms.find((roomInfo: any) => roomInfo.id === room.roomId)) {
+      appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь. Уже работаем над этим')
+      if (userStore().isDevelopMode) {
+        console.log(`Помещения с id ${room.roomId} нет в таблице помещений`)
+      } else {
+        return
+      }
+    }
+    //Если есть активный маршрут, аудитория не выделяется
+    if (appStore().queryService.steps) {
+      return
+    }
+    if (appStore().selectedRoomId !== room.roomId) {
+      appStore().changeSelectedRoom(room.roomId)
+    } else {
+      appStore().changeSelectedRoom(null)
     }
   }
 
