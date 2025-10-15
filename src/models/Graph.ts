@@ -4,7 +4,8 @@ import { LocationData, PlanData } from '../constants/types'
 import chalk from 'chalk'
 
 export class Graph {
-  vertexes: Array<Vertex> = [] //Мапа вершин
+  vertexes: Array<Vertex> = [] //Массив вершин
+  private vertexMap: Map<VertexId, Vertex> = new Map() //Map для быстрого поиска вершин по ID
   readonly location: LocationData
 
   constructor(location: LocationData) {
@@ -23,9 +24,9 @@ export class Graph {
     const plansOfLocation = dataStore().plans.filter((plan) => plan.corpus?.location === this.location)
     plansOfLocation.forEach((plan) => {
       plan.graph.forEach((rawVertex) => {
-        this.vertexes.push(
-          new Vertex(rawVertex.id, rawVertex.x, rawVertex.y, rawVertex.type, rawVertex.neighborData, plan)
-        )
+        const vertex = new Vertex(rawVertex.id, rawVertex.x, rawVertex.y, rawVertex.type, rawVertex.neighborData, plan)
+        this.vertexes.push(vertex)
+        this.vertexMap.set(vertex.id, vertex) // Добавляем в Map для быстрого поиска
       })
     })
   }
@@ -61,7 +62,7 @@ export class Graph {
   }
 
   findVertexById(id: VertexId) {
-    return this.vertexes.find((vertex) => vertex.id === id)
+    return this.vertexMap.get(id) // O(1) поиск вместо O(n)
   }
 
   private addNeighborBoth(vertex1: Vertex, vertex2: Vertex, distance1to2: number, distance2to1: number) {
@@ -148,13 +149,14 @@ export class Graph {
       finals.add(currentVertexID) //помечаем текущую вершину как обработканную
       if (currentVertexID === idVertex2) isEndVertexInFinals = true
       //поиск следующей обрабатываемой вершины (необработанная вершина с наименьшим расстоянием от начала)
+      // Оптимизированный поиск - используем только отфильтрованные вершины
       let minDistance = Infinity
       let nextVertexID = ''
-      for (const [id, distance] of distances) {
-        if (distance < minDistance && !finals.has(id)) {
+      for (const vertex of filteredVertexes) {
+        const distance = distances.get(vertex.id)
+        if (distance !== undefined && distance < minDistance && !finals.has(vertex.id)) {
           minDistance = distance
-          nextVertexID = id
-          // console.log(minDistance, nextVertexID)
+          nextVertexID = vertex.id
         }
       }
       if (minDistance === Infinity)
