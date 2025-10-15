@@ -43,21 +43,21 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
     onDragMove: (clientY, deltaY) => {
       const canMoveUp = bottomCardState !== CardState.FULLSCREEN && deltaY < 0
       const canMoveDown = bottomCardState === CardState.FULLSCREEN && deltaY > 0
-      
+
       if (!canMoveUp && !canMoveDown) {
         return
       }
     },
     onDragEnd: (deltaY) => {
-      const threshold = 50
-      
+      const threshold = 100
+
       if (bottomCardState !== CardState.FULLSCREEN && deltaY < -threshold) {
         setBottomCardState(CardState.FULLSCREEN)
       } else if (bottomCardState === CardState.FULLSCREEN && deltaY > threshold) {
         const newState = activeLayout === Layout.SEARCH ? CardState.EXPANDED : CardState.COLLAPSED
         setBottomCardState(newState)
       }
-    }
+    },
   })
 
   //TODO: переделать на навешивание классов через время
@@ -74,7 +74,7 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
   }
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={layerClassNames}
       style={containerStyle}
