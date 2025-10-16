@@ -45,7 +45,7 @@
       position: absolute;
       left: 0;
       right: 0;
-      top: $size-40;
+      top: toRem(60);
     }
 
     @media (min-width: 992px) {

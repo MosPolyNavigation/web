@@ -2,6 +2,7 @@ export enum CardState {
   HIDDEN = 'HIDDEN',
   COLLAPSED = 'COLLAPSED',
   EXPANDED = 'EXPANDED',
+  FULLSCREEN = 'FULLSCREEN',
 }
 
 export enum Pos {
@@ -51,6 +52,7 @@ export enum Layout {
   LOCATIONS = 'LOCATIONS',
   SEARCH = 'SEARCH',
   MENU = 'MENU',
+  REPORT = 'REPORT',
 }
 
 export enum SearchIndent {
