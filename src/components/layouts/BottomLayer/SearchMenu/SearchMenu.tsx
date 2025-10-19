@@ -8,6 +8,8 @@ import { dataStore, useDataStore } from '../../../../store/useDataStore.ts'
 import { appStore, useAppStore } from '../../../../store/useAppStore.ts'
 import { RoomData, RoomType } from '../../../../constants/types.ts'
 import { QueryService } from '../../../../models/QueryService.ts'
+import { searchRooms } from '../../../../functions/roomSearch.ts'
+import { useDebounce } from '../../../../hooks/useDebounce.ts'
 
 interface SearchMenuProps {
   a?: boolean
@@ -19,12 +21,10 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   const [results, setResults] = useState(false)
   const searchQuery = useAppStore((state) => state.searchQuery)
   const planModel = useAppStore((state) => state.planModel)
-  const componentRef = useRef<HTMLDivElement>()
-  const buttonRef = useRef<HTMLButtonElement>()
+  const componentRef = useRef<HTMLDivElement | null>(null)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
 
-  const finalSearchQuery = useMemo(() => {
-    return searchQuery.toLowerCase().replaceAll(' ', '').replaceAll('-', '')
-  }, [searchQuery])
+  const debouncedSearchQuery = useDebounce(searchQuery, 200)
 
   useEffect(() => {
     //при скролле убираем фокус с инпута
@@ -34,33 +34,27 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   }, [])
 
   const roomsRenderList = useMemo(() => {
-    if (finalSearchQuery) {
-      return rooms
-        .filter(
-          (room) =>
-            room.title.toLowerCase().replaceAll(' ', '').replaceAll('-', '').includes(finalSearchQuery) ||
-            room.subTitle.toLowerCase().replaceAll(' ', '').replaceAll('-', '').includes(finalSearchQuery)
-        )
-        .sort((a, b) => b.title.length - a.title.length)
-      // .sort(
-      //   (a, b) =>
-      //     a.title.toLowerCase().replaceAll(' ', '').replaceAll('-', '').indexOf(finalSearchQuery) -
-      //     b.title.toLowerCase().replaceAll(' ', '').replaceAll('-', '').indexOf(finalSearchQuery)
-      // )
+    if (debouncedSearchQuery.trim()) {
+      return searchRooms(rooms, debouncedSearchQuery, {
+        currentPlan: planModel?.plan || null
+      })
     } else {
       return []
     }
-  }, [rooms, finalSearchQuery])
+  }, [rooms, debouncedSearchQuery, planModel])
 
   const nearestRooms: Array<RoomData[]> = useMemo(() => {
-    const currentPlan = planModel.plan
-    const roomsInCurrentCorpus = dataStore().rooms.filter((room) => room.plan.corpus === currentPlan.corpus)
+    const currentPlan = planModel?.plan
+    if (!currentPlan) return []
+    const roomsInCurrentCorpus = dataStore().rooms.filter((room) => room.plan && room.plan.corpus === currentPlan.corpus)
     const types: RoomType[] = ['Мужской туалет', 'Женский туалет', 'Вход в здание']
     const roomsByTypes = types.map((type) => roomsInCurrentCorpus.filter((room) => room.type === type))
     const nearestRoomsByTypes = roomsByTypes.map((roomsByType) =>
-      roomsByType.sort(
-        (a, b) => Math.abs(currentPlan.floor - a.plan.floor) - Math.abs(currentPlan.floor - b.plan.floor)
-      )
+      roomsByType
+        .filter((r) => r.plan)
+        .sort(
+          (a, b) => Math.abs(currentPlan.floor - (a.plan!.floor)) - Math.abs(currentPlan.floor - (b.plan!.floor))
+        )
     )
     console.log(nearestRoomsByTypes)
     return nearestRoomsByTypes
@@ -126,18 +120,25 @@ const SearchMenu: FC<SearchMenuProps> = () => {
           </button>
         </>
 
-        {searchQuery ? (
+        {debouncedSearchQuery ? (
           <>
-            {roomsRenderList.map((room, index) => (
-              <MenuItem
-                onClick={() => menuItemClickHandler(room)}
-                text={room.title}
-                addText={room.subTitle}
-                iconLink={room.icon}
-                isFirst={index === 0}
-                {...resultProps}
-              />
-            ))}
+            {roomsRenderList.length === 0 ? (
+              <div className={cl.noResults}>
+                <div className={cl.noResultsGif} />
+                <div className={cl.noResultsText}>Ничего не найдено</div>
+              </div>
+            ) : (
+              roomsRenderList.map((room, index) => (
+                <MenuItem
+                  onClick={() => menuItemClickHandler(room)}
+                  text={room.title}
+                  addText={room.subTitle}
+                  iconLink={room.icon}
+                  isFirst={index === 0}
+                  {...resultProps}
+                />
+              ))
+            )}
           </>
         ) : (
           <>
