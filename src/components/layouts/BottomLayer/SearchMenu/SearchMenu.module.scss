@@ -30,6 +30,51 @@
     }
   }
 
+  .noResults {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $size-20;
+  }
+
+  .noResultsGif {
+    width: toRem(140);
+    height: toRem(140);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/img/male-shrug.gif');
+
+    @media (max-width: 992px) {
+      width: toRem(160);
+      height: toRem(160);
+    }
+    @media (max-width: 600px) {
+      width: toRem(180);
+      height: toRem(180);
+    }
+  }
+
+  .noResultsText {
+    @extend %text-2; // base main text
+    font-size: toRem(16);
+    line-height: toRem(20);
+    color: $color-4;
+    text-align: center;
+
+    @media (max-width: 992px) {
+      font-size: toRem(17);
+      line-height: toRem(21);
+    }
+    @media (max-width: 600px) {
+      font-size: toRem(18);
+      line-height: toRem(22);
+    }
+  }
+
   .quickActions {
     display: none;
     //display: flex;
