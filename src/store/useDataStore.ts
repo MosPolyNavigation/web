@@ -5,6 +5,7 @@ import { appConfig } from '../appConfig.ts'
 import { Graph } from '../models/Graph'
 import { getDataFromServerAndParse } from '../models/data/getDataFromServerAndParse.ts'
 import chalk from 'chalk'
+import { QueryService } from '../models/QueryService'
 
 type State = {
   /**
@@ -62,19 +63,43 @@ export const useDataStore = create<State & Action>()((set, get) => ({
       let firstPlan: PlanData | undefined = dataStore().plans.find((plan) => plan.id === appConfig.firstPlan)
       const paramsString = window.location.search
       const searchParams = new URLSearchParams(paramsString)
-      const roomIdSearchParam = searchParams.get(appConfig.roomSearchParamName)
-      const roomFromSearchParam = get().rooms.find((room) => room.id === roomIdSearchParam)
-      if (roomIdSearchParam) {
-        console.log(`Найден search параметр 'room'`)
-        if (roomFromSearchParam) {
-          console.log(
-            chalk.green.bold(`Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
-          )
-          firstPlan = roomFromSearchParam.plan ?? undefined
-        } else {
-          console.log(
-            chalk.red.bold(`Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
-          )
+      // Поддержка маршрута через ?from= & ?to= (нормализация ввода)
+      const norm = (s?: string | null) => (s ? s.trim().toLowerCase() : undefined)
+      const fromParamRaw = searchParams.get(appConfig.fromSearchParamName)
+      const toParamRaw = searchParams.get(appConfig.toSearchParamName)
+      const fromParam = norm(fromParamRaw)
+      const toParam = norm(toParamRaw)
+      const fromRoom = fromParam
+        ? get().rooms.find((room) => room.id.toLowerCase() === fromParam)
+        : undefined
+      const toRoom = toParam
+        ? get().rooms.find((room) => room.id.toLowerCase() === toParam)
+        : undefined
+
+      if (fromParam || toParam) {
+        console.log(`Найдены параметры маршрута: from=${fromParam ?? '-'} to=${toParam ?? '-'}`)
+        // Выбраем стартовый план: приоритет у from, иначе по to
+        const planCandidate = (fromRoom?.plan ?? toRoom?.plan) ?? undefined
+        if (planCandidate) firstPlan = planCandidate
+      } else {
+        // Поддержка прежнего поведения ?room=
+        const roomIdSearchParamRaw = searchParams.get(appConfig.roomSearchParamName)
+        const roomIdSearchParam = norm(roomIdSearchParamRaw)
+        const roomFromSearchParam = roomIdSearchParam
+          ? get().rooms.find((room) => room.id.toLowerCase() === roomIdSearchParam)
+          : undefined
+        if (roomIdSearchParam) {
+          console.log(`Найден search параметр 'room'`)
+          if (roomFromSearchParam) {
+            console.log(
+              chalk.green.bold(`Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
+            )
+            firstPlan = roomFromSearchParam.plan ?? undefined
+          } else {
+            console.log(
+              chalk.red.bold(`Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
+            )
+          }
         }
       }
       if (firstPlan) {
@@ -82,9 +107,28 @@ export const useDataStore = create<State & Action>()((set, get) => ({
       } else {
         console.log(chalk.red('Не найден firstPlan для установки'))
       }
-      if (roomFromSearchParam) {
-        appStore().changeCurrentPlan(roomFromSearchParam.plan, true)
-        appStore().changeSelectedRoom(roomFromSearchParam.id)
+      // Пост-инициализационная логика по выбранным параметрам
+      if (fromParam || toParam) {
+        // Устанавливаем сервис маршрута согласно наличию параметров
+        appStore().setQueryService(new QueryService({
+          from: fromRoom?.id,
+          to: toRoom?.id,
+        }))
+        // Если указан только один (from или to) — выделим это помещение как ориентир
+        const singleRoom = fromRoom ?? toRoom
+        if (singleRoom) {
+          appStore().changeCurrentPlan(singleRoom.plan, true)
+        }
+      } else {
+        const roomIdSearchParamRaw = searchParams.get(appConfig.roomSearchParamName)
+        const roomIdSearchParam = norm(roomIdSearchParamRaw)
+        const roomFromSearchParam = roomIdSearchParam
+          ? get().rooms.find((room) => room.id.toLowerCase() === roomIdSearchParam)
+          : undefined
+        if (roomFromSearchParam) {
+          appStore().changeCurrentPlan(roomFromSearchParam.plan, true)
+          appStore().changeSelectedRoom(roomFromSearchParam.id)
+        }
       }
       // const graphInitLocation = firstPlan.corpus.location
       // if (graphInitLocation) {
