@@ -35,10 +35,6 @@ const ReportPage: React.FC = () => {
 
   const { isSending, succeeded, error, sendReview, reset } = useReviewStore()
 
-  useEffect(() => {
-    reset()
-  }, [reset])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const userId = userStore().userId
@@ -70,8 +66,9 @@ const ReportPage: React.FC = () => {
       setSelectedBuilding('')
       setSelectedFloor('')
       setImage(null)
+      reset()
     }
-  }, [succeeded])
+  }, [succeeded, reset])
 
   if (isLoading) return <div className={cl.reportPage}>Загрузка данных...</div>
 
@@ -143,8 +140,8 @@ const ReportPage: React.FC = () => {
           <Button
             color={Color.BLUE}
             text={isSending ? 'Отправка...' : 'Отправить'}
-            type="submit"
             disabled={isSending}
+            type="submit"
           />
         </div>
         {error && <div className={cl.error}>Ошибка: {error}</div>}
