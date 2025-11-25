@@ -1,5 +1,5 @@
-import { create } from 'zustand'
 import axios from 'axios'
+import { create } from 'zustand'
 
 type ReviewData = {
   image?: File | null
@@ -13,12 +13,16 @@ type State = {
   succeeded: boolean
   error: string | null
   sendReview: (review: ReviewData) => Promise<void>
+  reset: () => void
 }
 
 export const useReviewStore = create<State>((set) => ({
   isSending: false,
   succeeded: false,
   error: null,
+  reset() {
+    set({ isSending: false, succeeded: false, error: null })
+  },
   async sendReview(review) {
     set({ isSending: true, succeeded: false, error: null })
     try {
@@ -30,12 +34,13 @@ export const useReviewStore = create<State>((set) => ({
         formData.append('image', review.image)
       }
 
-      await axios.post('/api/review/add', formData, {
+      await axios.post('https://mpunav.ru/api/review/add', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       set({ isSending: false, succeeded: true, error: null })
     } catch (e) {
-      set({ isSending: false, succeeded: false, error: e.message || 'Ошибка отправки' })
+      const errorMessage = e instanceof Error ? e.message : 'Ошибка отправки'
+      set({ isSending: false, succeeded: false, error: errorMessage })
     }
   },
 }))
