@@ -9,7 +9,6 @@
   padding: 20px;
   background: $color-1;
   gap: 20px;
-
   position: relative;
 }
 
@@ -28,23 +27,22 @@
   left: 0;
 }
 
-.header a {
-  color: $color-4;
-  font-weight: 700;
-}
-
-.header span {
-  margin-left: 10px;
-}
-
 .backButton {
+  background: none;
+  border: none;
   text-decoration: none;
-  color: white;
+  color: $color-4;
   font-size: 18px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 5px;
   cursor: pointer;
+  padding: 0;
+
+  span {
+    margin-left: 10px;
+  }
 }
 
 h1 {
@@ -61,25 +59,10 @@ h1 {
   padding: 20px;
   border-radius: 8px;
   border: 2px solid $color-3;
-  box-shadow:
-    0 4px 24px 0 rgba(0, 0, 0, 0.15),
-    0 1.5px 7px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.15), 0 1.5px 7px 0 rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-.formSection {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  h2 {
-    font-size: 18px;
-    font-weight: bold;
-    color: $color-5;
-    margin-bottom: 10px;
-  }
 }
 
 .formGroup {
@@ -94,23 +77,37 @@ h1 {
   }
 
   select,
-  textarea {
+  textarea,
+  input[type='file'] {
     width: 100%;
     padding: 10px;
     border: 1px solid $color-3;
     border-radius: 4px;
     font-size: 16px;
+    background: $color-2;
+    color: $color-5;
     transition: border-color 0.3s ease;
 
     &:focus {
       border-color: $color-4;
       outline: none;
     }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
   textarea {
     resize: vertical;
     min-height: 100px;
+    font-family: inherit;
+  }
+
+  input[type='file'] {
+    padding: 8px;
+    cursor: pointer;
   }
 }
 
@@ -119,17 +116,9 @@ h1 {
   justify-content: flex-end;
 }
 
-.submitButton {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #0056b3;
-  }
+.error {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
 }

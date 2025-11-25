@@ -1,13 +1,13 @@
-import { FC, useEffect, useMemo, useState } from 'react'
-import cl from './LeftMenu.module.scss'
-import MenuItem from '../../menuopmponents/MenuItem/MenuItem.tsx'
-import { IconLink } from '../../../constants/IconLink.ts'
 import classNames from 'classnames'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { BtnName, Color, Layout } from '../../../constants/enums.ts'
-import IconButton from '../../buttons/IconButton/IconButton.tsx'
+import { IconLink } from '../../../constants/IconLink.ts'
 import useOnHideRemover from '../../../hooks/useOnHideRemover.ts'
 import { useAppStore } from '../../../store/useAppStore.ts'
 import { userStore, useUserStore } from '../../../store/useUserStore.ts'
+import IconButton from '../../buttons/IconButton/IconButton.tsx'
+import MenuItem from '../../menuopmponents/MenuItem/MenuItem.tsx'
+import cl from './LeftMenu.module.scss'
 
 const LeftMenu: FC = () => {
   const [activeLayout, controlBtnClickHandler] = [
@@ -60,7 +60,7 @@ const LeftMenu: FC = () => {
       </div>
       <div className={cl.items}>
         <MenuItem text="О сервисе" color={Color.BLUE} iconLink={IconLink.ABOUT} />
-        <MenuItem text="Сообщить о проблеме" color={Color.BLUE} iconLink={IconLink.PROBLEM} />
+        <MenuItem text="Сообщить о проблеме" color={Color.BLUE} iconLink={IconLink.PROBLEM} to="/report" />
         <MenuItem text="Настройки" color={Color.BLUE} iconLink={IconLink.SETTINGS} />
       </div>
       <div className={cl.bottom}>
