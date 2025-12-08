@@ -19,6 +19,7 @@ import { userStore } from '../../store/useUserStore.ts'
 import { statisticApi } from '../../api/statisticApi.ts'
 import { useSearchParams } from 'react-router'
 import { Vertex } from '../../models/Graph.ts'
+import { RoomData } from '../../constants/types.ts'
 
 function App() {
   const activeLayout = useAppStore((state) => state.activeLayout)
@@ -64,6 +65,12 @@ function App() {
       return null
     }
 
+    const getShortName = (room: RoomData) => {
+      const parts = room.title.split(' — ')
+      const base = parts[0] ?? room.title
+      return base.length > 40 ? `${base.slice(0, 37)}…` : base
+    }
+
     const uiSteps = steps.map((step, idx) => {
       const nextStep = steps[idx + 1]
       const lastVertex = step.way.at(-1)
@@ -90,7 +97,8 @@ function App() {
             : `Дойти до лестницы, перейти в корпус ${nextStep.plan.corpus.title}`
         }
       } else {
-        text = lastRoom ? `Дойти до ${lastRoom.title}` : `Дойти до точки ${lastVertex?.id ?? idx + 1}`
+        const targetName = lastRoom ? getShortName(lastRoom) : `точки ${lastVertex?.id ?? idx + 1}`
+        text = `Дойти до ${targetName}`
       }
 
       return {
@@ -100,6 +108,7 @@ function App() {
     })
 
     return {
+      // Для начала и конца оставляем полное название, визуально ограничивается line-clamp в UI
       fromWay: { fromIcon: fromRoom.icon ?? IconLink.FROM, text: fromRoom.title },
       toWay: { toIcon: toRoom.icon ?? IconLink.TO, text: toRoom.title },
       steps: uiSteps,
