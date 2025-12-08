@@ -18,6 +18,7 @@ import { appConfig } from '../../appConfig.ts'
 import { userStore } from '../../store/useUserStore.ts'
 import { statisticApi } from '../../api/statisticApi.ts'
 import { useSearchParams } from 'react-router'
+import { Vertex } from '../../models/Graph.ts'
 
 function App() {
   const activeLayout = useAppStore((state) => state.activeLayout)
@@ -64,9 +65,33 @@ function App() {
     }
 
     const uiSteps = steps.map((step, idx) => {
+      const nextStep = steps[idx + 1]
       const lastVertex = step.way.at(-1)
       const lastRoom = rooms.find((room) => room.id === lastVertex?.id)
-      const text = lastRoom ? `Дойти до ${lastRoom.title}` : `Дойти до точки ${lastVertex?.id ?? idx + 1}`
+
+      const hasStair = step.way.some((v: Vertex) => v.type === 'stair')
+      let text: string
+
+      if (nextStep && (hasStair || nextStep.plan !== step.plan)) {
+        const sameCorpus = nextStep.plan.corpus === step.plan.corpus
+        const hasCrossing = step.way.some((v: Vertex) => v.type === 'crossing' || v.type === 'crossingSpace')
+
+        if (sameCorpus) {
+          if (nextStep.plan.floor > step.plan.floor) {
+            text = `Дойти до лестницы, подняться на ${nextStep.plan.floor}-й этаж`
+          } else if (nextStep.plan.floor < step.plan.floor) {
+            text = `Дойти до лестницы, спуститься на ${nextStep.plan.floor}-й этаж`
+          } else {
+            text = `Дойти до лестницы, перейти на ${nextStep.plan.floor}-й этаж`
+          }
+        } else {
+          text = hasCrossing
+            ? `Дойти до перехода, перейти в корпус ${nextStep.plan.corpus.title}`
+            : `Дойти до лестницы, перейти в корпус ${nextStep.plan.corpus.title}`
+        }
+      } else {
+        text = lastRoom ? `Дойти до ${lastRoom.title}` : `Дойти до точки ${lastVertex?.id ?? idx + 1}`
+      }
 
       return {
         stepIcon: IconLink.STEP1,
