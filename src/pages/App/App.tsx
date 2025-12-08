@@ -1,7 +1,7 @@
 import cl from './App.module.scss'
 import MiddleAndTopControlsLayer from '../../components/layouts/ControlsLayer/MiddleAndTopControlsLayer.tsx'
 import LeftMenu from '../../components/layouts/LeftMenu/LeftMenu.tsx'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import HomeLayer from '../../components/layouts/HomeLayer/HomeLayer.tsx'
 import BottomLayer from '../../components/layouts/BottomLayer/BottomLayer.tsx'
 import SpaceInfo from '../../components/layouts/BottomLayer/SpaceInfo/SpaceInfo.tsx'
@@ -22,6 +22,7 @@ import { useSearchParams } from 'react-router'
 function App() {
   const activeLayout = useAppStore((state) => state.activeLayout)
   const queryService = useAppStore((state) => state.queryService)
+  const rooms = useDataStore((state) => state.rooms)
   const appRef = useRef<HTMLDivElement>(null)
   const [searchParams] = useSearchParams()
 
@@ -53,6 +54,33 @@ function App() {
     })()
   }, [])
 
+  const wayInfoData = useMemo(() => {
+    const steps = queryService.steps
+    const fromRoom = rooms.find((room) => room.id === queryService.from)
+    const toRoom = rooms.find((room) => room.id === queryService.to)
+
+    if (!steps || !fromRoom || !toRoom) {
+      return null
+    }
+
+    const uiSteps = steps.map((step, idx) => {
+      const lastVertex = step.way.at(-1)
+      const lastRoom = rooms.find((room) => room.id === lastVertex?.id)
+      const text = lastRoom ? `Дойти до ${lastRoom.title}` : `Дойти до точки ${lastVertex?.id ?? idx + 1}`
+
+      return {
+        stepIcon: IconLink.STEP1,
+        stepText: text,
+      }
+    })
+
+    return {
+      fromWay: { fromIcon: fromRoom.icon ?? IconLink.FROM, text: fromRoom.title },
+      toWay: { toIcon: toRoom.icon ?? IconLink.TO, text: toRoom.title },
+      steps: uiSteps,
+    }
+  }, [queryService.from, queryService.steps, queryService.to, rooms])
+
   return (
     <div className={cl.app} ref={appRef}>
       <BottomControlsLayer />
@@ -67,15 +95,8 @@ function App() {
         {activeLayout === Layout.SEARCH && <SearchMenu />}
         {/*TODO: По идее надо добавить в стор сосотояния для открытого SpaceInfo и WayInfo чтобы вот так костыльно не делать*/}
         {activeLayout !== Layout.SEARCH && queryService.steps === undefined && <SpaceInfo />}
-        {activeLayout !== Layout.SEARCH && queryService.steps ? (
-          <WayInfo
-            fromWay={{ fromIcon: IconLink.STUDY, text: 'Н 405 (Аудитория)' }}
-            toWay={{ toIcon: IconLink.STUDY, text: 'Н 519 (Аудитория)' }}
-            steps={[
-              { stepIcon: IconLink.STEP1, stepText: 'Дойти до лестницы, подняться на 5-й этаж' },
-              { stepIcon: IconLink.STEP1, stepText: 'Дойти до аудитории' },
-            ]}
-          />
+        {activeLayout !== Layout.SEARCH && wayInfoData ? (
+          <WayInfo fromWay={wayInfoData.fromWay} toWay={wayInfoData.toWay} steps={wayInfoData.steps} />
         ) : null}
       </BottomLayer>
 
