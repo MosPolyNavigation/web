@@ -3,6 +3,7 @@ import cl from './ControlsLayer.module.scss'
 import Button from '../../buttons/LargeButton/Button.tsx'
 import FloorsControl from '../../controls/FloorsControl/FloorsControl.tsx'
 import ScaleControl from '../../controls/ScaleControl/ScaleControl.tsx'
+import RotationControl from '../../controls/RotationControl/RotationControl.tsx'
 import { IconLink } from '../../../constants/IconLink.ts'
 import { BtnName, Layout } from '../../../constants/enums.ts'
 import classNames from 'classnames'
@@ -42,7 +43,10 @@ const MiddleAndTopControlsLayer: FC = () => {
 
       <div className={cl.middle}>
         <FloorsControl />
-        <ScaleControl />
+        <div className={cl.controlsRight}>
+          <RotationControl />
+          <ScaleControl />
+        </div>
       </div>
 
       <div />

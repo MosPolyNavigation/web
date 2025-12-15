@@ -110,10 +110,11 @@ export const useDataStore = create<State & Action>()((set, get) => ({
       // Пост-инициализационная логика по выбранным параметрам
       if (fromParam || toParam) {
         // Устанавливаем сервис маршрута согласно наличию параметров
+        // updateUrl = true, так как маршрут загружается из квери-параметров
         appStore().setQueryService(new QueryService({
           from: fromRoom?.id,
           to: toRoom?.id,
-        }))
+        }), true)
         // Если указан только один (from или to) — выделим это помещение как ориентир
         const singleRoom = fromRoom ?? toRoom
         if (singleRoom) {

@@ -1,0 +1,50 @@
+@import '../../../styles/base';
+
+.rotationControl {
+  @extend %border-default;
+  @extend %shadow-default;
+  background: $color-2;
+  width: $size-40;
+  height: fit-content;
+  padding: toRem(2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+
+  .rotationInputWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: toRem(2);
+    width: 100%;
+  }
+
+  .rotationInput {
+    background: transparent;
+    border: none;
+    color: $color-4;
+    @extend %text-4;
+    text-align: center;
+    width: toRem(30);
+    outline: none;
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &:focus {
+      color: $color-5;
+    }
+  }
+
+  .rotationUnit {
+    @extend %text-4;
+    color: $color-4;
+  }
+}
+

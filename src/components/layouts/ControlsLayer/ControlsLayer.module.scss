@@ -39,6 +39,13 @@
     align-items: center;
     pointer-events: none;
   }
+
+  .controlsRight {
+    display: flex;
+    flex-direction: column;
+    gap: $size-10;
+    align-items: flex-end;
+  }
 }
 
 @keyframes hide {
