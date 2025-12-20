@@ -5,6 +5,7 @@ import { dataStore } from '../store/useDataStore.ts'
 import axios from 'axios'
 import { userStore } from '../store/useUserStore.ts'
 import { statisticApi } from '../api/statisticApi.ts'
+import { IconLink } from '../constants/IconLink.ts'
 
 /**
  * Класс, представляющий **Сервис выбора куда и откуда**, хранится в состоянии приложения и при задании новых "куда" и "откуда" начинает новый маршрут
@@ -24,7 +25,11 @@ export class QueryService {
   /**
    * Инициализация параметров from и to из аргументов конструктора
    */
-  private initializeFromArgs(args?: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean }) {
+  private initializeFromArgs(args?: {
+    from?: string | null | Pointer.NOTHING
+    to?: string | null | Pointer.NOTHING
+    swap?: boolean
+  }) {
     if (!args) return
 
     const oldQueryService = appStore().queryService
@@ -39,7 +44,10 @@ export class QueryService {
   /**
    * Проверка, нужно ли поменять местами from и to
    */
-  private shouldSwap(args: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean }, oldQueryService: QueryService): boolean {
+  private shouldSwap(
+    args: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean },
+    oldQueryService: QueryService
+  ): boolean {
     return (
       (args.from && args.from === oldQueryService.to) ||
       (args.to && args.to === oldQueryService.from) ||
@@ -50,7 +58,10 @@ export class QueryService {
   /**
    * Назначение значений from и to из аргументов
    */
-  private assignFromArgs(args: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean }, oldQueryService: QueryService) {
+  private assignFromArgs(
+    args: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean },
+    oldQueryService: QueryService
+  ) {
     if (args.from !== Pointer.NOTHING) {
       this.from = args.from || oldQueryService.from
     }
@@ -111,7 +122,7 @@ export class QueryService {
   private handleRouteError(error: any) {
     console.error(error)
     void statisticApi.sendStartWay(this.from!, this.to!, false)
-    appStore().toast.showForTime('К сожалению, не удалось построить маршрут')
+    appStore().toast.showForTime('К сожалению, не удалось построить маршрут', IconLink.SMILE_SAD)
     this.from = undefined
     this.to = undefined
   }

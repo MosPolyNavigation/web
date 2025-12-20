@@ -36,4 +36,8 @@ export enum IconLink {
   ELEVATOR = 'img/icons/plans/elevator.svg',
   STAIR = 'img/icons/plans/stair.svg',
   GARDEROB = 'img/icons/plans/garderob.svg',
+
+  TG = 'img/icons/tg.svg',
+  TG_OUTLINED = 'img/icons/tg-outlined.svg',
+  VK = 'img/icons/vk.svg',
 }
