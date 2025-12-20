@@ -1,79 +1,51 @@
-import React, { useState, useMemo, useEffect } from 'react'
-import cl from './ReportPage.module.scss'
-import axios from 'axios'
-import { useDataStore } from '../../store/useDataStore'
-import { useReviewStore } from '../../store/reviewStore'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import Button from '../../components/buttons/LargeButton/Button'
 import { Color } from '../../constants/enums'
-import { Link } from 'react-router-dom'
 import { IconLink } from '../../constants/IconLink'
-import IconButton from '../../components/buttons/IconButton/IconButton'
+import { useReviewStore } from '../../store/reviewStore'
+import { appStore } from '../../store/useAppStore'
+import { useDataStore } from '../../store/useDataStore'
+import { userStore } from '../../store/useUserStore'
+import cl from './ReportPage.module.scss'
+import Icon from '../../components/common/Icon/Icon.tsx'
+import { CorpusData, PlanData } from '../../constants/types.ts'
+import Toast from '../../components/common/Toast/Toast.tsx'
+import IconButton from '../../components/buttons/IconButton/IconButton.tsx'
 
 const ReportPage: React.FC = () => {
   const [problemType, setProblemType] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [selectedBuilding, setSelectedBuilding] = useState<string>('')
-  const [selectedFloor, setSelectedFloor] = useState<string>('')
+  const [selectedCorpus, setSelectedCorpus] = useState<CorpusData | null>(null)
+  const [selectedPlan, setSelectedPlan] = useState<PlanData | null>(null)
   const [image, setImage] = useState<File | null>(null)
+  const navigate = useNavigate()
 
-  const [userId, setUserId] = useState<string | null>(null)
-  const [isLoadingUserId, setIsLoadingUserId] = useState(true)
-
-  useEffect(() => {
-    const cached = localStorage.getItem('user_id')
-    if (cached) {
-      setUserId(cached)
-      setIsLoadingUserId(false)
-    } else {
-      setIsLoadingUserId(true)
-      axios
-        .get('/api/get/user-id')
-        .then((res) => {
-          setUserId(res.data.user_id)
-          localStorage.setItem('user_id', res.data.user_id)
-        })
-        .catch(() => {
-          alert('Ошибка получения user_id, попробуйте перезагрузить страницу.')
-        })
-        .finally(() => {
-          setIsLoadingUserId(false)
-        })
-    }
-  }, [])
-
-  const fetchData = useDataStore((state) => state.fetchData)
   const corpuses = useDataStore((state) => state.corpuses)
   const plans = useDataStore((state) => state.plans)
 
-  useEffect(() => {
-    if (corpuses.length === 0 || plans.length === 0) {
-      fetchData()
-    }
-  }, [corpuses.length, plans.length, fetchData])
-
   const isLoading = corpuses.length === 0 || plans.length === 0
-  const buildings = useMemo(() => [...new Set(corpuses.map((corpus) => corpus.title.trim()))], [corpuses])
-  const filteredFloors = useMemo(() => {
-    if (!selectedBuilding) return []
-    const floors = plans.filter((plan) => plan.corpus.title === selectedBuilding).map((plan) => plan.floor.toString())
-    return [...new Set(floors)]
-  }, [plans, selectedBuilding])
 
-  const { isSending, succeeded, error, sendReview } = useReviewStore()
+  const filteredPlans = selectedCorpus
+    ? [...plans.filter((p) => p.corpus === selectedCorpus)].sort((p1, p2) => p1.floor - p2.floor)
+    : []
+
+  const { isSending, succeeded, error, sendReview, reset } = useReviewStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const userId = userStore().userId
     if (!userId) {
-      alert('Нет user_id, попробуйте перезагрузить страницу')
+      appStore().toast.showForTime('Нет user_id, попробуйте перезагрузить страницу', IconLink.SMILE_SAD)
       return
     }
-    if (!problemType || !description || (problemType === 'plan' && (!selectedBuilding || !selectedFloor))) {
-      alert('Заполните все обязательные поля')
+    if (!problemType || !description || (problemType === 'plan' && (!selectedCorpus || !selectedPlan))) {
+      appStore().toast.showForTime('Заполните все обязательные поля')
       return
     }
     let text = description
     if (problemType === 'plan') {
-      text += ` (Корпус: ${selectedBuilding}, Этаж: ${selectedFloor})`
+      text += ` (Корпус: ${selectedCorpus?.id}, Этаж: ${selectedPlan?.id})`
     }
     await sendReview({
       image,
@@ -81,30 +53,23 @@ const ReportPage: React.FC = () => {
       problem: problemType,
       text,
     })
+    appStore().toast.showForTime('Успешно отправлено. Спасибо за обратную связь!')
+    setProblemType('')
+    setDescription('')
+    setSelectedCorpus(null)
+    setSelectedPlan(null)
+    setImage(null)
+    reset()
   }
 
-  useEffect(() => {
-    if (succeeded) {
-      alert('Проблема отправлена!')
-      setProblemType('')
-      setDescription('')
-      setSelectedBuilding('')
-      setSelectedFloor('')
-      setImage(null)
-    }
-  }, [succeeded])
-
-  if (isLoading || isLoadingUserId) return <div className={cl.reportPage}>Загрузка данных...</div>
+  if (isLoading) return <div className={cl.reportPage}>Загрузка данных...</div>
 
   return (
     <div className={cl.reportPage}>
       <div className={cl.header}>
-        <Link to="/" className={cl.backButton}>
-          <IconButton iconLink={IconLink.BACK} color={Color.C4} />
-          <span>Назад</span>
-        </Link>
+        <IconButton onClick={() => navigate(-1)} className={cl.backButton} iconLink={IconLink.BACK} />
+        <h1 className={cl.pageTitle}>Сообщить о проблеме</h1>
       </div>
-      <h1>Сообщить о проблеме</h1>
       <form className={cl.form} encType="multipart/form-data" onSubmit={handleSubmit}>
         <div className={cl.formGroup}>
           <label>В чем проблема?</label>
@@ -120,11 +85,17 @@ const ReportPage: React.FC = () => {
           <>
             <div className={cl.formGroup}>
               <label>Корпус</label>
-              <select value={selectedBuilding} onChange={(e) => setSelectedBuilding(e.target.value)} required>
-                <option value="">Выберите корпус</option>
-                {buildings.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
+              <select
+                value={selectedCorpus?.id ?? ''}
+                onChange={(e) => setSelectedCorpus(corpuses.find((c) => c.id === e.target.value) ?? selectedCorpus)}
+                required
+              >
+                <option value="" disabled style={{ display: 'none' }}>
+                  Выберите корпус
+                </option>
+                {corpuses.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {`${c.location.short}, корпус ${c.title}`}
                   </option>
                 ))}
               </select>
@@ -132,15 +103,15 @@ const ReportPage: React.FC = () => {
             <div className={cl.formGroup}>
               <label>Этаж</label>
               <select
-                value={selectedFloor}
-                onChange={(e) => setSelectedFloor(e.target.value)}
+                value={selectedPlan?.id ?? ''}
+                onChange={(e) => setSelectedPlan(filteredPlans.find((p) => p.id === e.target.value) ?? selectedPlan)}
                 required
-                disabled={!selectedBuilding || filteredFloors.length === 0}
+                disabled={!selectedCorpus || filteredPlans.length === 0}
               >
                 <option value="">Выберите этаж</option>
-                {filteredFloors.map((floor) => (
-                  <option key={floor} value={floor}>
-                    {floor}
+                {filteredPlans.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.floor}
                   </option>
                 ))}
               </select>
@@ -164,13 +135,19 @@ const ReportPage: React.FC = () => {
           <Button
             color={Color.BLUE}
             text={isSending ? 'Отправка...' : 'Отправить'}
-            type="submit"
-            className={cl.submitButton}
             disabled={isSending}
+            type="submit"
           />
         </div>
-        {error && <div style={{ color: 'red', marginTop: 8 }}>Ошибка: {error}</div>}
+        {error && <div className={cl.error}>Ошибка: {error}</div>}
       </form>
+      <div className={cl.info}>
+        Сообщить о проблеме, не связанной с нашим сервисом можно в{' '}
+        <a className={cl.qq} href="https://e.mospolytech.ru/#/maintenance" target="_blank">
+          Личном кабинете
+        </a>
+      </div>
+      <Toast />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 @import '../../../styles/base';
 
 .toast {
-  position: absolute;
+  position: fixed;
   bottom: toRem(80);
   z-index: 2;
 

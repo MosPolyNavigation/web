@@ -57,7 +57,7 @@ function WayInfo(props: Props) {
       <div className={cl.waySteps}>
         <ul className={cl.wayStepsList}>
           <li className={cl.wayStepsItem}>
-            <Icon classNameExt={cl.wayStepsIcon} iconLink={IconLink.FROM} color={Color.INITIAL} />
+            <Icon classNameExt={cl.wayStepsIcon} iconLink={props.fromWay.fromIcon} color={Color.INITIAL} />
             <p className={cl.wayStepsText}>{props.fromWay.text}</p>
           </li>
           {props.steps.map((step, index) => (
@@ -67,7 +67,7 @@ function WayInfo(props: Props) {
             </li>
           ))}
           <li className={cl.wayStepsItem}>
-            <Icon classNameExt={cl.wayStepsIcon} iconLink={IconLink.TO} color={Color.INITIAL} />
+            <Icon classNameExt={cl.wayStepsIcon} iconLink={props.toWay.toIcon} color={Color.INITIAL} />
             <p className={cl.wayStepsText}>{props.toWay.text}</p>
           </li>
         </ul>

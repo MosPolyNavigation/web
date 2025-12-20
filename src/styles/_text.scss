@@ -37,3 +37,19 @@
   line-height: toRem(23.5);
   font-weight: 700;
 }
+
+%text-5 {
+  //Screen header
+  font-size: toRem(16);
+  line-height: toRem(20);
+  font-weight: 500;
+}
+
+@mixin clampText($lines) {
+  line-clamp: $lines;
+  -webkit-line-clamp: $lines;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical
+}

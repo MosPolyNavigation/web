@@ -4,14 +4,10 @@ import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 import { appConfig } from '../../../appConfig.ts'
 import axios from 'axios'
 import classNames from 'classnames'
-import { RoomModel } from '../../../constants/types.ts'
-import { getSvgLink } from '../../../functions/planFunctions.ts'
+import { getSvgLink, isSvgSafe } from '../../../functions/planFunctions.ts'
 import { ReactZoomPanPinchContentRef, TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { PlanModel } from '../../../models/Plan/PlanModel.ts'
-import { userStore } from '../../../store/useUserStore.ts'
-import { statisticApi } from '../../../api/statisticApi.ts'
-import { dataStore } from '../../../store/useDataStore.ts'
-import chalk from 'chalk'
+import { IconLink } from '../../../constants/IconLink.ts'
 
 const PlanLayout: FC = () => {
   const planSvgRef = useRef<null | SVGSVGElement>(null)
@@ -25,43 +21,36 @@ const PlanLayout: FC = () => {
     return null
   }, [currentPlan])
 
-  async function roomClickHandler(room: RoomModel) {
-    //Если аудитории нет в таблице помещений, то она не выделяется (кроме режима разработчика)
-    if (!dataStore().rooms.find((roomInfo) => roomInfo.id === room.roomId)) {
-      appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь. Уже работаем над этим')
-      if (userStore().isDevelopMode) {
-        console.log(chalk.red(`Помещения с id ${chalk.underline(room.roomId)} нет в таблице помещений`))
-      } else {
-        return
-      }
-    }
-    //Если есть активный маршрут, аудитория не выделяется
-    if (appStore().queryService.steps) {
-      return
-    }
-    if (appStore().selectedRoomId !== room.roomId) {
-      appStore().changeSelectedRoom(room.roomId)
-    } else {
-      appStore().changeSelectedRoom(null)
-    }
-  }
-
   useEffect(() => {
     if (currentPlan) {
-      axios.get(getSvgLink(currentPlan)).then((response) => {
-        if (!planSvgRef.current) return //Если вдруг нет свгшки на странице, пропустить
-        // Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
-        const parsedSvgDomEl = new DOMParser().parseFromString(response.data, 'image/svg+xml').documentElement as
-          | SVGSVGElement
-          | HTMLElement
-        appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl, roomClickHandler) //Установка новой модели-плана в стор приложения
-        //Сохранение текущего плана в LocalStorage
-        localStorage.setItem('last-plan', currentPlan.id)
-        localStorage.setItem('last-plan-setting-date', String(Date.now()))
-        if (transformWrapperRef.current) transformWrapperRef.current.resetTransform(1)
-        // setTimeout(() => {
-        // }, 1000)
-      })
+      axios
+        .get(getSvgLink(currentPlan))
+        .then((response) => {
+          if (!planSvgRef.current) return //Если вдруг нет свгшки на странице, пропустить
+
+          // Проверка безопасности SVG
+          if (!isSvgSafe(response.data)) {
+            console.error('SVG содержит потенциально опасный контент и не будет загружен')
+            appStore().toast.showForTime('Ошибка загрузки плана: небезопасный контент', IconLink.SMILE_SAD)
+            return
+          }
+
+          // Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
+          const parsedSvgDomEl = new DOMParser().parseFromString(response.data, 'image/svg+xml').documentElement as
+            | SVGSVGElement
+            | HTMLElement
+          appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl) //Установка новой модели-плана в стор приложения
+          //Сохранение текущего плана в LocalStorage
+          localStorage.setItem('last-plan', currentPlan.id)
+          localStorage.setItem('last-plan-setting-date', String(Date.now()))
+          if (transformWrapperRef.current) transformWrapperRef.current.resetTransform(1)
+          // setTimeout(() => {
+          // }, 1000)
+        })
+        .catch((error) => {
+          console.error('Ошибка загрузки SVG:', error)
+          appStore().toast.showForTime('Ошибка загрузки плана', IconLink.SMILE_SAD)
+        })
     }
   }, [currentPlan])
 

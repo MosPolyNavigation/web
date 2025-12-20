@@ -1,9 +1,9 @@
-import React, { Attributes, CSSProperties, FC } from 'react'
-import { IconLink } from '../../../constants/IconLink.ts'
-import cl from './Button.module.scss'
-import Icon from '../../common/Icon/Icon.tsx'
-import { Color, Pos, Size } from '../../../constants/enums.ts'
 import classNames from 'classnames'
+import React, { Attributes, CSSProperties, FC } from 'react'
+import { Color, Pos, Size } from '../../../constants/enums.ts'
+import { IconLink } from '../../../constants/IconLink.ts'
+import Icon from '../../common/Icon/Icon.tsx'
+import cl from './Button.module.scss'
 
 interface ButtonProps extends Attributes {
   iconLink?: IconLink
@@ -17,6 +17,7 @@ interface ButtonProps extends Attributes {
   current?: boolean
   textPosition?: Pos.LEFT | Pos.RIGHT
   style?: CSSProperties
+  type?: 'button' | 'submit' | 'reset'
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -32,7 +33,13 @@ const Button: FC<ButtonProps> = (props) => {
   const textStyle = props.textColor && { color: props.textColor }
 
   return (
-    <button disabled={props.disabled} className={buttonClasses} onClick={props.onClick} style={props.style}>
+    <button
+      disabled={props.disabled}
+      className={buttonClasses}
+      onClick={props.onClick}
+      style={props.style}
+      type={props.type}
+    >
       {props.text && props.textPosition === Pos.LEFT && (
         <span style={textStyle} className={cl.text}>
           {props.text}

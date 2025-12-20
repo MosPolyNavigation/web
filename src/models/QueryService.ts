@@ -5,6 +5,7 @@ import { dataStore } from '../store/useDataStore.ts'
 import axios from 'axios'
 import { userStore } from '../store/useUserStore.ts'
 import { statisticApi } from '../api/statisticApi.ts'
+import { IconLink } from '../constants/IconLink.ts'
 
 /**
  * Класс, представляющий **Сервис выбора куда и откуда**, хранится в состоянии приложения и при задании новых "куда" и "откуда" начинает новый маршрут
@@ -17,64 +18,113 @@ export class QueryService {
   fullDistance?: number
 
   constructor(args?: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean }) {
-    //Если инициализация или сброс куда откуда, то просто ставим null
+    this.initializeFromArgs(args)
+    this.buildRouteIfNeeded()
+  }
 
-    if (args) {
-      const oldQueryService = appStore().queryService //Предыдущий сервис, чтобы брать "откуда" и "куда" из него
-      if (
-        (args.from && args.from === oldQueryService.to) || //Если "куда" есть и совпадает со старым "откуда"
-        (args.to && args.to === oldQueryService.from) || //или наоборот
-        args.swap //Или если поменять местами 'куда' 'откуда'
-      ) {
-        this.swapFromOld(oldQueryService) //То сделать из поменянными местами
-      } else {
-        //Иначе если есть куда и это не в "никуда", назначить откуда куда из конструктора, либо если там нулл то из старого
-        if (args.from !== Pointer.NOTHING) {
-          if (args.from) this.from = args.from
-          else this.from = oldQueryService.from
-        }
-        if (args.to !== Pointer.NOTHING) {
-          if (args.to) this.to = args.to
-          else this.to = oldQueryService.to
-        }
-      }
+  /**
+   * Инициализация параметров from и to из аргументов конструктора
+   */
+  private initializeFromArgs(args?: {
+    from?: string | null | Pointer.NOTHING
+    to?: string | null | Pointer.NOTHING
+    swap?: boolean
+  }) {
+    if (!args) return
+
+    const oldQueryService = appStore().queryService
+
+    if (this.shouldSwap(args, oldQueryService)) {
+      this.swapFromOld(oldQueryService)
+    } else {
+      this.assignFromArgs(args, oldQueryService)
+    }
+  }
+
+  /**
+   * Проверка, нужно ли поменять местами from и to
+   */
+  private shouldSwap(
+    args: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean },
+    oldQueryService: QueryService
+  ): boolean {
+    return (
+      (args.from && args.from === oldQueryService.to) ||
+      (args.to && args.to === oldQueryService.from) ||
+      args.swap === true
+    )
+  }
+
+  /**
+   * Назначение значений from и to из аргументов
+   */
+  private assignFromArgs(
+    args: { from?: string | null | Pointer.NOTHING; to?: string | null | Pointer.NOTHING; swap?: boolean },
+    oldQueryService: QueryService
+  ) {
+    if (args.from !== Pointer.NOTHING) {
+      this.from = args.from || oldQueryService.from
+    }
+    if (args.to !== Pointer.NOTHING) {
+      this.to = args.to || oldQueryService.to
+    }
+  }
+
+  /**
+   * Построение маршрута, если указаны from и to
+   */
+  private buildRouteIfNeeded() {
+    if (!this.to || !this.from) return
+
+    try {
+      const way = new Way(this.from, this.to)
+      this.validateAndSetRoute(way)
+      this.changeToFirstPlan()
+    } catch (e) {
+      this.handleRouteError(e)
+    }
+  }
+
+  /**
+   * Валидация и установка маршрута
+   */
+  private validateAndSetRoute(way: Way) {
+    if (way.steps.length === 0 || isNaN(way.fullDistance)) {
+      throw new Error(`Не удалось построить маршрут ${this.from} ${this.to}`)
     }
 
-    // console.log(this.from, this.to)
+    void statisticApi.sendStartWay(this.from!, this.to!, true)
+    this.steps = way.steps
+    this.currentStepIndex = 0
+    this.fullDistance = way.fullDistance
 
-    //Если нет текущего маршрута или у текущего маршрута не совпадают куда откуда с query-вскими
-    //Если указано откуда и куда строить маршрут то построить новый маршрут и запомнить его
-    if (this.to && this.from) {
-      try {
-        const { steps, fullDistance } = new Way(this.from, this.to)
-        if (steps.length === 0 || isNaN(fullDistance)) {
-          throw new Error(`Не удалось построить маршрут ${this.from} ${this.to}`)
-        }
-        void statisticApi.sendStartWay(this.from, this.to, true)
-        this.steps = steps
-        this.currentStepIndex = 0
-        this.fullDistance = fullDistance
-        console.log(steps, fullDistance)
-        console.log(
-          `Построен маршрут от ${chalk.underline(this.from)} до ${chalk.underline(this.to)} общей длиной ${chalk.bold(this.fullDistance)}`,
-          this.steps
-        )
-        if (this.steps.length > 0) {
-          const firstPlan = dataStore().plans.find((plan) => plan === steps[0].plan)
-          if (appStore().currentPlan !== firstPlan && firstPlan) {
-            appStore().changeCurrentPlan(firstPlan)
-          }
-          // if(firstPlan)
-          // useAppStore().changeCurrentPlan(dataStore().plans)
-        }
-      } catch (e) {
-        console.error(e)
-        void statisticApi.sendStartWay(this.from, this.to, false)
-        appStore().toast.showForTime('К сожалению, не удалось построить маршрут')
-        this.from = undefined
-        this.to = undefined
+    console.log(
+      `Построен маршрут от ${chalk.underline(this.from)} до ${chalk.underline(this.to)} общей длиной ${chalk.bold(this.fullDistance)}`,
+      this.steps
+    )
+  }
+
+  /**
+   * Переход к первому плану маршрута
+   */
+  private changeToFirstPlan() {
+    if (this.steps && this.steps.length > 0) {
+      const firstPlan = dataStore().plans.find((plan) => plan === this.steps![0].plan)
+      if (appStore().currentPlan !== firstPlan && firstPlan) {
+        appStore().changeCurrentPlan(firstPlan)
       }
     }
+  }
+
+  /**
+   * Обработка ошибки построения маршрута
+   */
+  private handleRouteError(error: any) {
+    console.error(error)
+    void statisticApi.sendStartWay(this.from!, this.to!, false)
+    appStore().toast.showForTime('К сожалению, не удалось построить маршрут', IconLink.SMILE_SAD)
+    this.from = undefined
+    this.to = undefined
   }
 
   //Поменять местами из старых

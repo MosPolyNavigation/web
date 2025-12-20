@@ -70,8 +70,7 @@ type Action = {
   changePlanModel: (
     planInf: PlanData,
     planSvgEl: SVGSVGElement,
-    virtualSvg: SVGSVGElement | HTMLElement,
-    roomClickHandler: (room: RoomModel) => void
+    virtualSvg: SVGSVGElement | HTMLElement
   ) => void
   setQueryService: (query: QueryService) => void
   setSearchQuery: (newSearchQuery: string) => void
@@ -174,8 +173,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
     }
   },
 
-  changePlanModel: (planInf, planSvgEl, virtualSvg, roomClickHandler) => {
-    set({ planModel: new PlanModel(planInf, planSvgEl, virtualSvg, roomClickHandler) })
+  changePlanModel: (planInf, planSvgEl, virtualSvg) => {
+    set({ planModel: new PlanModel(planInf, planSvgEl, virtualSvg) })
   },
 
   setQueryService: (query) => {
