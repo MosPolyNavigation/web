@@ -44,7 +44,7 @@ const MiddleAndTopControlsLayer: FC = () => {
       <div className={cl.middle}>
         <FloorsControl />
         <div className={cl.controlsRight}>
-          <RotationControl />
+          {/*<RotationControl />*/}
           <ScaleControl />
         </div>
       </div>
