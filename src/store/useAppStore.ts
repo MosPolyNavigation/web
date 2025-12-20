@@ -46,6 +46,8 @@ type State = {
   searchIndent: SearchIndent
   /** Функции изменения масштаба */
   controlsFunctions: null | { zoomIn: () => void; zoomOut: () => void }
+  /** Угол поворота карты в градусах */
+  rotationAngle: number
   /**  */
   toast: Toast
 }
@@ -63,15 +65,12 @@ type Action = {
   controlBtnClickHandler: (btnName: BtnName) => void
   changeLayout: (layout: Layout) => void
   changeCurrentPlan: (plan: PlanData | null, first?: boolean) => void
-  changePlanModel: (
-    planInf: PlanData,
-    planSvgEl: SVGSVGElement,
-    virtualSvg: SVGSVGElement | HTMLElement
-  ) => void
-  setQueryService: (query: QueryService) => void
+  changePlanModel: (planInf: PlanData, planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement | HTMLElement) => void
+  setQueryService: (query: QueryService, updateUrl?: boolean) => void
   setSearchQuery: (newSearchQuery: string) => void
   setSearchIndent: (searchIndent: SearchIndent) => void
   setControlsFunctions: (functions: { zoomIn: () => void; zoomOut: () => void }) => void
+  setRotationAngle: (angle: number) => void
 }
 
 export function appStore() {
@@ -90,6 +89,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   searchQuery: '',
   searchIndent: SearchIndent.SELECT,
   controlsFunctions: null,
+  rotationAngle: 0,
   toast: new Toast(),
 
   controlBtnClickHandler: (btnName) => {
@@ -169,9 +169,37 @@ export const useAppStore = create<State & Action>()((set, get) => ({
     set({ planModel: new PlanModel(planInf, planSvgEl, virtualSvg) })
   },
 
-  setQueryService: (query) => {
+  setQueryService: (query, updateUrl = false) => {
     appStore().planModel?.deHighlightRoomsForNextStep() //Снятие старых хайлайтов и слушателей на смену плана
     set({ queryService: query })
+
+    // Обновляем URL только если явно указано (например, при загрузке из квери-параметров)
+    // При ручном создании маршрута (updateUrl = false по умолчанию) URL не обновляется
+    if (updateUrl) {
+      const url = new URL(window.location.href)
+      const params = new URLSearchParams(url.search)
+      if (query.from) params.set(appConfig.fromSearchParamName, query.from)
+      else params.delete(appConfig.fromSearchParamName)
+      if (query.to) params.set(appConfig.toSearchParamName, query.to)
+      else params.delete(appConfig.toSearchParamName)
+      // Если есть хотя бы один из from/to — удаляем одиночный room
+      if (query.from || query.to) params.delete(appConfig.roomSearchParamName)
+      // Если оба отсутствуют — просто чистим from/to
+      window.history.replaceState(null, '', `${url.pathname}?${params.toString()}`)
+    }
+
+    // Подсветка помещения при частичных параметрах (только from или только to)
+    const planModel = get().planModel
+    const singleId = query.from && !query.to ? query.from : !query.from && query.to ? query.to : undefined
+    if (planModel) {
+      planModel.toggleRoom(null, { hideRooms: true, hideEntrances: true })
+      if (singleId) {
+        const room = planModel.rooms.get(singleId)
+        if (room) {
+          planModel.toggleRoom(room, { activateRoom: true, activateEntrance: true })
+        }
+      }
+    }
   },
   setSearchQuery: (newSearchQuery) => {
     set({ searchQuery: newSearchQuery })
@@ -181,5 +209,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   },
   setControlsFunctions: (functions) => {
     set({ controlsFunctions: functions })
+  },
+  setRotationAngle: (angle) => {
+    set({ rotationAngle: angle })
   },
 }))

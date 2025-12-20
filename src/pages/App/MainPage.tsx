@@ -32,7 +32,9 @@ function MainPage() {
     //Если пользователь не заходил на сайти или заходил больше 85 минут назад, показать начальный экран
     if (
       (!appConfig.firstPlanSettingDate || Date.now() - appConfig.firstPlanSettingDate > 85 * 60 * 1000) &&
-      !searchParams.get(appConfig.roomSearchParamName)
+      !searchParams.get(appConfig.roomSearchParamName) &&
+      !searchParams.get(appConfig.fromSearchParamName) &&
+      !searchParams.get(appConfig.toSearchParamName)
     ) {
       appStore().changeLayout(Layout.LOCATIONS)
     }
