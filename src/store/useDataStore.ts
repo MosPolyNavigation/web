@@ -69,17 +69,13 @@ export const useDataStore = create<State & Action>()((set, get) => ({
       const toParamRaw = searchParams.get(appConfig.toSearchParamName)
       const fromParam = norm(fromParamRaw)
       const toParam = norm(toParamRaw)
-      const fromRoom = fromParam
-        ? get().rooms.find((room) => room.id.toLowerCase() === fromParam)
-        : undefined
-      const toRoom = toParam
-        ? get().rooms.find((room) => room.id.toLowerCase() === toParam)
-        : undefined
+      const fromRoom = fromParam ? get().rooms.find((room) => room.id.toLowerCase() === fromParam) : undefined
+      const toRoom = toParam ? get().rooms.find((room) => room.id.toLowerCase() === toParam) : undefined
 
       if (fromParam || toParam) {
         console.log(`Найдены параметры маршрута: from=${fromParam ?? '-'} to=${toParam ?? '-'}`)
         // Выбраем стартовый план: приоритет у from, иначе по to
-        const planCandidate = (fromRoom?.plan ?? toRoom?.plan) ?? undefined
+        const planCandidate = fromRoom?.plan ?? toRoom?.plan ?? undefined
         if (planCandidate) firstPlan = planCandidate
       } else {
         // Поддержка прежнего поведения ?room=
@@ -92,12 +88,16 @@ export const useDataStore = create<State & Action>()((set, get) => ({
           console.log(`Найден search параметр 'room'`)
           if (roomFromSearchParam) {
             console.log(
-              chalk.green.bold(`Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
+              chalk.green.bold(
+                `Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
+              )
             )
             firstPlan = roomFromSearchParam.plan ?? undefined
           } else {
             console.log(
-              chalk.red.bold(`Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`)
+              chalk.red.bold(
+                `Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
+              )
             )
           }
         }
@@ -111,10 +111,18 @@ export const useDataStore = create<State & Action>()((set, get) => ({
       if (fromParam || toParam) {
         // Устанавливаем сервис маршрута согласно наличию параметров
         // updateUrl = true, так как маршрут загружается из квери-параметров
-        appStore().setQueryService(new QueryService({
-          from: fromRoom?.id,
-          to: toRoom?.id,
-        }), true)
+        appStore().setQueryService(
+          new QueryService({
+            from: fromRoom?.id,
+            to: toRoom?.id,
+          }),
+          false
+        )
+        const url = new URL(window.location.href)
+        const params = new URLSearchParams(url.search)
+        params.delete(appConfig.fromSearchParamName)
+        params.delete(appConfig.toSearchParamName)
+        window.history.pushState(null, '', `${url.pathname}?${params.toString()}`)
         // Если указан только один (from или to) — выделим это помещение как ориентир
         const singleRoom = fromRoom ?? toRoom
         if (singleRoom) {

@@ -65,11 +65,7 @@ type Action = {
   controlBtnClickHandler: (btnName: BtnName) => void
   changeLayout: (layout: Layout) => void
   changeCurrentPlan: (plan: PlanData | null, first?: boolean) => void
-  changePlanModel: (
-    planInf: PlanData,
-    planSvgEl: SVGSVGElement,
-    virtualSvg: SVGSVGElement | HTMLElement
-  ) => void
+  changePlanModel: (planInf: PlanData, planSvgEl: SVGSVGElement, virtualSvg: SVGSVGElement | HTMLElement) => void
   setQueryService: (query: QueryService, updateUrl?: boolean) => void
   setSearchQuery: (newSearchQuery: string) => void
   setSearchIndent: (searchIndent: SearchIndent) => void
@@ -176,7 +172,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   setQueryService: (query, updateUrl = false) => {
     appStore().planModel?.deHighlightRoomsForNextStep() //Снятие старых хайлайтов и слушателей на смену плана
     set({ queryService: query })
-    
+
     // Обновляем URL только если явно указано (например, при загрузке из квери-параметров)
     // При ручном создании маршрута (updateUrl = false по умолчанию) URL не обновляется
     if (updateUrl) {
