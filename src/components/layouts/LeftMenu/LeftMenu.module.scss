@@ -74,10 +74,20 @@
     margin-top: auto;
 
     display: flex;
-    gap: $size-10;
-    align-items: center;
+    flex-direction: column;
+    gap: $size-20;
 
     @extend %text-1;
-    color: $color-4;
+
+    .bottom_links {
+      display: flex;
+      gap: toRem(8);
+      align-items: center;
+    }
+
+    .bottom_project {
+      color: $color-4;
+      text-wrap: balance;
+    }
   }
 }

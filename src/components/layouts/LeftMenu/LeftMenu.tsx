@@ -59,14 +59,31 @@ const LeftMenu: FC = () => {
         />
       </div>
       <div className={cl.items}>
-        <MenuItem text="О сервисе" color={Color.BLUE} iconLink={IconLink.ABOUT} />
         <MenuItem text="Сообщить о проблеме" color={Color.BLUE} iconLink={IconLink.PROBLEM} to="/report" />
-        <MenuItem text="Настройки" color={Color.BLUE} iconLink={IconLink.SETTINGS} />
+        <MenuItem text="О сервисе" color={Color.BLUE} iconLink={IconLink.ABOUT} />
+        <MenuItem
+          text='Тг-бот "ПОЛИНА"'
+          color={Color.BLUE}
+          iconLink={IconLink.TG_OUTLINED}
+          to="https://t.me/mospolyna_bot"
+          target="_blank"
+        />
+        <MenuItem
+          text='Тг-бот "ПОЛИНА для абитуриентов"'
+          color={Color.BLUE}
+          iconLink={IconLink.TG_OUTLINED}
+          to="https://t.me/PoliNavigatorDOD_bot"
+          target="_blank"
+          isLast
+        />
       </div>
       <div className={cl.bottom}>
-        Сделано студентами проекта
-        <br />
-        “Политех-Навигация (ПолиНа)”
+        <div className={cl.bottom_links}>
+          <div>Наши соцсети:</div>
+          <IconButton iconLink={IconLink.VK} to="https://t.me/mospolynavigation" target="_blank" />
+          <IconButton iconLink={IconLink.TG} to="https://vk.com/mospolynavigation" target="_blank" />
+        </div>
+        <div className={cl.bottom_project}>Сделано студентами проекта “Политех-Навигация (ПолиНа)”</div>
       </div>
       {isDevelopMode && (
         <div>

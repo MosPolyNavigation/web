@@ -19,6 +19,10 @@
       align-items: center;
       gap: $size-10;
 
+      .text {
+        @include clampText(1);
+      }
+
       .icon {
         width: $size-20;
         height: $size-20;

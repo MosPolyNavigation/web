@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import { getSvgLink, isSvgSafe } from '../../../functions/planFunctions.ts'
 import { ReactZoomPanPinchContentRef, TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { PlanModel } from '../../../models/Plan/PlanModel.ts'
+import { IconLink } from '../../../constants/IconLink.ts'
 
 const PlanLayout: FC = () => {
   const planSvgRef = useRef<null | SVGSVGElement>(null)
@@ -20,34 +21,36 @@ const PlanLayout: FC = () => {
     return null
   }, [currentPlan])
 
-
   useEffect(() => {
     if (currentPlan) {
-      axios.get(getSvgLink(currentPlan)).then((response) => {
-        if (!planSvgRef.current) return //Если вдруг нет свгшки на странице, пропустить
-        
-        // Проверка безопасности SVG
-        if (!isSvgSafe(response.data)) {
-          console.error('SVG содержит потенциально опасный контент и не будет загружен')
-          appStore().toast.showForTime('Ошибка загрузки плана: небезопасный контент')
-          return
-        }
-        
-        // Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
-        const parsedSvgDomEl = new DOMParser().parseFromString(response.data, 'image/svg+xml').documentElement as
-          | SVGSVGElement
-          | HTMLElement
-        appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl) //Установка новой модели-плана в стор приложения
-        //Сохранение текущего плана в LocalStorage
-        localStorage.setItem('last-plan', currentPlan.id)
-        localStorage.setItem('last-plan-setting-date', String(Date.now()))
-        if (transformWrapperRef.current) transformWrapperRef.current.resetTransform(1)
-        // setTimeout(() => {
-        // }, 1000)
-      }).catch((error) => {
-        console.error('Ошибка загрузки SVG:', error)
-        appStore().toast.showForTime('Ошибка загрузки плана')
-      })
+      axios
+        .get(getSvgLink(currentPlan))
+        .then((response) => {
+          if (!planSvgRef.current) return //Если вдруг нет свгшки на странице, пропустить
+
+          // Проверка безопасности SVG
+          if (!isSvgSafe(response.data)) {
+            console.error('SVG содержит потенциально опасный контент и не будет загружен')
+            appStore().toast.showForTime('Ошибка загрузки плана: небезопасный контент', IconLink.SMILE_SAD)
+            return
+          }
+
+          // Парсинг полученного текста свг=изображения в виртуальный ДОМ-элемент
+          const parsedSvgDomEl = new DOMParser().parseFromString(response.data, 'image/svg+xml').documentElement as
+            | SVGSVGElement
+            | HTMLElement
+          appStore().changePlanModel(currentPlan, planSvgRef.current, parsedSvgDomEl) //Установка новой модели-плана в стор приложения
+          //Сохранение текущего плана в LocalStorage
+          localStorage.setItem('last-plan', currentPlan.id)
+          localStorage.setItem('last-plan-setting-date', String(Date.now()))
+          if (transformWrapperRef.current) transformWrapperRef.current.resetTransform(1)
+          // setTimeout(() => {
+          // }, 1000)
+        })
+        .catch((error) => {
+          console.error('Ошибка загрузки SVG:', error)
+          appStore().toast.showForTime('Ошибка загрузки плана', IconLink.SMILE_SAD)
+        })
     }
   }, [currentPlan])
 

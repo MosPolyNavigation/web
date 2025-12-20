@@ -1,12 +1,10 @@
 import cl from './Toast.module.scss'
 import Icon from '../Icon/Icon.tsx'
-import { IconLink } from '../../../constants/IconLink.ts'
 import { Color, Size } from '../../../constants/enums.ts'
-import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
 import { useAppStore } from '../../../store/useAppStore.ts'
 
-const Toast = observer(() => {
+const Toast = () => {
   {
     const isShown = useAppStore((state) => state.toast.isShown)
     const content = useAppStore((state) => state.toast.content)
@@ -23,6 +21,6 @@ const Toast = observer(() => {
       </div>
     )
   }
-})
+}
 
 export default Toast

@@ -5,6 +5,7 @@ import { appStore } from '../../store/useAppStore.ts'
 import { statisticApi } from '../../api/statisticApi.ts'
 import { dataStore } from '../../store/useDataStore.ts'
 import { userStore } from '../../store/useUserStore.ts'
+import { IconLink } from '../../constants/IconLink.ts'
 
 export class PlanModel {
   readonly rooms: Map<Id, RoomModel>
@@ -38,7 +39,7 @@ export class PlanModel {
     this.planSvgEl.setAttribute('fill', 'none')
 
     this.planSvgEl.innerHTML = virtualSvg.innerHTML //Установка внутреннего содержимого отображаемого свг из спаршенного
-    
+
     // Добавляем классы для элементов, которые не должны выделяться
     const noSelectSelectors = ['g#Walls', 'g#Textes', 'g#Texts', '#gEntrances', 'g#Icons']
     noSelectSelectors.forEach((selector) => {
@@ -58,7 +59,7 @@ export class PlanModel {
         if (elementId) {
           void statisticApi.sendSelectRoom(elementId, false)
         }
-        appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
+        appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь', IconLink.SMILE_SAD)
       })
     }
 
@@ -94,7 +95,7 @@ export class PlanModel {
       if (elementId) {
         void statisticApi.sendSelectRoom(elementId, false)
       }
-      appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
+      appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь', IconLink.SMILE_SAD)
     })
   }
 
@@ -132,7 +133,7 @@ export class PlanModel {
   private assignEntrancesToRooms() {
     const entrancesIdToEl: Map<Id, SVGCircleElement> = new Map()
     const entrancesElement = this.planSvgEl.getElementById('Entrances')
-    
+
     if (entrancesElement) {
       for (const entranceEl of entrancesElement.children) {
         entrancesIdToEl.set(entranceEl.id, entranceEl as SVGCircleElement)
@@ -213,7 +214,10 @@ export class PlanModel {
   private handleRoomClick(room: RoomModel) {
     //Если аудитории нет в таблице помещений, то она не выделяется (кроме режима разработчика)
     if (!dataStore().rooms.find((roomInfo: any) => roomInfo.id === room.roomId)) {
-      appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь. Уже работаем над этим')
+      appStore().toast.showForTime(
+        'К сожалению, мы пока не знаем, что здесь. Уже работаем над этим',
+        IconLink.SMILE_SAD
+      )
       if (userStore().isDevelopMode) {
         console.log(`Помещения с id ${room.roomId} нет в таблице помещений`)
       } else {

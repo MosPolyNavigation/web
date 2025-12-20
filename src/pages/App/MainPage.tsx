@@ -1,4 +1,4 @@
-import cl from './App.module.scss'
+import cl from './MainPage.module.scss'
 import MiddleAndTopControlsLayer from '../../components/layouts/ControlsLayer/MiddleAndTopControlsLayer.tsx'
 import LeftMenu from '../../components/layouts/LeftMenu/LeftMenu.tsx'
 import { useEffect, useMemo, useRef } from 'react'
@@ -21,7 +21,7 @@ import { useSearchParams } from 'react-router'
 import { Vertex } from '../../models/Graph.ts'
 import { RoomData } from '../../constants/types.ts'
 
-function App() {
+function MainPage() {
   const activeLayout = useAppStore((state) => state.activeLayout)
   const queryService = useAppStore((state) => state.queryService)
   const rooms = useDataStore((state) => state.rooms)
@@ -36,7 +36,6 @@ function App() {
     ) {
       appStore().changeLayout(Layout.LOCATIONS)
     }
-    useDataStore.getState().init()
     // TODO: дать возможность уменьшать
     if (appRef.current)
       appRef.current.addEventListener('touchmove', (e) => {
@@ -140,8 +139,9 @@ function App() {
       {/*	*/}
       {/*	<h1>asl;dkj</h1>*/}
       {/*</div>*/}
+      <Toast />
     </div>
   )
 }
 
-export default App
+export default MainPage
