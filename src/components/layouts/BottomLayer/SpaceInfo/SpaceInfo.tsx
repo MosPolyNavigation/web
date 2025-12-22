@@ -14,6 +14,7 @@ const mockImages = [
   'https://avatars.mds.yandex.net/i?id=8dced079671fe04155e8c40ac057373486ec132a-4531115-images-thumbs&n=13',
   'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800',
   'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800',
+  'https://avatars.mds.yandex.net/i?id=c5775b89f0c0c4b9518d3c7f85a66c084f2176d4-9847927-images-thumbs&n=13'
 ]
 
 const SpaceInfo: FC = () => {
