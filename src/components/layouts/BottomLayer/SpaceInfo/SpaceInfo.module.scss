@@ -36,16 +36,10 @@
   .actions {
     display: flex;
     gap: $size-10;
+    margin-top: toRem(16);
 
     .heartBtn {
       margin-right: auto;
-    }
-
-    @media (width <= 900px) {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: toRem(60);
     }
 
     @media (min-width: 992px) {
