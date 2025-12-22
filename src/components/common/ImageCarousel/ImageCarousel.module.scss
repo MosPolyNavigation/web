@@ -69,6 +69,23 @@
   }
 }
 
+.single {
+  overflow-x: hidden; 
+}
+
+.singleImage {
+  width: 100%;          
+  height: auto;          
+  aspect-ratio: 3 / 2;   
+}
+
+.singleImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
 @media (max-width: 900px) {
   .imageCarousel { 
     margin-top: 0px;
