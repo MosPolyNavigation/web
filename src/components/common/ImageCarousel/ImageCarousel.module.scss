@@ -1,0 +1,76 @@
+@import '../../../styles/base';
+
+.imageCarousel {
+  width: 100%;
+  padding-bottom: 10px;
+  margin-top: 32px;
+
+}
+
+.carouselContainer {
+  display: flex;    
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  padding-bottom: 10px;
+
+  /* высота скролла */
+  &::-webkit-scrollbar {
+    height: 3px;
+    transition: height 0.3s ease;
+
+  }
+
+  &:hover {
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+  }
+
+  /* сама полоска */
+  &::-webkit-scrollbar-thumb {
+    background-color: #9EBCFF;
+    border-radius: 999px;
+  }
+
+  /* убираем фон */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* полностью убираем углы */
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+.carouselImage {
+  flex: 0 0 auto;
+  width: 216px;      
+  height: 144px;
+  scroll-snap-align: start;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .imageCarousel { 
+    margin-top: 0px;
+  }
+}
