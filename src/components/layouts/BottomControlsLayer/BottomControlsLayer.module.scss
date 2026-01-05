@@ -34,11 +34,18 @@
     bottom: unset;
     z-index: 3;
     justify-content: space-between;
+    transition: all 150ms ease;
 
     .favouriteBtn {
       pointer-events: none;
       opacity: 0;
     }
+  }
+
+  &.searchClosing {
+    translate: 0 100dvh;
+    transition: translate 150ms ease, opacity 150ms ease;
+    opacity: 0;
   }
 
   .locationsBtn {

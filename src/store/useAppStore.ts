@@ -50,6 +50,10 @@ type State = {
   rotationAngle: number
   /**  */
   toast: Toast
+  /** Флаг закрытия плашки поиска для синхронизации с инпутом */
+  isSearchPanelClosing: boolean
+  /** Смещение плашки во время драга для синхронизации движения инпута */
+  bottomLayerTranslateY: number
 }
 
 type Action = {
@@ -71,6 +75,8 @@ type Action = {
   setSearchIndent: (searchIndent: SearchIndent) => void
   setControlsFunctions: (functions: { zoomIn: () => void; zoomOut: () => void }) => void
   setRotationAngle: (angle: number) => void
+  setSearchPanelClosing: (isClosing: boolean) => void
+  setBottomLayerTranslateY: (translateY: number) => void
 }
 
 export function appStore() {
@@ -91,6 +97,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   controlsFunctions: null,
   rotationAngle: 0,
   toast: new Toast(),
+  isSearchPanelClosing: false,
+  bottomLayerTranslateY: 0,
 
   controlBtnClickHandler: (btnName) => {
     const activeLayout = get().activeLayout
@@ -212,5 +220,11 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   },
   setRotationAngle: (angle) => {
     set({ rotationAngle: angle })
+  },
+  setSearchPanelClosing: (isClosing) => {
+    set({ isSearchPanelClosing: isClosing })
+  },
+  setBottomLayerTranslateY: (translateY) => {
+    set({ bottomLayerTranslateY: translateY })
   },
 }))
