@@ -8,10 +8,13 @@ import { appStore, useAppStore } from '../../../../store/useAppStore.ts'
 import classNames from 'classnames'
 
 function BaseControls() {
-  const [activeLayout, controlBtnClickHandler] = [
+  const [activeLayout, controlBtnClickHandler, queryService] = [
     useAppStore((state) => state.activeLayout),
     useAppStore((state) => state.controlBtnClickHandler),
+    useAppStore((state) => state.queryService),
   ]
+  
+  const hasRoute = queryService.steps !== undefined
 
   const heartBtnClickHandler = () => {
     // appStore().toast.showForTime('К сожалению, мы пока не знаем, что здесь')
@@ -42,7 +45,9 @@ function BaseControls() {
           {/*До: {query.to}*/}
         </div>
       )}
-      <SearchButton expanded={activeLayout === Layout.SEARCH} onClick={() => controlBtnClickHandler(BtnName.SEARCH)} />
+      {!hasRoute && (
+        <SearchButton expanded={activeLayout === Layout.SEARCH} onClick={() => controlBtnClickHandler(BtnName.SEARCH)} />
+      )}
       <Button
         iconLink={rightBtnIcon}
         classNameExt={rightBtnClass}

@@ -15,20 +15,30 @@ const BottomControlsLayer: FC = () => {
   const activeLayout = useAppStore((state) => state.activeLayout)
   const selectedRoomId = useAppStore((state) => state.selectedRoomId)
   const queryService = useAppStore((state) => state.queryService)
+  const isSearchPanelClosing = useAppStore((state) => state.isSearchPanelClosing)
+  const bottomLayerTranslateY = useAppStore((state) => state.bottomLayerTranslateY)
+
+  const hasRoute = queryService.steps !== undefined
+  const hasPartialRoute = (queryService.from || queryService.to) && !(queryService.from && queryService.to)
+  const hasFullRoute = queryService.from && queryService.to
+
+  const containerStyle = activeLayout === Layout.SEARCH && bottomLayerTranslateY > 0
+    ? { transform: `translateY(${bottomLayerTranslateY}px)`, transition: 'none' }
+    : undefined
 
   return (
     <div
       className={classNames(cl.bottomControlsLayer, {
-        [cl.centered]: (!!selectedRoomId || queryService.steps) && activeLayout !== Layout.SEARCH,
-        [cl.searchOpen]: activeLayout === Layout.SEARCH,
-        [cl.flexCenter]: (queryService.from || queryService.to) && !(queryService.from && queryService.to),
+        [cl.centered]: (!!selectedRoomId || hasRoute) && activeLayout !== Layout.SEARCH,
+        [cl.searchOpen]: activeLayout === Layout.SEARCH && !isSearchPanelClosing,
+        [cl.searchClosing]: isSearchPanelClosing,
+        [cl.flexCenter]: hasPartialRoute,
       })}
+      style={containerStyle}
     >
-      {(queryService.from || queryService.to) &&
-      !(queryService.from && queryService.to) &&
-      activeLayout !== Layout.SEARCH ? (
+      {hasPartialRoute && activeLayout !== Layout.SEARCH ? (
         <WaySelectorsControls />
-      ) : queryService.from && queryService.to && activeLayout !== Layout.SEARCH ? (
+      ) : hasFullRoute && activeLayout !== Layout.SEARCH ? (
         <OnWayControls />
       ) : (
         <BaseControls />

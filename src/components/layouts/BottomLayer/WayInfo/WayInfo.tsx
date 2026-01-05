@@ -24,7 +24,7 @@ function WayInfo(props: Props) {
   //TODO: добавить "неизвестно" для помещений которых нет в таблице
   return (
     <div className={cl.wayInfoWrapper}>
-      <div className={cl.wayInfoContent}>
+      <div className={cl.wayInfoContent} data-no-drag="true">
         <WaySelectorButton
           text={roomFrom ? roomFrom.title : null}
           baseText={'Откуда'}
