@@ -52,6 +52,26 @@ interface CachedQueryData {
 }
 
 // Вспомогательные функции для оптимизации производительности
+
+function normalizeRoomNumber(text: string): string {
+  const cyrillicToLatin: Record<string, string> = {
+    'а': 'a',
+    'в': 'v',
+    'м': 'm',
+    'п': 'p',
+    'к': 'k',
+    'р': 'r',
+    'б': 'b',
+    'с': 's'
+  }
+  
+  let normalized = text.toLowerCase()
+  
+  normalized = normalized.split('').map(char => cyrillicToLatin[char] || char).join('')
+  
+  return normalized.replace(/[\s-]/g, '')
+}
+
 function getCachedRoomData(room: RoomData): CachedRoomData {
   const titleLower = room.title.toLowerCase()
   const subTitleLower = room.subTitle.toLowerCase()
@@ -120,6 +140,12 @@ function hasLocationMatch(room: RoomData, location: string): boolean {
 function matchesSearchCriteria(room: RoomData, cachedRoom: CachedRoomData, cachedQuery: CachedQueryData): boolean {
   const { roomText, titleLower, subTitleLower, typeLower } = cachedRoom
   const { originalQuery, queryWords, expandedQueries } = cachedQuery
+  
+  const normalizedQuery = normalizeRoomNumber(originalQuery)
+  const normalizedTitle = normalizeRoomNumber(titleLower)
+  if (normalizedQuery.length >= SCORE_CONSTANTS.MIN_PREFIX_LENGTH && normalizedTitle.includes(normalizedQuery)) {
+    return true
+  }
   
   // Проверяем все расширенные запросы
   const hasExpandedMatch = expandedQueries.some(expandedQuery => {
@@ -306,6 +332,15 @@ function calculateCustomScore(
 
   const { roomText, titleLower, subTitleLower, typeLower } = cachedRoom
   const { originalQuery, queryWords, expandedQueries, structuredQuery } = cachedQuery
+
+  const normalizedQuery = normalizeRoomNumber(originalQuery)
+  const normalizedTitle = normalizeRoomNumber(titleLower)
+  if (normalizedQuery.length >= SCORE_CONSTANTS.MIN_PREFIX_LENGTH && normalizedTitle.includes(normalizedQuery)) {
+    score += SCORE_CONSTANTS.EXACT_MATCH
+    if (normalizedTitle === normalizedQuery) {
+      score += SCORE_CONSTANTS.TITLE_PREFIX_MATCH
+    }
+  }
 
   // Буст за точное совпадение с оригинальным запросом
   if (roomText.includes(originalQuery)) {
