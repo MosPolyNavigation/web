@@ -105,3 +105,39 @@
     right: $size-20;
   }
 }
+
+.showIndicator {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: toRem(40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(28, 31, 38, 0.95) 0%, rgba(28, 31, 38, 0.8) 70%, transparent 100%);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 300ms ease;
+
+  &:hover {
+    background: linear-gradient(to top, rgba(28, 31, 38, 1) 0%, rgba(28, 31, 38, 0.9) 70%, transparent 100%);
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+
+  @media (min-width: 900px) {
+    display: none;
+  }
+}
+
+.indicatorSlider {
+  width: $size-40;
+  height: toRem(3);
+  background-color: $color-3;
+  border-radius: toRem(2);
+  margin-bottom: toRem(8);
+}

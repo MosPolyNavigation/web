@@ -23,6 +23,10 @@
     &.centered {
       translate: 0 toRem(-129);
     }
+    
+    &.bottomLayerHidden {
+      translate: 0 toRem(-160);
+    }
   }
 
   &.flexCenter {

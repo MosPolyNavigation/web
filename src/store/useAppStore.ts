@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { BtnName, Layout, SearchIndent } from '../constants/enums.ts'
+import { BtnName, Layout, SearchIndent, CardState } from '../constants/enums.ts'
 
 import { PlanData, RoomModel } from '../constants/types.ts'
 import { PlanModel } from '../models/Plan/PlanModel.ts'
@@ -50,6 +50,10 @@ type State = {
   rotationAngle: number
   /**  */
   toast: Toast
+  /** Смещение BottomLayer по Y для синхронизации с BottomControlsLayer */
+  bottomLayerTranslateY: number
+  /** Состояние BottomLayer для синхронизации с BottomControlsLayer */
+  bottomLayerState: CardState | null
 }
 
 type Action = {
@@ -71,6 +75,8 @@ type Action = {
   setSearchIndent: (searchIndent: SearchIndent) => void
   setControlsFunctions: (functions: { zoomIn: () => void; zoomOut: () => void }) => void
   setRotationAngle: (angle: number) => void
+  setBottomLayerTranslateY: (translateY: number) => void
+  setBottomLayerState: (state: CardState | null) => void
 }
 
 export function appStore() {
@@ -91,6 +97,8 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   controlsFunctions: null,
   rotationAngle: 0,
   toast: new Toast(),
+  bottomLayerTranslateY: 0,
+  bottomLayerState: null,
 
   controlBtnClickHandler: (btnName) => {
     const activeLayout = get().activeLayout
@@ -212,5 +220,11 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   },
   setRotationAngle: (angle) => {
     set({ rotationAngle: angle })
+  },
+  setBottomLayerTranslateY: (translateY) => {
+    set({ bottomLayerTranslateY: translateY })
+  },
+  setBottomLayerState: (state) => {
+    set({ bottomLayerState: state })
   },
 }))
