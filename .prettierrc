@@ -8,8 +8,8 @@
   "printWidth": 120,
   "bracketSpacing": true,
   "arrowParens": "always",
-  "jsxSingleQuote": false,
+  "jsxSingleQuote": true,
   "quoteProps": "as-needed",
   "bracketSameLine": false,
-  "endOfLine": "auto"
+  "endOfLine": "lf"
 }

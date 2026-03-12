@@ -70,15 +70,15 @@ const ReportPage: React.FC = () => {
         <IconButton onClick={() => navigate(-1)} className={cl.backButton} iconLink={IconLink.BACK} />
         <h1 className={cl.pageTitle}>Сообщить о проблеме</h1>
       </div>
-      <form className={cl.form} encType="multipart/form-data" onSubmit={handleSubmit}>
+      <form className={cl.form} encType='multipart/form-data' onSubmit={handleSubmit}>
         <div className={cl.formGroup}>
           <label>В чем проблема?</label>
           <select value={problemType} onChange={(e) => setProblemType(e.target.value)} required>
-            <option value="">Выберите тип проблемы</option>
-            <option value="plan">Неточность на плане</option>
-            <option value="work">Работа приложения</option>
-            <option value="way">Неправильный маршрут</option>
-            <option value="other">Другое</option>
+            <option value=''>Выберите тип проблемы</option>
+            <option value='plan'>Неточность на плане</option>
+            <option value='work'>Работа приложения</option>
+            <option value='way'>Неправильный маршрут</option>
+            <option value='other'>Другое</option>
           </select>
         </div>
         {problemType === 'plan' && (
@@ -90,7 +90,7 @@ const ReportPage: React.FC = () => {
                 onChange={(e) => setSelectedCorpus(corpuses.find((c) => c.id === e.target.value) ?? selectedCorpus)}
                 required
               >
-                <option value="" disabled style={{ display: 'none' }}>
+                <option value='' disabled style={{ display: 'none' }}>
                   Выберите корпус
                 </option>
                 {corpuses.map((c) => (
@@ -108,7 +108,7 @@ const ReportPage: React.FC = () => {
                 required
                 disabled={!selectedCorpus || filteredPlans.length === 0}
               >
-                <option value="">Выберите этаж</option>
+                <option value=''>Выберите этаж</option>
                 {filteredPlans.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.floor}
@@ -123,27 +123,27 @@ const ReportPage: React.FC = () => {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Введите описание проблемы..."
+            placeholder='Введите описание проблемы...'
             required
           />
         </div>
         <div className={cl.formGroup}>
           <label>Фото (необязательно)</label>
-          <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] || null)} />
+          <input type='file' accept='image/*' onChange={(e) => setImage(e.target.files?.[0] || null)} />
         </div>
         <div className={cl.actions}>
           <Button
             color={Color.BLUE}
             text={isSending ? 'Отправка...' : 'Отправить'}
             disabled={isSending}
-            type="submit"
+            type='submit'
           />
         </div>
         {error && <div className={cl.error}>Ошибка: {error}</div>}
       </form>
       <div className={cl.info}>
         Сообщить о проблеме, не связанной с нашим сервисом можно в{' '}
-        <a className={cl.qq} href="https://e.mospolytech.ru/#/maintenance" target="_blank">
+        <a className={cl.qq} href='https://e.mospolytech.ru/#/maintenance' target='_blank'>
           Личном кабинете
         </a>
       </div>

@@ -36,7 +36,7 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   const roomsRenderList = useMemo(() => {
     if (debouncedSearchQuery.trim()) {
       return searchRooms(rooms, debouncedSearchQuery, {
-        currentPlan: planModel?.plan || null
+        currentPlan: planModel?.plan || null,
       })
     } else {
       return []
@@ -46,15 +46,15 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   const nearestRooms: Array<RoomData[]> = useMemo(() => {
     const currentPlan = planModel?.plan
     if (!currentPlan) return []
-    const roomsInCurrentCorpus = dataStore().rooms.filter((room) => room.plan && room.plan.corpus === currentPlan.corpus)
+    const roomsInCurrentCorpus = dataStore().rooms.filter(
+      (room) => room.plan && room.plan.corpus === currentPlan.corpus
+    )
     const types: RoomType[] = ['Мужской туалет', 'Женский туалет', 'Вход в здание']
     const roomsByTypes = types.map((type) => roomsInCurrentCorpus.filter((room) => room.type === type))
     const nearestRoomsByTypes = roomsByTypes.map((roomsByType) =>
       roomsByType
         .filter((r) => r.plan)
-        .sort(
-          (a, b) => Math.abs(currentPlan.floor - (a.plan!.floor)) - Math.abs(currentPlan.floor - (b.plan!.floor))
-        )
+        .sort((a, b) => Math.abs(currentPlan.floor - a.plan!.floor) - Math.abs(currentPlan.floor - b.plan!.floor))
     )
     console.log(nearestRoomsByTypes)
     return nearestRoomsByTypes
@@ -163,9 +163,9 @@ const SearchMenu: FC<SearchMenuProps> = () => {
         <Button iconLink={IconLink.WOMAN} {...actionBtnsProps} />
         <Button iconLink={IconLink.MEN} {...actionBtnsProps} />
         <Button iconLink={IconLink.BOOK} {...actionBtnsProps} />
-        <Button iconLink={IconLink.ENTER} text="Вход" {...actionBtnsProps} />
-        <Button iconLink={IconLink.ACT} text="А 100" {...actionBtnsProps} />
-        <Button iconLink={IconLink.FOOD} text="Б 2 этаж" {...actionBtnsProps} />
+        <Button iconLink={IconLink.ENTER} text='Вход' {...actionBtnsProps} />
+        <Button iconLink={IconLink.ACT} text='А 100' {...actionBtnsProps} />
+        <Button iconLink={IconLink.FOOD} text='Б 2 этаж' {...actionBtnsProps} />
       </div>
     </div>
   )

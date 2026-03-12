@@ -51,7 +51,7 @@ const LocationCard: FC<LocationCardProps> = ({ expanded, location, corpuses, exp
       </div>
       <div style={styles.contentWrapper} className={cl.contentWrapper}>
         <div ref={contentRef} className={cl.content}>
-          <div className="">
+          <div className=''>
             <p>Обозначение: {location.short}</p>
             <p>Адрес: {location.address}</p>
           </div>

@@ -92,7 +92,7 @@
     background-color: $color-3;
     border-radius: toRem(2);
     cursor: grab;
-    
+
     &:active {
       cursor: grabbing;
     }

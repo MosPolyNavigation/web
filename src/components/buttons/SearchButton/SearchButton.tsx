@@ -55,14 +55,14 @@ const SearchInput = (props: Props) => {
 
   return (
     <>
-      <label htmlFor="search"></label>
+      <label htmlFor='search'></label>
       <input
         ref={inputRef}
-        autoComplete="off"
+        autoComplete='off'
         placeholder={'Поиск...'}
-        type="text"
-        name="search"
-        id="search"
+        type='text'
+        name='search'
+        id='search'
         onChange={(e) => appStore().setSearchQuery(e.target.value)}
         value={searchQuery}
       />

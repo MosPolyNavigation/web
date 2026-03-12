@@ -21,7 +21,7 @@ const SCORE_CONSTANTS = {
   EDUCATIONAL_ROOM: 25,
   SERVICE_ROOM_PENALTY: -10,
   MIN_PREFIX_LENGTH: 2,
-  MAX_RESULTS: 20
+  MAX_RESULTS: 20,
 } as const
 
 export interface SearchContext {
@@ -55,20 +55,23 @@ interface CachedQueryData {
 
 function normalizeRoomNumber(text: string): string {
   const cyrillicToLatin: Record<string, string> = {
-    'а': 'a',
-    'в': 'v',
-    'м': 'm',
-    'п': 'p',
-    'к': 'k',
-    'р': 'r',
-    'б': 'b',
-    'с': 's'
+    а: 'a',
+    в: 'v',
+    м: 'm',
+    п: 'p',
+    к: 'k',
+    р: 'r',
+    б: 'b',
+    с: 's',
   }
-  
+
   let normalized = text.toLowerCase()
-  
-  normalized = normalized.split('').map(char => cyrillicToLatin[char] || char).join('')
-  
+
+  normalized = normalized
+    .split('')
+    .map((char) => cyrillicToLatin[char] || char)
+    .join('')
+
   return normalized.replace(/[\s-]/g, '')
 }
 
@@ -76,61 +79,67 @@ function getCachedRoomData(room: RoomData): CachedRoomData {
   const titleLower = room.title.toLowerCase()
   const subTitleLower = room.subTitle.toLowerCase()
   const typeLower = (room.type || '').toLowerCase()
-  
+
   return {
     roomText: `${titleLower} ${subTitleLower} ${typeLower}`,
     titleLower,
     subTitleLower,
-    typeLower
+    typeLower,
   }
 }
 
 function getCachedQueryData(query: string): CachedQueryData {
   const originalQuery = query.toLowerCase()
-  const queryWords = originalQuery.split(/\s+/).filter(word => word.length > 0)
+  const queryWords = originalQuery.split(/\s+/).filter((word) => word.length > 0)
   const expandedQueries = expandQueryWithSynonyms(query)
-  
+
   return {
     originalQuery,
     queryWords,
     expandedQueries,
-    structuredQuery: parseStructuredQuery(query)
+    structuredQuery: parseStructuredQuery(query),
   }
 }
 
 function hasLocationMatch(room: RoomData, location: string): boolean {
   const locationLower = location.toLowerCase()
-  
+
   // Маппинг кириллических букв на латинские для соответствия с данными
   const cyrillicToLatin: Record<string, string> = {
-    'м': 'm',
-    'пк': 'pk', 
-    'пр': 'pr',
-    'бс': 'bs',
-    'ав': 'av'
+    м: 'm',
+    пк: 'pk',
+    пр: 'pr',
+    бс: 'bs',
+    ав: 'av',
   }
-  
+
   const mappedLocation = cyrillicToLatin[locationLower] || locationLower
-  
+
   // Проверяем по ID локации
   if (room.plan?.corpus.location.id?.toLowerCase() === mappedLocation) {
     return true
   }
-  
+
   // Проверяем по названию локации
-  if (room.plan?.corpus.location.title?.toLowerCase().split(/\s+/).some(word => 
-    word.startsWith(mappedLocation) || word === mappedLocation
-  )) {
+  if (
+    room.plan?.corpus.location.title
+      ?.toLowerCase()
+      .split(/\s+/)
+      .some((word) => word.startsWith(mappedLocation) || word === mappedLocation)
+  ) {
     return true
   }
-  
+
   // Проверяем по subTitle комнаты (название корпуса)
-  if (room.subTitle?.toLowerCase().split(/\s+/).some(word => 
-    word.startsWith(mappedLocation) || word === mappedLocation
-  )) {
+  if (
+    room.subTitle
+      ?.toLowerCase()
+      .split(/\s+/)
+      .some((word) => word.startsWith(mappedLocation) || word === mappedLocation)
+  ) {
     return true
   }
-  
+
   return false
 }
 
@@ -140,63 +149,74 @@ function hasLocationMatch(room: RoomData, location: string): boolean {
 function matchesSearchCriteria(room: RoomData, cachedRoom: CachedRoomData, cachedQuery: CachedQueryData): boolean {
   const { roomText, titleLower, subTitleLower, typeLower } = cachedRoom
   const { originalQuery, queryWords, expandedQueries } = cachedQuery
-  
+
   const normalizedQuery = normalizeRoomNumber(originalQuery)
   const normalizedTitle = normalizeRoomNumber(titleLower)
   if (normalizedQuery.length >= SCORE_CONSTANTS.MIN_PREFIX_LENGTH && normalizedTitle.includes(normalizedQuery)) {
     return true
   }
-  
+
   // Проверяем все расширенные запросы
-  const hasExpandedMatch = expandedQueries.some(expandedQuery => {
-    const expandedWords = expandedQuery.toLowerCase().split(/\s+/).filter(word => word.length > 0)
-    return expandedWords.some(word => roomText.includes(word))
+  const hasExpandedMatch = expandedQueries.some((expandedQuery) => {
+    const expandedWords = expandedQuery
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((word) => word.length > 0)
+    return expandedWords.some((word) => roomText.includes(word))
   })
-  
+
   // Проверяем префиксные совпадения
-  const hasPrefixMatch = queryWords.some(word => {
+  const hasPrefixMatch = queryWords.some((word) => {
     if (word.length < SCORE_CONSTANTS.MIN_PREFIX_LENGTH) return false
-    const roomWords = roomText.split(/\s+/).filter(roomWord => roomWord.length > 0)
-    return roomWords.some(roomWord => roomWord.startsWith(word))
+    const roomWords = roomText.split(/\s+/).filter((roomWord) => roomWord.length > 0)
+    return roomWords.some((roomWord) => roomWord.startsWith(word))
   })
-  
+
   if (hasExpandedMatch || hasPrefixMatch) {
     if (queryWords.length <= 1) return true
-    
-    const hasFullMatch = expandedQueries.some(expandedQuery => {
-      const expandedWords = expandedQuery.toLowerCase().split(/\s+/).filter(word => word.length > 0)
-      return expandedWords.every(word => roomText.includes(word))
+
+    const hasFullMatch = expandedQueries.some((expandedQuery) => {
+      const expandedWords = expandedQuery
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((word) => word.length > 0)
+      return expandedWords.every((word) => roomText.includes(word))
     })
-    
+
     if (hasFullMatch) return true
-    
-    const hasTypeAndLocationMatch = expandedQueries.some(expandedQuery => {
-      const expandedWords = expandedQuery.toLowerCase().split(/\s+/).filter(word => word.length > 0)
-      
-      const hasTypeMatch = typeLower && expandedWords.some(word => typeLower.includes(word))
-      const hasLocationMatch = expandedWords.some(word => subTitleLower.includes(word))
-      
+
+    const hasTypeAndLocationMatch = expandedQueries.some((expandedQuery) => {
+      const expandedWords = expandedQuery
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((word) => word.length > 0)
+
+      const hasTypeMatch = typeLower && expandedWords.some((word) => typeLower.includes(word))
+      const hasLocationMatch = expandedWords.some((word) => subTitleLower.includes(word))
+
       return hasTypeMatch && hasLocationMatch
     })
-    
+
     if (hasTypeAndLocationMatch) return true
-    
+
     // Проверяем частичные совпадения для многословных запросов
-    const hasPrefixTypeMatch = typeLower && queryWords.some(word => {
-      if (word.length < SCORE_CONSTANTS.MIN_PREFIX_LENGTH) return false
-      const typeWords = typeLower.split(/\s+/)
-      return typeWords.some(typeWord => typeWord.startsWith(word))
-    })
-    
-    const hasPrefixLocationMatch = queryWords.some(word => {
+    const hasPrefixTypeMatch =
+      typeLower &&
+      queryWords.some((word) => {
+        if (word.length < SCORE_CONSTANTS.MIN_PREFIX_LENGTH) return false
+        const typeWords = typeLower.split(/\s+/)
+        return typeWords.some((typeWord) => typeWord.startsWith(word))
+      })
+
+    const hasPrefixLocationMatch = queryWords.some((word) => {
       if (word.length < SCORE_CONSTANTS.MIN_PREFIX_LENGTH) return false
       const locationWords = subTitleLower.split(/\s+/)
-      return locationWords.some(locationWord => locationWord.startsWith(word))
+      return locationWords.some((locationWord) => locationWord.startsWith(word))
     })
-    
+
     return Boolean(hasPrefixTypeMatch && hasPrefixLocationMatch)
   }
-  
+
   return false
 }
 
@@ -214,36 +234,32 @@ function matchesSearchCriteria(room: RoomData, cachedRoom: CachedRoomData, cache
  * 7. Буст для текущего этажа (+15 баллов)
  * 8. Учебные аудитории выше служебных (+25/-10 баллов)
  */
-export function searchRooms(
-  rooms: RoomData[],
-  query: string,
-  context?: SearchContext
-): RoomData[] {
+export function searchRooms(rooms: RoomData[], query: string, context?: SearchContext): RoomData[] {
   if (!query.trim()) {
     return []
   }
 
   const trimmedQuery = query.trim()
   const cachedQuery = getCachedQueryData(trimmedQuery)
-  
+
   // Фильтруем комнаты с использованием кэшированных данных
-  const filteredResults = rooms.filter(room => {
+  const filteredResults = rooms.filter((room) => {
     const cachedRoom = getCachedRoomData(room)
     return matchesSearchCriteria(room, cachedRoom, cachedQuery)
   })
-  
+
   // Применяем скоринг и ограничиваем результат
-  const scoredResults: SearchResult[] = filteredResults.map(room => ({
+  const scoredResults: SearchResult[] = filteredResults.map((room) => ({
     room,
-    score: calculateCustomScore(room, getCachedRoomData(room), cachedQuery, context)
+    score: calculateCustomScore(room, getCachedRoomData(room), cachedQuery, context),
   }))
 
   // Сортируем по финальному скору и ограничиваем результат
   const finalResults = scoredResults
     .sort((a, b) => b.score - a.score)
     .slice(0, SCORE_CONSTANTS.MAX_RESULTS)
-    .map(result => result.room)
-  
+    .map((result) => result.room)
+
   return finalResults
 }
 
@@ -257,65 +273,67 @@ function parseStructuredQuery(query: string): {
   isTypeSpecific: boolean
 } {
   const queryLower = query.toLowerCase()
-  
+
   const roomTypeKeywords = getRoomTypeKeywords()
   const locationKeywords = getLocationKeywords()
-  
+
   let roomType: string | undefined
   let location: string | undefined
-  
+
   const roomSearchPattern = /^(пр|бс|ав|м|пк|pr|bs|av|m|pk)\s*[-]?\s*\d+$/i
   const roomMatch = query.match(roomSearchPattern)
-  
+
   if (roomMatch) {
     // Если запрос соответствует паттерну поиска комнаты (например, "ПР-123")
     location = roomMatch[1].toLowerCase()
-    
+
     // Определяем тип комнаты через поиск по ключевым словам
     for (const [type, keywords] of Object.entries(roomTypeKeywords)) {
-      if (keywords.some(keyword => queryLower.includes(keyword))) {
+      if (keywords.some((keyword) => queryLower.includes(keyword))) {
         roomType = type
         break
       }
     }
-    
+
     return {
       roomType,
       location,
-      isTypeSpecific: true
+      isTypeSpecific: true,
     }
   }
-  
+
   for (const [type, keywords] of Object.entries(roomTypeKeywords)) {
-    if (keywords.some(keyword => queryLower.includes(keyword))) {
+    if (keywords.some((keyword) => queryLower.includes(keyword))) {
       roomType = type
       break
     }
   }
-  
+
   // Ищем локацию только если есть полные названия кампусов или явные указания
   for (const [loc, keywords] of Object.entries(locationKeywords)) {
     // Исключаем короткие сокращения (м, пк, пр, бс, ав) из поиска локации
     // если они могут конфликтовать с типами помещений
     const shortAbbreviations = ['м', 'пк', 'пр', 'бс', 'ав']
-    
-    if (keywords.some(keyword => {
-      if (shortAbbreviations.includes(keyword)) {
-        return false 
-      }
-      return queryLower.includes(keyword)
-    })) {
+
+    if (
+      keywords.some((keyword) => {
+        if (shortAbbreviations.includes(keyword)) {
+          return false
+        }
+        return queryLower.includes(keyword)
+      })
+    ) {
       if (roomType) {
         location = loc.toLowerCase()
         break
       }
     }
   }
-  
+
   return {
     roomType,
     location,
-    isTypeSpecific: !!roomType
+    isTypeSpecific: !!roomType,
   }
 }
 
@@ -323,9 +341,9 @@ function parseStructuredQuery(query: string): {
  * Вычисляет оптимизированный скор для ранжирования
  */
 function calculateCustomScore(
-  room: RoomData, 
-  cachedRoom: CachedRoomData, 
-  cachedQuery: CachedQueryData, 
+  room: RoomData,
+  cachedRoom: CachedRoomData,
+  cachedQuery: CachedQueryData,
   context?: SearchContext
 ): number {
   let score = SCORE_CONSTANTS.BASE_SCORE
@@ -363,9 +381,9 @@ function calculateCustomScore(
   }
 
   // Бусты за совпадения с синонимами
-  expandedQueries.forEach(expandedQuery => {
+  expandedQueries.forEach((expandedQuery) => {
     if (expandedQuery === originalQuery) return
-    
+
     const expandedQueryLower = expandedQuery.toLowerCase()
     if (roomText.includes(expandedQueryLower)) {
       score += SCORE_CONSTANTS.SYNONYM_MATCH
@@ -373,11 +391,11 @@ function calculateCustomScore(
   })
 
   // Буст за частичные совпадения (prefix matching)
-  queryWords.forEach(word => {
+  queryWords.forEach((word) => {
     if (word.length >= SCORE_CONSTANTS.MIN_PREFIX_LENGTH) {
-      const roomWords = roomText.split(/\s+/).filter(roomWord => roomWord.length > 0)
-      const hasPrefixMatch = roomWords.some(roomWord => roomWord.startsWith(word))
-      
+      const roomWords = roomText.split(/\s+/).filter((roomWord) => roomWord.length > 0)
+      const hasPrefixMatch = roomWords.some((roomWord) => roomWord.startsWith(word))
+
       if (hasPrefixMatch) {
         score += SCORE_CONSTANTS.PREFIX_MATCH
       }
@@ -386,9 +404,9 @@ function calculateCustomScore(
 
   // Специальный буст для многословных запросов типа "туалет ПК"
   if (queryWords.length > 1) {
-    const hasTypeMatch = typeLower && queryWords.some(word => typeLower.includes(word))
-    const hasCorpusMatch = queryWords.some(word => subTitleLower.includes(word))
-    
+    const hasTypeMatch = typeLower && queryWords.some((word) => typeLower.includes(word))
+    const hasCorpusMatch = queryWords.some((word) => subTitleLower.includes(word))
+
     if (hasTypeMatch && hasCorpusMatch) {
       score += SCORE_CONSTANTS.TYPE_AND_LOCATION_MATCH
     }
@@ -397,25 +415,25 @@ function calculateCustomScore(
   // Специальный буст за соответствие структурированному запросу по типу помещения
   if (structuredQuery.isTypeSpecific && structuredQuery.roomType) {
     const roomTypeMatches = typeLower && typeLower.includes(structuredQuery.roomType)
-    
+
     if (roomTypeMatches) {
       score += SCORE_CONSTANTS.TYPE_SPECIFIC_MATCH
-      
+
       // Дополнительный буст если есть совпадение по корпусу
       if (structuredQuery.location) {
         const locationMatches = hasLocationMatch(room, structuredQuery.location)
-        
+
         if (locationMatches) {
           score += SCORE_CONSTANTS.TYPE_AND_LOCATION_INTENT_MATCH
         }
       }
     }
   }
-  
+
   // Специальный буст за соответствие структурированному запросу только по корпусу
   if (!structuredQuery.isTypeSpecific && structuredQuery.location) {
     const locationMatches = hasLocationMatch(room, structuredQuery.location)
-    
+
     if (locationMatches) {
       score += SCORE_CONSTANTS.LOCATION_INTENT_MATCH
     }
@@ -424,9 +442,8 @@ function calculateCustomScore(
   // Контекстно-зависимый буст за текущий кампус
   if (context?.currentPlan && room.plan?.corpus.location.id === context.currentPlan.corpus.location.id) {
     if (structuredQuery.isTypeSpecific) {
-      const roomTypeMatches = structuredQuery.roomType && typeLower && 
-        typeLower.includes(structuredQuery.roomType)
-      
+      const roomTypeMatches = structuredQuery.roomType && typeLower && typeLower.includes(structuredQuery.roomType)
+
       if (roomTypeMatches) {
         score += SCORE_CONSTANTS.CURRENT_CAMPUS_TYPE_MATCH
       } else {
@@ -435,7 +452,7 @@ function calculateCustomScore(
     } else {
       score += SCORE_CONSTANTS.CURRENT_CAMPUS_STANDARD
     }
-    
+
     // Дополнительный буст для поиска по префиксу в текущем корпусе
     if (titleLower.startsWith(originalQuery)) {
       score += SCORE_CONSTANTS.CURRENT_CAMPUS_PREFIX
@@ -464,13 +481,7 @@ function calculateCustomScore(
  * Проверяет, является ли помещение учебным
  */
 function isEducationalRoom(type: RoomType): boolean {
-  const educationalTypes = [
-    'Учебная аудитория',
-    'Лекторий', 
-    'Лаборатория',
-    'Библиотека / читальный зал',
-    'Коворкинг'
-  ]
+  const educationalTypes = ['Учебная аудитория', 'Лекторий', 'Лаборатория', 'Библиотека / читальный зал', 'Коворкинг']
   return educationalTypes.includes(type as string)
 }
 
@@ -478,10 +489,6 @@ function isEducationalRoom(type: RoomType): boolean {
  * Проверяет, является ли помещение служебным
  */
 function isServiceRoom(type: RoomType): boolean {
-  const serviceTypes = [
-    'Служебное помещение',
-    'Не используется',
-    'Гардероб / раздевалка'
-  ]
+  const serviceTypes = ['Служебное помещение', 'Не используется', 'Гардероб / раздевалка']
   return serviceTypes.includes(type as string)
 }

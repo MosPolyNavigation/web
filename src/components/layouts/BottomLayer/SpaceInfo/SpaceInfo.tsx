@@ -38,8 +38,8 @@ const SpaceInfo: FC = () => {
 
       <div className={cl.actions}>
         <Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={IconLink.HEART} />
-        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text="Отсюда" onClick={fromBtnHandler} />
-        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text="Сюда" onClick={toBtnHandler} />
+        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text='Отсюда' onClick={fromBtnHandler} />
+        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text='Сюда' onClick={toBtnHandler} />
       </div>
     </div>
   )

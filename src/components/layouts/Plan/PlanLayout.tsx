@@ -134,14 +134,14 @@ const PlanLayout: FC = () => {
       // Ищем все элементы иконок, исключая crossing
       const iconElements: SVGElement[] = []
       const allElements = svg.querySelectorAll('*')
-      
+
       allElements.forEach((el) => {
         // Пропускаем элементы crossing
         const elId = el.id || ''
         if (elId.includes('crossing') || elId.includes('Crossing')) {
           return
         }
-        
+
         const opacity = el.getAttribute('opacity') || (el as HTMLElement).style.opacity
         if (opacity === '0.5' || parseFloat(opacity) === 0.5) {
           iconElements.push(el as SVGElement)
@@ -185,11 +185,11 @@ const PlanLayout: FC = () => {
           let foundNewParts = true
           let iterations = 0
           const maxIterations = 10 // Защита от бесконечного цикла
-          
+
           while (foundNewParts && iterations < maxIterations) {
             iterations++
             foundNewParts = false
-            
+
             iconElements.forEach((otherElement) => {
               if (processedIconElements.has(otherElement) || iconParts.includes(otherElement)) return
 
@@ -205,10 +205,10 @@ const PlanLayout: FC = () => {
                     const partBBox = (part as SVGGraphicsElement).getBBox()
                     const partCenterX = partBBox.x + partBBox.width / 2
                     const partCenterY = partBBox.y + partBBox.height / 2
-                    
+
                     const deltaX = Math.abs(otherCenterX - partCenterX)
                     const deltaY = Math.abs(otherCenterY - partCenterY)
-                    
+
                     // Проверяем расстояние в координатах SVG (независимо от масштаба)
                     if (deltaX < iconPartRadius && deltaY < iconPartRadius) {
                       isNearAnyPart = true
@@ -218,13 +218,13 @@ const PlanLayout: FC = () => {
                     // Игнорируем ошибки
                   }
                 }
-                
+
                 if (isNearAnyPart) {
                   // Нашли часть иконки
                   iconParts.push(otherElement)
                   processedIconElements.add(otherElement)
                   foundNewParts = true
-                  
+
                   // Расширяем bounding box группы
                   minX = Math.min(minX, otherBBox.x)
                   minY = Math.min(minY, otherBBox.y)
@@ -290,12 +290,12 @@ const PlanLayout: FC = () => {
             // Проверяем расстояние от центра группы иконки в координатах SVG
             const deltaX = Math.abs(textCenterX - iconGroup.centerX)
             const deltaY = Math.abs(textCenterY - iconGroup.centerY)
-            
+
             // Текст должен быть рядом с группой иконки (в координатах SVG, независимо от масштаба)
             if (deltaX < searchRadius && deltaY < searchRadius && deltaY > 5) {
               processedTexts.add(text)
               relatedTexts.push(text as SVGElement)
-              
+
               // Расширяем bounding box
               minX = Math.min(minX, textBBox.x)
               minY = Math.min(minY, textBBox.y)
@@ -385,35 +385,35 @@ const PlanLayout: FC = () => {
                     d={primaryWayPathD}
                     className={classNames(cl.way, wayAnimationClass)}
                     style={{ strokeDasharray: primaryWayLength, strokeDashoffset: primaryWayLength }}
-                    markerStart="url(#way-start-circle)"
-                    markerEnd="url(#way-end-arrow)"
+                    markerStart='url(#way-start-circle)'
+                    markerEnd='url(#way-end-arrow)'
                   />
                 )}
                 <defs>
                   <marker
-                    id="way-end-arrow"
-                    markerUnits="userSpaceOnUse"
-                    markerWidth="20"
-                    markerHeight="22"
-                    refX="15"
-                    refY="11"
-                    viewBox="0 0 20 22"
-                    fill="none"
-                    orient="auto-start-reverse"
+                    id='way-end-arrow'
+                    markerUnits='userSpaceOnUse'
+                    markerWidth='20'
+                    markerHeight='22'
+                    refX='15'
+                    refY='11'
+                    viewBox='0 0 20 22'
+                    fill='none'
+                    orient='auto-start-reverse'
                   >
                     <path key={primaryWayPathD} className={classNames(cl.endArrow, wayAnimationClass)}></path>
                   </marker>
                   <marker
-                    id="way-start-circle"
-                    markerUnits="userSpaceOnUse"
-                    markerWidth="20"
-                    markerHeight="20"
-                    refX="10"
-                    refY="10"
-                    viewBox="0 0 20 20"
-                    fill="none"
+                    id='way-start-circle'
+                    markerUnits='userSpaceOnUse'
+                    markerWidth='20'
+                    markerHeight='20'
+                    refX='10'
+                    refY='10'
+                    viewBox='0 0 20 20'
+                    fill='none'
                   >
-                    <circle fill="white" cx="10" cy="10" className={classNames(cl.startCircle, wayAnimationClass)} />
+                    <circle fill='white' cx='10' cy='10' className={classNames(cl.startCircle, wayAnimationClass)} />
                   </marker>
                 </defs>
               </svg>

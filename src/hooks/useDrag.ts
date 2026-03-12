@@ -24,53 +24,71 @@ export const useDrag = (options: UseDragOptions = {}): UseDragReturn => {
   const [currentY, setCurrentY] = useState(0)
   const [translateY, setTranslateY] = useState(0)
 
-  const handleStart = useCallback((clientY: number) => {
-    if (!enabled) return
-    
-    setIsDragging(true)
-    setStartY(clientY)
-    setCurrentY(clientY)
-    onDragStart?.(clientY)
-  }, [enabled, onDragStart])
+  const handleStart = useCallback(
+    (clientY: number) => {
+      if (!enabled) return
 
-  const handleMove = useCallback((clientY: number) => {
-    if (!isDragging || !enabled) return
-    
-    const deltaY = clientY - startY
-    setCurrentY(clientY)
-    setTranslateY(deltaY)
-    onDragMove?.(clientY, deltaY)
-  }, [isDragging, startY, enabled, onDragMove])
+      setIsDragging(true)
+      setStartY(clientY)
+      setCurrentY(clientY)
+      onDragStart?.(clientY)
+    },
+    [enabled, onDragStart]
+  )
+
+  const handleMove = useCallback(
+    (clientY: number) => {
+      if (!isDragging || !enabled) return
+
+      const deltaY = clientY - startY
+      setCurrentY(clientY)
+      setTranslateY(deltaY)
+      onDragMove?.(clientY, deltaY)
+    },
+    [isDragging, startY, enabled, onDragMove]
+  )
 
   const handleEnd = useCallback(() => {
     if (!isDragging) return
-    
+
     setIsDragging(false)
     const deltaY = currentY - startY
     setTranslateY(0)
     onDragEnd?.(deltaY)
   }, [isDragging, currentY, startY, onDragEnd])
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    handleStart(e.touches[0].clientY)
-  }, [handleStart])
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      handleStart(e.touches[0].clientY)
+    },
+    [handleStart]
+  )
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    handleMove(e.touches[0].clientY)
-  }, [handleMove])
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      handleMove(e.touches[0].clientY)
+    },
+    [handleMove]
+  )
 
   const handleTouchEnd = useCallback(() => {
     handleEnd()
   }, [handleEnd])
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    handleStart(e.clientY)
-  }, [handleStart])
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      handleStart(e.clientY)
+    },
+    [handleStart]
+  )
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    handleMove(e.clientY)
-  }, [handleMove])
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      handleMove(e.clientY)
+    },
+    [handleMove]
+  )
 
   const handleMouseUp = useCallback(() => {
     handleEnd()
@@ -80,7 +98,7 @@ export const useDrag = (options: UseDragOptions = {}): UseDragReturn => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)

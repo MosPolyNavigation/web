@@ -11,10 +11,10 @@ const App = () => {
   }, [])
 
   return (
-    <BrowserRouter basename="/web">
+    <BrowserRouter basename='/web'>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/report" element={<ReportPage />} />
+        <Route path='/' element={<MainPage />} />
+        <Route path='/report' element={<ReportPage />} />
       </Routes>
     </BrowserRouter>
   )

@@ -52,16 +52,16 @@ const RotationControl: FC<RotationControlProps> = ({ onClick }) => {
       <div className={cl.rotationInputWrapper}>
         <input
           ref={inputRef}
-          type="number"
+          type='number'
           className={cl.rotationInput}
           value={inputValue}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
-          min="0"
-          max="360"
-          step="1"
+          min='0'
+          max='360'
+          step='1'
         />
         <span className={cl.rotationUnit}>°</span>
       </div>
@@ -70,4 +70,3 @@ const RotationControl: FC<RotationControlProps> = ({ onClick }) => {
 }
 
 export default RotationControl
-
