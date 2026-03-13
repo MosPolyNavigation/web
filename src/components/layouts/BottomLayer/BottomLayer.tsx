@@ -51,7 +51,11 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
       (bottomCardState === CardState.EXPANDED && activeLayout === Layout.SEARCH)
         ? 0
         : null,
-    onDragEnd: (deltaY) => {
+    onDragEnd: (deltaY, e) => {
+      if (Math.abs(deltaY) > 20) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
       const threshold = 100
 
       if (bottomCardState !== CardState.FULLSCREEN && deltaY < -threshold) {
