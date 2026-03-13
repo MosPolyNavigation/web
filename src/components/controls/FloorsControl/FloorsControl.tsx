@@ -38,11 +38,6 @@ const FloorsControl: FC = () => {
         [cl.invisible]: queryService.steps,
         [cl.bottomCardExpanded]: activeLayout === Layout.SEARCH,
       })}
-      style={{
-        // @ts-expect-error TS2353
-        //Эта переменная указывает шаг отступа и используется в CSS для вычисления отступа
-        '--floors-circle-offset-step': String(circleOffsetStep ?? 0),
-      }}
     >
       {floorsPlans &&
         floorsPlans.map((plan: PlanData) => {
@@ -60,7 +55,16 @@ const FloorsControl: FC = () => {
             </button>
           )
         })}
-      <div className={cl.circle}></div>
+      {typeof circleOffsetStep === 'number' && (
+        <div
+          className={classNames(cl.circle)}
+          style={{
+            //Эта переменная указывает шаг отступа и используется в CSS для вычисления отступа
+            // @ts-expect-error TS2353
+            '--floors-circle-offset-step': String(circleOffsetStep ?? 0),
+          }}
+        ></div>
+      )}
     </div>
   )
 }

@@ -11,23 +11,16 @@
   justify-content: space-between;
   gap: $size-20;
 
-  @media (max-width: 900px) {
+  @include mobile {
     flex-direction: column;
   }
 
   .results {
-    height: 0;
-    flex-grow: 1;
+    flex: 1;
     display: flex;
     padding-bottom: $size-20;
-    overflow-y: scroll;
+    overflow-y: auto;
     flex-direction: column;
-
-    @media (max-width: 900px) {
-    }
-
-    @media (min-width: 900px) {
-    }
   }
 
   .noResults {
@@ -48,13 +41,9 @@
     background-position: center;
     background-image: url('/img/male-shrug.gif');
 
-    @media (max-width: 992px) {
+    @include mobile {
       width: toRem(160);
       height: toRem(160);
-    }
-    @media (max-width: 600px) {
-      width: toRem(180);
-      height: toRem(180);
     }
   }
 
@@ -65,13 +54,9 @@
     color: $color-4;
     text-align: center;
 
-    @media (max-width: 992px) {
+    @include mobile {
       font-size: toRem(17);
       line-height: toRem(21);
-    }
-    @media (max-width: 600px) {
-      font-size: toRem(18);
-      line-height: toRem(22);
     }
   }
 
@@ -85,10 +70,6 @@
     //background-color: #63E3D4;
     overflow-x: scroll;
     overflow-y: hidden;
-
-    @media (max-width: 992px) {
-      scrollbar-width: none;
-    }
   }
 
   .fakeFocusBtn {

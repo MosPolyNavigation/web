@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { BtnName, Layout, SearchIndent } from '../constants/enums.ts'
 
-import { PlanData, RoomModel } from '../constants/types.ts'
+import { PlanData } from '../constants/types.ts'
 import { PlanModel } from '../models/Plan/PlanModel.ts'
 import { QueryService } from '../models/QueryService'
 import chalk from 'chalk'

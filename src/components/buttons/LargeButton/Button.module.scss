@@ -45,7 +45,7 @@
       padding-left: toRem(13);
       padding-right: toRem(13);
 
-      @media (min-width: 992px) {
+      @include desktop {
         .text {
           top: -1px;
         }

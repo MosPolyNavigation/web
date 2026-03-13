@@ -28,7 +28,7 @@
   animation: show ease-out 400ms;
   transition: all ease 400ms;
 
-  @media (width > 900px) {
+  @include desktop {
     border: $color-3 1px solid;
     //border: $color-3 toRem(1) solid;
     border-radius: $size-20;

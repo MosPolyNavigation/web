@@ -3,7 +3,11 @@
 .bottomControlsLayer {
   position: absolute;
   z-index: 2;
-  inset: auto $size-10 $size-20 $size-10;
+  right: $size-10;
+  left: $size-10;
+  bottom: $size-20;
+  //top: calc(100dvh - $size-40 - $size-20);
+  //inset: auto $size-10 $size-20 $size-10;
   translate: 0;
 
   display: flex;
@@ -12,14 +16,14 @@
   gap: $size-10;
   pointer-events: none;
 
-  @media (width > 900px) {
+  @include desktop {
     top: toRem(70);
     bottom: unset;
 
     width: toRem(340);
   }
 
-  @media (width <= 900px) {
+  @include mobile {
     &.centered {
       translate: 0 toRem(-129);
     }
@@ -30,8 +34,10 @@
   }
 
   &.searchOpen {
-    top: toRem(40);
-    bottom: unset;
+    @include mobile {
+      top: calc($size-40);
+    }
+    transition: all 500ms ease;
     z-index: 3;
     justify-content: space-between;
 

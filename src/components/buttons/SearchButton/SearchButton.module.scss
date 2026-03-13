@@ -12,7 +12,7 @@
 
     transition: flex-grow $search-anim-dur ease-out;
 
-    @media (width > 900px) {
+    @include desktop {
       display: none;
     }
 
@@ -34,7 +34,7 @@
 
     transition: all $search-anim-dur ease;
 
-    @media (width > 900px) {
+    @include desktop {
       width: toRem(290);
     }
 

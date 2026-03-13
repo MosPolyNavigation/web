@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 
 import { Layout } from '../../../constants/enums.ts'
 
@@ -15,6 +15,8 @@ const BottomControlsLayer: FC = () => {
   const activeLayout = useAppStore((state) => state.activeLayout)
   const selectedRoomId = useAppStore((state) => state.selectedRoomId)
   const queryService = useAppStore((state) => state.queryService)
+  const openWaySelectors =
+    (queryService.from || queryService.to) && !(queryService.from && queryService.to) && activeLayout !== Layout.SEARCH
 
   return (
     <div
@@ -22,11 +24,10 @@ const BottomControlsLayer: FC = () => {
         [cl.centered]: (!!selectedRoomId || queryService.steps) && activeLayout !== Layout.SEARCH,
         [cl.searchOpen]: activeLayout === Layout.SEARCH,
         [cl.flexCenter]: (queryService.from || queryService.to) && !(queryService.from && queryService.to),
+        [cl.openWaySelectors]: openWaySelectors,
       })}
     >
-      {(queryService.from || queryService.to) &&
-      !(queryService.from && queryService.to) &&
-      activeLayout !== Layout.SEARCH ? (
+      {openWaySelectors ? (
         <WaySelectorsControls />
       ) : queryService.from && queryService.to && activeLayout !== Layout.SEARCH ? (
         <OnWayControls />

@@ -3,10 +3,13 @@ import cl from './BottomLayer.module.scss'
 import IconButton from '../../buttons/IconButton/IconButton.tsx'
 import { IconLink } from '../../../constants/IconLink.ts'
 import classNames from 'classnames'
-import { Layout, CardState } from '../../../constants/enums.ts'
-import useOnHideRemover from '../../../hooks/useOnHideRemover.ts'
+import { CardState, Layout } from '../../../constants/enums.ts'
 import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 import { useDrag } from '../../../hooks/useDrag.ts'
+import SearchMenu from './SearchMenu/SearchMenu.tsx'
+import SpaceInfo from './SpaceInfo/SpaceInfo.tsx'
+import WayInfo from './WayInfo/WayInfo.tsx'
+import { Pointer, QueryService } from '../../../models/QueryService.ts'
 
 interface BottomLayerProps {
   children?: ReactNode
@@ -20,6 +23,9 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
   const [bottomCardState, setBottomCardState] = useState<CardState>(CardState.HIDDEN)
   const previousState = useRef<CardState>(bottomCardState)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  /** Есть ли активный маршрут и показывать ли его */
+  const activeRoute = activeLayout !== Layout.SEARCH && queryService.steps && queryService.from && queryService.to
 
   useEffect(() => {
     if (activeLayout === Layout.SEARCH) {
@@ -40,22 +46,38 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
 
   const { isDragging, translateY, handleTouchStart, handleTouchMove, handleTouchEnd, handleMouseDown } = useDrag({
     enabled: bottomCardState !== CardState.HIDDEN,
-    onDragMove: (clientY, deltaY) => {
-      const canMoveUp = bottomCardState !== CardState.FULLSCREEN && deltaY < 0
-      const canMoveDown = bottomCardState === CardState.FULLSCREEN && deltaY > 0
-
-      if (!canMoveUp && !canMoveDown) {
-        return
-      }
-    },
+    minTranslateY:
+      bottomCardState === CardState.FULLSCREEN ||
+      (bottomCardState === CardState.EXPANDED && activeLayout === Layout.SEARCH)
+        ? 0
+        : null,
     onDragEnd: (deltaY) => {
       const threshold = 100
 
       if (bottomCardState !== CardState.FULLSCREEN && deltaY < -threshold) {
         setBottomCardState(CardState.FULLSCREEN)
-      } else if (bottomCardState === CardState.FULLSCREEN && deltaY > threshold) {
-        const newState = activeLayout === Layout.SEARCH ? CardState.EXPANDED : CardState.COLLAPSED
-        setBottomCardState(newState)
+        // Если потянули сильно вниз или панелька находятся достаточно снизу (менее 60пикс от нижнего края экрана)
+      } else if (
+        deltaY > threshold ||
+        (containerRef.current && innerHeight - containerRef.current?.getBoundingClientRect().y < 60)
+      ) {
+        // Действия при закрытии
+
+        if (bottomCardState === CardState.FULLSCREEN || bottomCardState === CardState.EXPANDED) {
+          if (activeLayout === Layout.SEARCH) {
+            setBottomCardState(CardState.HIDDEN)
+            appStore().changeLayout(appStore().previousLayout)
+          } else {
+            setBottomCardState(CardState.COLLAPSED)
+          }
+        } else if (bottomCardState === CardState.COLLAPSED) {
+          if (appStore().selectedRoomId) {
+            appStore().changeSelectedRoom(null)
+          } else if (activeRoute) {
+            appStore().setQueryService(new QueryService({ from: Pointer.NOTHING, to: Pointer.NOTHING }))
+          }
+          setBottomCardState(CardState.HIDDEN)
+        }
       }
     },
   })
@@ -91,7 +113,12 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
           iconLink={IconLink.CROSS}
         />
       )}
-      {children}
+      {activeLayout === Layout.SEARCH && <SearchMenu />}
+      {/*TODO: По идее надо добавить в стор сосотояния для открытого SpaceInfo и WayInfo чтобы вот так костыльно не делать*/}
+      {activeLayout !== Layout.SEARCH && queryService.steps === undefined && (
+        <SpaceInfo expanded={bottomCardState === CardState.FULLSCREEN} />
+      )}
+      {activeRoute && <WayInfo />}
     </div>
   )
 }

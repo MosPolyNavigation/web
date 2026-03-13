@@ -4,8 +4,10 @@ import { CorpusData, LocationData, PlanData, RoomData } from '../../constants/ty
 import { Parser } from '../Parser.ts'
 import { appConfig } from '../../appConfig.ts'
 
-export async function getDataFromServerAndParse() {
-  let dto: DataDto = {
+const LS_DATA_KEY = 'data-v1'
+
+export async function getDataFromServerAndParse({ source }: { source: 'server' | 'ls' }) {
+  let data: DataDto = {
     plans: [],
     rooms: [],
     corpuses: [],
@@ -18,11 +20,18 @@ export async function getDataFromServerAndParse() {
   let rooms: RoomData[] = []
 
   try {
-    dto = (await axios.get(appConfig.dataUrl)).data as DataDto
+    if (source === 'ls') {
+      const fromLS = localStorage.getItem(LS_DATA_KEY)
+      if (!fromLS) throw new Error('Нет сохраненных данных')
+      data = JSON.parse(fromLS) as DataDto
+    } else {
+      data = (await axios.get<DataDto>(appConfig.dataUrl)).data
+      if (data) localStorage.setItem(LS_DATA_KEY, JSON.stringify(data))
+    }
 
-    console.log('Данные загружены с сервера')
+    console.log(`Данные загружены с ${source}`)
 
-    locations = dto.locations.map((locDto) => ({
+    locations = data.locations.map((locDto) => ({
       id: locDto.id,
       title: locDto.title,
       short: locDto.short,
@@ -31,7 +40,7 @@ export async function getDataFromServerAndParse() {
       crossings: locDto.crossings ?? [],
     }))
 
-    corpuses = dto.corpuses.map((corpDto) => ({
+    corpuses = data.corpuses.map((corpDto) => ({
       id: corpDto.id,
       location: locations.find((loc) => loc.id === corpDto.locationId) as LocationData,
       title: corpDto.title,
@@ -39,7 +48,7 @@ export async function getDataFromServerAndParse() {
       stairs: corpDto.stairs ?? [],
     }))
 
-    plans = dto.plans.map((planDto) => ({
+    plans = data.plans.map((planDto) => ({
       id: planDto.id,
       corpus: corpuses.find((corpus) => corpus.id === planDto.corpusId) as CorpusData,
       available: planDto.available,
@@ -49,16 +58,15 @@ export async function getDataFromServerAndParse() {
       entrances: planDto.entrances,
     }))
 
-    rooms = dto.rooms
-      .map((roomDto) =>
-        Parser.fillRoomData(
-          roomDto,
-          plans.find((plan) => plan.id === roomDto.planId)
-        )
-      )
+    rooms = data.rooms
+      .map((roomDto) => {
+        const plan = plans.find((plan) => plan.id === roomDto.planId)
+        if (plan) return Parser.fillRoomData(roomDto, plan)
+        else return null
+      })
       .filter((room) => !!room)
   } catch (e) {
-    console.log('Не удалось загрузить данные с сервера')
+    console.log(e, 'Не удалось загрузить данные с сервера')
   }
   return { locations, corpuses, plans, rooms }
 }

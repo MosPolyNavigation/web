@@ -2,8 +2,6 @@ import { appStore } from '../store/useAppStore'
 import { Step, Way } from './Way.ts'
 import chalk from 'chalk'
 import { dataStore } from '../store/useDataStore.ts'
-import axios from 'axios'
-import { userStore } from '../store/useUserStore.ts'
 import { statisticApi } from '../api/statisticApi.ts'
 import { IconLink } from '../constants/IconLink.ts'
 

@@ -6,7 +6,6 @@ import axios from 'axios'
 import classNames from 'classnames'
 import { getSvgLink, isSvgSafe } from '../../../functions/planFunctions.ts'
 import { ReactZoomPanPinchContentRef, TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
-import { PlanModel } from '../../../models/Plan/PlanModel.ts'
 import { IconLink } from '../../../constants/IconLink.ts'
 
 const PlanLayout: FC = () => {

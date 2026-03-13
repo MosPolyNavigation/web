@@ -3,6 +3,7 @@
 .spaceInfo {
   width: 100%;
   position: relative;
+  flex: 1;
 
   display: flex;
   flex-direction: column;
@@ -11,7 +12,7 @@
     @extend %text-3;
     margin-right: toRem(30);
 
-    @media (min-width: 900px) {
+    @include desktop {
       order: 2;
       margin-top: $size-20;
     }
@@ -26,9 +27,15 @@
 
   .location {
     color: $color-4;
+    margin-top: toRem(8);
     margin-bottom: $size-15;
+    transition: all 350ms ease;
 
-    @media (min-width: 900px) {
+    &.isExpanded {
+      margin-top: toRem(16);
+    }
+
+    @include desktop {
       display: none;
     }
   }
@@ -37,18 +44,42 @@
     display: flex;
     gap: $size-10;
 
-    .heartBtn {
-      margin-right: auto;
+    @include mobile {
+      transition: all 0.3s ease;
+      &.topActions {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 100px;
+        top: toRem(60);
+        background-color: rgba($color-2, 0.75);
+        box-shadow: 0 0 12px 12px rgba($color-2, 0.75);
+        // backdrop-filter: blur(0.5px);
+
+        &.isExpanded {
+          opacity: 0;
+          user-select: none;
+          pointer-events: none;
+        }
+      }
+
+      .heartBtn {
+        margin-right: auto;
+      }
+
+      &.bottomActions {
+        margin-top: auto;
+        margin-bottom: $size-20;
+      }
     }
 
-    @media (width <= 900px) {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: toRem(60);
+    @include desktop {
+      &.bottomActions {
+        display: none;
+      }
     }
 
-    @media (min-width: 992px) {
+    @include desktop {
       .heartBtn {
         margin: unset;
       }
