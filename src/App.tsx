@@ -3,6 +3,7 @@ import { dataStore } from './store/useDataStore.ts'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import MainPage from './pages/App/MainPage.tsx'
 import ReportPage from './pages/ReportPage/ReportPage.tsx'
+import { DodLayout } from './pages/DodLayout/DodLayout.tsx'
 
 const App = () => {
   useEffect(() => {
@@ -12,8 +13,10 @@ const App = () => {
   return (
     <BrowserRouter basename='/web'>
       <Routes>
-        <Route path='/' element={<MainPage />} />
-        <Route path='/report' element={<ReportPage />} />
+        <Route element={<DodLayout />}>
+          <Route path='/' element={<MainPage />} />
+          <Route path='/report' element={<ReportPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

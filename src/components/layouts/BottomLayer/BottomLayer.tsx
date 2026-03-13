@@ -10,6 +10,7 @@ import SearchMenu from './SearchMenu/SearchMenu.tsx'
 import SpaceInfo from './SpaceInfo/SpaceInfo.tsx'
 import WayInfo from './WayInfo/WayInfo.tsx'
 import { Pointer, QueryService } from '../../../models/QueryService.ts'
+import { useShowDodLayout } from '../../../hooks/useMediaQuery.ts'
 
 interface BottomLayerProps {
   children?: ReactNode
@@ -86,12 +87,16 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
     },
   })
 
+  const { showDodLayout } = useShowDodLayout()
+  console.log({ showDodLayout })
+
   //TODO: переделать на навешивание классов через время
   const layerClassNames = classNames(cl.bottomLayer, {
     [cl.hidden]: bottomCardState === CardState.HIDDEN,
     [cl.expanded]: bottomCardState === CardState.EXPANDED,
     [cl.fullscreen]: bottomCardState === CardState.FULLSCREEN,
     [cl.dragging]: isDragging,
+    [cl.inDodLayout]: showDodLayout,
   })
 
   const containerStyle = {

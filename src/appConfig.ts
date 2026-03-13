@@ -6,6 +6,7 @@ export const appConfig = {
     auditoriumFillColor: '#3B3C41',
   },
   dataUrl: 'https://mospolynavigation.github.io/polyna-preprocess/locationsV2.json',
+  dodImageUrl: 'https://mospolynavigation.github.io/navigationData/sources/dod-image.png',
   roomSearchParamName: 'room',
   fromSearchParamName: 'from',
   toSearchParamName: 'to',

@@ -6,7 +6,12 @@
   z-index: 2;
   width: 100%;
   //noinspection CssInvalidPropertyValue
-  top: calc(100dvh - toRem(129));
+  top: calc(100% - toRem(129));
+
+  //&.inDodLayout {
+  //  top: calc(100dvh - 44px - toRem(129));
+  //}
+
   pointer-events: auto;
   @extend %shadow-default;
   transition: all ease 300ms;
@@ -19,9 +24,14 @@
   @include mobile {
     inset: 0;
     //height: 100%;
-    min-height: calc(100dvh - 5rem);
+    min-height: calc(100% - 5rem);
     //noinspection CssInvalidPropertyValue
     translate: 0 calc(100dvh - toRem(130));
+    &.inDodLayout {
+      //min-height: calc(100dvh - 44px - 5rem);
+      //noinspection CssInvalidPropertyValue
+      translate: 0 calc(100dvh - 44px - toRem(130));
+    }
     border-left: none;
     border-right: none;
     border-bottom: none;
@@ -30,6 +40,11 @@
 
     &.hidden {
       translate: 0 100dvh;
+
+      &.inDodLayout {
+        translate: 0 calc(100dvh - 44px);
+      }
+
       box-shadow: none;
     }
 

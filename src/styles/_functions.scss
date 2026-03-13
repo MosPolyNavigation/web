@@ -9,16 +9,16 @@
 
 // Применяет декстопные свойства
 @mixin desktop {
-  @media (min-width: 1040px) {
-    //@media (min-width: 10040px) {
+  //@media (min-width: 1040px) {
+  @media (min-width: 10040px) {
     @content;
   }
 }
 
 // Применяет мобильные свойства (стараться не использовать)
 @mixin mobile {
-  //@media (max-width: 10039.98px) {
-  @media (max-width: 1039.98px) {
+  @media (max-width: 10039.98px) {
+    //@media (max-width: 1039.98px) {
     @content;
   }
 }
