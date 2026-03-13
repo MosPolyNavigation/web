@@ -10,7 +10,7 @@
 // Применяет декстопные свойства
 @mixin desktop {
   @media (min-width: 1040px) {
-  //@media (min-width: 10040px) {
+    //@media (min-width: 10040px) {
     @content;
   }
 }

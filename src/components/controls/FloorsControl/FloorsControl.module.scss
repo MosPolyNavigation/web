@@ -3,7 +3,7 @@
 .floorControl {
   width: $size-40;
   height: fit-content;
-  &:not(:has(.circle)){
+  &:not(:has(.circle)) {
     height: toRem(40 * 3.5);
   }
   //min-height: toRem(40 * 3.5);
@@ -71,7 +71,7 @@
     bottom: calc(toRem(2) + toRem(34 + 5) * var(--floors-circle-offset-step));
 
     //&.hasFloor {
-      transition: bottom 500ms ease;
+    transition: bottom 500ms ease;
     //}
   }
 }
