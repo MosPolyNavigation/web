@@ -145,6 +145,9 @@ const ReportPage: React.FC = () => {
         <a className={cl.qq} href='https://e.mospolytech.ru/#/maintenance' target='_blank'>
           Личном кабинете
         </a>
+        <br />
+        <br />
+        v1.25.1
       </div>
       <Toast />
     </div>
