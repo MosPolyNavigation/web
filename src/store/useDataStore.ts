@@ -5,6 +5,7 @@ import { appConfig } from '../appConfig.ts'
 import { Graph } from '../models/Graph'
 import { getDataFromServerAndParse } from '../models/data/getDataFromServerAndParse.ts'
 import { QueryService } from '../models/QueryService'
+import chalk from 'chalk'
 
 type State = {
   /**
@@ -44,111 +45,115 @@ export const useDataStore = create<State & Action>()((set, get) => ({
   init: async () => {
     //TODO включить обратно
 
-    function processParsedData() {
-      return (data) => {
-        set({
-          locations: data.locations,
-          corpuses: data.corpuses,
-          plans: data.plans,
-          rooms: data.rooms,
-        })
-        // @ts-expect-error TS2339
-        window.data = {
-          locations: data.locations,
-          corpuses: data.corpuses,
-          plans: data.plans,
-          rooms: data.rooms,
-        }
-
-        let firstPlan: PlanData | undefined = dataStore().plans.find((plan) => plan.id === appConfig.firstPlan)
-        const paramsString = window.location.search
-        const searchParams = new URLSearchParams(paramsString)
-        // Поддержка маршрута через ?from= & ?to= (нормализация ввода)
-        const norm = (s?: string | null) => (s ? s.trim().toLowerCase() : undefined)
-        const fromParamRaw = searchParams.get(appConfig.fromSearchParamName)
-        const toParamRaw = searchParams.get(appConfig.toSearchParamName)
-        const fromParam = norm(fromParamRaw)
-        const toParam = norm(toParamRaw)
-        const fromRoom = fromParam ? get().rooms.find((room) => room.id.toLowerCase() === fromParam) : undefined
-        const toRoom = toParam ? get().rooms.find((room) => room.id.toLowerCase() === toParam) : undefined
-
-        if (fromParam || toParam) {
-          // console.log(`Найдены параметры маршрута: from=${fromParam ?? '-'} to=${toParam ?? '-'}`)
-          // Выбраем стартовый план: приоритет у from, иначе по to
-          const planCandidate = fromRoom?.plan ?? toRoom?.plan ?? undefined
-          if (planCandidate) firstPlan = planCandidate
-        } else {
-          // Поддержка прежнего поведения ?room=
-          const roomIdSearchParamRaw = searchParams.get(appConfig.roomSearchParamName)
-          const roomIdSearchParam = norm(roomIdSearchParamRaw)
-          const roomFromSearchParam = roomIdSearchParam
-            ? get().rooms.find((room) => room.id.toLowerCase() === roomIdSearchParam)
-            : undefined
-          if (roomIdSearchParam) {
-            // console.log(`Найден search параметр 'room'`)
-            if (roomFromSearchParam) {
-              // console.log(
-              //   chalk.green.bold(
-              //     `Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
-              //   )
-              // )
-              firstPlan = roomFromSearchParam.plan ?? undefined
-            } else {
-              // console.log(
-              //   chalk.red.bold(
-              //     `Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
-              //   )
-              // )
-            }
-          }
-        }
-        if (firstPlan) {
-          appStore().changeCurrentPlan(firstPlan, true)
-        } else {
-          // console.log(chalk.red('Не найден firstPlan для установки'))
-        }
-        // Пост-инициализационная логика по выбранным параметрам
-        if (fromParam || toParam) {
-          // Устанавливаем сервис маршрута согласно наличию параметров
-          // updateUrl = true, так как маршрут загружается из квери-параметров
-          appStore().setQueryService(
-            new QueryService({
-              from: fromRoom?.id,
-              to: toRoom?.id,
-            }),
-            false
-          )
-          const url = new URL(window.location.href)
-          const params = new URLSearchParams(url.search)
-          params.delete(appConfig.fromSearchParamName)
-          params.delete(appConfig.toSearchParamName)
-          window.history.pushState(null, '', `${url.pathname}?${params.toString()}`)
-          // Если указан только один (from или to) — выделим это помещение как ориентир
-          const singleRoom = fromRoom ?? toRoom
-          if (singleRoom) {
-            appStore().changeCurrentPlan(singleRoom.plan, true)
-          }
-        } else {
-          const roomIdSearchParamRaw = searchParams.get(appConfig.roomSearchParamName)
-          const roomIdSearchParam = norm(roomIdSearchParamRaw)
-          const roomFromSearchParam = roomIdSearchParam
-            ? get().rooms.find((room) => room.id.toLowerCase() === roomIdSearchParam)
-            : undefined
-          if (roomFromSearchParam) {
-            appStore().changeCurrentPlan(roomFromSearchParam.plan, true)
-            appStore().changeSelectedRoom(roomFromSearchParam.id)
-          }
-        }
-        // const graphInitLocation = firstPlan.corpus.location
-        // if (graphInitLocation) {
-        //   dataStore().setGraphForLocation(graphInitLocation)
-        //   // new Way('a-210', 'a-412')
-        // }
+    function processParsedData(data: {
+      locations: LocationData[]
+      corpuses: CorpusData[]
+      plans: PlanData[]
+      rooms: RoomData[]
+      source: 'server' | 'ls'
+    }) {
+      set({
+        locations: data.locations,
+        corpuses: data.corpuses,
+        plans: data.plans,
+        rooms: data.rooms,
+      })
+      // @ts-expect-error TS2339
+      window.data = {
+        locations: data.locations,
+        corpuses: data.corpuses,
+        plans: data.plans,
+        rooms: data.rooms,
       }
+
+      let firstPlan: PlanData | undefined = dataStore().plans.find((plan) => plan.id === appConfig.firstPlan)
+      const paramsString = window.location.search
+      const searchParams = new URLSearchParams(paramsString)
+      // Поддержка маршрута через ?from= & ?to= (нормализация ввода)
+      const norm = (s?: string | null) => (s ? s.trim().toLowerCase() : undefined)
+      const fromParamRaw = searchParams.get(appConfig.fromSearchParamName)
+      const toParamRaw = searchParams.get(appConfig.toSearchParamName)
+      const fromParam = norm(fromParamRaw)
+      const toParam = norm(toParamRaw)
+      const fromRoom = fromParam ? get().rooms.find((room) => room.id.toLowerCase() === fromParam) : undefined
+      const toRoom = toParam ? get().rooms.find((room) => room.id.toLowerCase() === toParam) : undefined
+
+      if (fromParam || toParam) {
+        console.log(`Найдены параметры маршрута: from=${fromParam ?? '-'} to=${toParam ?? '-'}`)
+        // Выбраем стартовый план: приоритет у from, иначе по to
+        const planCandidate = fromRoom?.plan ?? toRoom?.plan ?? undefined
+        if (planCandidate) firstPlan = planCandidate
+      } else {
+        // Поддержка прежнего поведения ?room=
+        const roomIdSearchParamRaw = searchParams.get(appConfig.roomSearchParamName)
+        const roomIdSearchParam = norm(roomIdSearchParamRaw)
+        const roomFromSearchParam = roomIdSearchParam
+          ? get().rooms.find((room) => room.id.toLowerCase() === roomIdSearchParam)
+          : undefined
+        if (roomIdSearchParam) {
+          // console.log(`Найден search параметр 'room'`)
+          if (roomFromSearchParam) {
+            console.log(
+              chalk.green.bold(
+                `Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
+              )
+            )
+            firstPlan = roomFromSearchParam.plan ?? undefined
+          } else {
+            console.log(
+              chalk.red.bold(
+                `Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
+              )
+            )
+          }
+        }
+      }
+      if (firstPlan) {
+        appStore().changeCurrentPlan(firstPlan, true)
+      } else {
+        console.log(chalk.red('Не найден firstPlan для установки'))
+      }
+      // Пост-инициализационная логика по выбранным параметрам
+      if ((fromParam || toParam) && data.source === 'server') {
+        // Устанавливаем сервис маршрута согласно наличию параметров
+        // updateUrl = true, так как маршрут загружается из квери-параметров
+        appStore().setQueryService(
+          new QueryService({
+            from: fromRoom?.id,
+            to: toRoom?.id,
+          }),
+          false
+        )
+        const url = new URL(window.location.href)
+        const params = new URLSearchParams(url.search)
+        params.delete(appConfig.fromSearchParamName)
+        params.delete(appConfig.toSearchParamName)
+        window.history.pushState(null, '', `${url.pathname}?${params.toString()}`)
+        // Если указан только один (from или to) — выделим это помещение как ориентир
+        const singleRoom = fromRoom ?? toRoom
+        if (singleRoom) {
+          appStore().changeCurrentPlan(singleRoom.plan, true)
+        }
+      } else {
+        const roomIdSearchParamRaw = searchParams.get(appConfig.roomSearchParamName)
+        const roomIdSearchParam = norm(roomIdSearchParamRaw)
+        const roomFromSearchParam = roomIdSearchParam
+          ? get().rooms.find((room) => room.id.toLowerCase() === roomIdSearchParam)
+          : undefined
+        if (roomFromSearchParam) {
+          appStore().changeCurrentPlan(roomFromSearchParam.plan, true)
+          appStore().changeSelectedRoom(roomFromSearchParam.id)
+        }
+      }
+      // const graphInitLocation = firstPlan.corpus.location
+      // if (graphInitLocation) {
+      //   dataStore().setGraphForLocation(graphInitLocation)
+      //   // new Way('a-210', 'a-412')
+      // }
     }
 
-    await getDataFromServerAndParse({ source: 'ls' }).then(processParsedData())
-    await getDataFromServerAndParse({ source: 'server' }).then(processParsedData())
+    await getDataFromServerAndParse({ source: 'ls' }).then(processParsedData)
+    await getDataFromServerAndParse({ source: 'server' }).then(processParsedData)
   },
 
   setGraphForLocation: (location: LocationData) => {

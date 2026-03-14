@@ -68,5 +68,5 @@ export async function getDataFromServerAndParse({ source }: { source: 'server' |
   } catch (e) {
     console.log(e, 'Не удалось загрузить данные с сервера')
   }
-  return { locations, corpuses, plans, rooms }
+  return { locations, corpuses, plans, rooms, source }
 }

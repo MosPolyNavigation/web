@@ -12,12 +12,12 @@ export class Graph {
     //Вызывается после того заполнились данные приложения и заполняет себя
     // @ts-expect-error 2339
     window.graph = this
-    // console.log('Граф начинает заполняться')
+    console.log('Граф начинает заполняться')
     this.location = location
     this.fillVertexesByRawVertexes()
     this.addStairs()
     this.addCrossings()
-    // console.log('Граф заполнен:', this)
+    console.log('Граф заполнен:', this)
   }
 
   private fillVertexesByRawVertexes() {
@@ -34,7 +34,7 @@ export class Graph {
   private addStairs() {
     //добавление связей между лестницами в графе по данным
     const corpusesOfLocations = dataStore().corpuses.filter((corpus) => corpus.location === this.location)
-    // console.log(corpusesOfLocations)
+    console.log(corpusesOfLocations)
     corpusesOfLocations.forEach((corpus) => {
       corpus.stairs.forEach((stairsGroup) => {
         for (let stairIndex = 1; stairIndex < stairsGroup.length; stairIndex++) {
@@ -167,9 +167,9 @@ export class Graph {
     for (const [id, way] of ways) {
       way.push(id)
     }
-    // console.log(
-    //   `Путь найден за ${Date.now() - start} миллисекунд с количеством итераций ${iterations[0]}, ${iterations[1]} и количеством вершин ${filteredVertexes.length}`
-    // )
+    console.log(
+      `Путь найден за ${Date.now() - start} миллисекунд с количеством итераций ${iterations[0]}, ${iterations[1]} и количеством вершин ${filteredVertexes.length}`
+    )
     return {
       way: ways.get(idVertex2)?.map((vertexId) => this.findVertexById(vertexId)),
       distance: Math.floor(distances.get(idVertex2)),

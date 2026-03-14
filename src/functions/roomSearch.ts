@@ -259,6 +259,7 @@ export function searchRooms(rooms: RoomData[], query: string, context?: SearchCo
     .sort((a, b) => b.score - a.score)
     .slice(0, SCORE_CONSTANTS.MAX_RESULTS)
     .map((result) => result.room)
+    .filter((r) => r.available && r.plan?.available && r.plan?.corpus.available && r.plan?.corpus.location.available)
 
   return finalResults
 }

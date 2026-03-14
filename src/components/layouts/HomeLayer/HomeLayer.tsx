@@ -8,7 +8,6 @@ import { Layout } from '../../../constants/enums.ts'
 import { useDataStore } from '../../../store/useDataStore.ts'
 import { LocationData } from '../../../constants/types.ts'
 import { isApple } from '../../../functions/common/isApple.ts'
-import Toast from '../../common/Toast/Toast.tsx'
 
 const HomeLayer: FC = () => {
   const activeLayout = useAppStore((state) => state.activeLayout)
@@ -47,15 +46,17 @@ const HomeLayer: FC = () => {
     <div onAnimationEnd={removerAnimationEndHandler} className={layoutClass}>
       <div className={cl.screenCaption}>Локации</div>
       <div className={cl.content}>
-        {locations.map((location) => (
-          <LocationCard
-            key={location.id}
-            location={location}
-            corpuses={corpuses.filter((corpus) => corpus.location === location)}
-            expanded={location === expandedLocation}
-            expandLocation={expandLocation}
-          />
-        ))}
+        {locations
+          .filter((l) => l.available)
+          .map((location) => (
+            <LocationCard
+              key={location.id}
+              location={location}
+              corpuses={corpuses.filter((corpus) => corpus.location === location)}
+              expanded={location === expandedLocation}
+              expandLocation={expandLocation}
+            />
+          ))}
       </div>
     </div>
   )

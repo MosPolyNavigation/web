@@ -23,7 +23,7 @@ const FloorsControl: FC = () => {
   }, [currentPlan, floorsPlans])
 
   const circleOffsetStep = useMemo<number | undefined>(() => {
-    if (currentPlan && floorsPlans) {
+    if (currentPlan && floorsPlans && floorsPlans.length > 0) {
       return currentPlan.floor - floorsPlans[0].floor
     }
   }, [currentPlan, floorsPlans])
