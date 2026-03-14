@@ -147,7 +147,7 @@ const ReportPage: React.FC = () => {
         </a>
         <br />
         <br />
-        v1.25.1
+        v1.25.2
       </div>
       <Toast />
     </div>
