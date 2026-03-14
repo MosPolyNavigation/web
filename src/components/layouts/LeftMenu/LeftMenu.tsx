@@ -95,8 +95,8 @@ const LeftMenu: FC = () => {
         <div className={cl.linksGroup}>
           <div>Соцсети Московского Политеха:</div>
           <div className={cl.bottom_links}>
-            <IconButton iconLink={IconLink.VK} color={Color.BLUE} to='https://t.me/mospolytech' target='_blank' />
-            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://vk.ru/moscowpolytech' target='_blank' />
+            <IconButton iconLink={IconLink.VK} color={Color.BLUE} to='https://vk.ru/moscowpolytech' target='_blank' />
+            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://t.me/mospolytech' target='_blank' />
             <IconButton
               iconLink={IconLink.MAX}
               color={Color.BLUE}
@@ -108,13 +108,13 @@ const LeftMenu: FC = () => {
         <div className={cl.linksGroup}>
           <div>Наши соцсети:</div>
           <div className={cl.bottom_links}>
-            <IconButton iconLink={IconLink.VK} color={Color.BLUE} to='https://t.me/mospolynavigation' target='_blank' />
             <IconButton
-              iconLink={IconLink.TG}
+              iconLink={IconLink.VK}
               color={Color.BLUE}
               to='https://vk.ru/mospolynavigation'
               target='_blank'
             />
+            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://t.me/mospolynavigation' target='_blank' />
             <IconButton
               iconLink={IconLink.MAX}
               color={Color.BLUE}
