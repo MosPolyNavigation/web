@@ -4,6 +4,7 @@
   width: 100%;
   position: relative;
   flex: 1;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -36,6 +37,7 @@
     &.isExpanded {
       margin-top: toRem(16);
       gap: toRem(8);
+      overflow: auto;
     }
 
     @include desktop {
