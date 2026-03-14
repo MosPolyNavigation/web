@@ -79,6 +79,12 @@
 
     @extend %text-1;
 
+    .linksGroup {
+      display: flex;
+      flex-direction: column;
+      gap: toRem(8);
+    }
+
     .bottom_links {
       display: flex;
       gap: toRem(8);

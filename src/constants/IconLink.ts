@@ -20,6 +20,7 @@ export enum IconLink {
   ARROW_LEFT = 'img/icons/ui/arrow-left.svg',
   ARROW_RIGHT = 'img/icons/ui/arrow-right.svg',
   SMILE_SAD = 'img/icons/ui/Smile-sad.svg',
+  LIST = 'img/icons/ui/list.svg',
 
   LEGAL = 'img/icons/plans/legal.svg',
   STUDY = 'img/icons/plans/study.svg',
@@ -40,4 +41,5 @@ export enum IconLink {
   TG = 'img/icons/tg.svg',
   TG_OUTLINED = 'img/icons/tg-outlined.svg',
   VK = 'img/icons/vk.svg',
+  MAX = 'img/icons/max.svg',
 }

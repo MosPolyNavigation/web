@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 import cl from './SpaceInfo.module.scss'
 import Icon from '../../../common/Icon/Icon.tsx'
 import { IconLink } from '../../../../constants/IconLink.ts'
@@ -13,6 +13,10 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
   const selectedRoomId = useAppStore((state) => state.selectedRoomId)
   const rooms = useDataStore((state) => state.rooms)
   const room = useMemo(() => rooms.find((room) => room.id === selectedRoomId), [selectedRoomId, rooms])
+
+  useEffect(() => {
+    console.log(room)
+  }, [room])
 
   function fromBtnHandler() {
     appStore().setQueryService(new QueryService({ from: selectedRoomId }))
@@ -36,7 +40,11 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
       </div>
 
       <div className={classNames(cl.location, { [cl.isExpanded]: expanded })}>
-        {room && room.subTitle == '' ? <span>&nbsp;</span> : room && room.subTitle}
+        {room && room.subTitle == '' ? (
+          <span>&nbsp;</span>
+        ) : (
+          room && room.subTitle.split('\n').map((part) => <p>{part}</p>)
+        )}
       </div>
 
       <div className={classNames(cl.actions, cl.topActions, { [cl.isExpanded]: expanded })}>

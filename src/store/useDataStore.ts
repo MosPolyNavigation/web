@@ -4,7 +4,6 @@ import { CorpusData, LocationData, PlanData, RoomData } from '../constants/types
 import { appConfig } from '../appConfig.ts'
 import { Graph } from '../models/Graph'
 import { getDataFromServerAndParse } from '../models/data/getDataFromServerAndParse.ts'
-import chalk from 'chalk'
 import { QueryService } from '../models/QueryService'
 
 type State = {
@@ -74,7 +73,7 @@ export const useDataStore = create<State & Action>()((set, get) => ({
         const toRoom = toParam ? get().rooms.find((room) => room.id.toLowerCase() === toParam) : undefined
 
         if (fromParam || toParam) {
-          console.log(`Найдены параметры маршрута: from=${fromParam ?? '-'} to=${toParam ?? '-'}`)
+          // console.log(`Найдены параметры маршрута: from=${fromParam ?? '-'} to=${toParam ?? '-'}`)
           // Выбраем стартовый план: приоритет у from, иначе по to
           const planCandidate = fromRoom?.plan ?? toRoom?.plan ?? undefined
           if (planCandidate) firstPlan = planCandidate
@@ -86,27 +85,27 @@ export const useDataStore = create<State & Action>()((set, get) => ({
             ? get().rooms.find((room) => room.id.toLowerCase() === roomIdSearchParam)
             : undefined
           if (roomIdSearchParam) {
-            console.log(`Найден search параметр 'room'`)
+            // console.log(`Найден search параметр 'room'`)
             if (roomFromSearchParam) {
-              console.log(
-                chalk.green.bold(
-                  `Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
-                )
-              )
+              // console.log(
+              //   chalk.green.bold(
+              //     `Найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
+              //   )
+              // )
               firstPlan = roomFromSearchParam.plan ?? undefined
             } else {
-              console.log(
-                chalk.red.bold(
-                  `Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
-                )
-              )
+              // console.log(
+              //   chalk.red.bold(
+              //     `Не найдено помещение с id из search параметра 'room' ${chalk.underline(roomIdSearchParam)}`
+              //   )
+              // )
             }
           }
         }
         if (firstPlan) {
           appStore().changeCurrentPlan(firstPlan, true)
         } else {
-          console.log(chalk.red('Не найден firstPlan для установки'))
+          // console.log(chalk.red('Не найден firstPlan для установки'))
         }
         // Пост-инициализационная логика по выбранным параметрам
         if (fromParam || toParam) {
@@ -154,7 +153,7 @@ export const useDataStore = create<State & Action>()((set, get) => ({
 
   setGraphForLocation: (location: LocationData) => {
     set({ graph: new Graph(location) })
-    console.log(`Установлен граф для локации ${get().graph?.location}`, get().graph)
+    // console.log(`Установлен граф для локации ${get().graph?.location}`, get().graph)
   },
 }))
 

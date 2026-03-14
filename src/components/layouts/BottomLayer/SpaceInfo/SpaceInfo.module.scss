@@ -30,9 +30,12 @@
     margin-top: toRem(8);
     margin-bottom: $size-15;
     transition: all 350ms ease;
+    display: flex;
+    flex-direction: column;
 
     &.isExpanded {
       margin-top: toRem(16);
+      gap: toRem(8);
     }
 
     @include desktop {

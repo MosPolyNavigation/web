@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FC, HTMLAttributeAnchorTarget } from 'react'
+import { CSSProperties, FC, HTMLAttributeAnchorTarget } from 'react'
 import { Link } from 'react-router'
 import { IconLink } from '../../../constants/IconLink.ts'
 import { Color, Size } from '../../../constants/enums.ts'
@@ -17,6 +17,7 @@ interface MenuItemProps {
   onClick?: () => void
   to?: string
   target?: HTMLAttributeAnchorTarget
+  style?: CSSProperties
 }
 
 const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
@@ -47,7 +48,11 @@ const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
   }
 
   return (
-    <button className={classNames(cl.menuItem, { [cl.sizeS]: props.size === Size.S })} onClick={props.onClick}>
+    <button
+      className={classNames(cl.menuItem, { [cl.sizeS]: props.size === Size.S })}
+      style={props.style}
+      onClick={props.onClick}
+    >
       {content}
     </button>
   )

@@ -1,5 +1,5 @@
-import { RoomData, PlanData, RoomType } from '../constants/types'
-import { expandQueryWithSynonyms, getRoomTypeKeywords, getLocationKeywords } from '../constants/synonyms'
+import { PlanData, RoomData, RoomType } from '../constants/types'
+import { expandQueryWithSynonyms, getLocationKeywords, getRoomTypeKeywords } from '../constants/synonyms'
 
 const SCORE_CONSTANTS = {
   BASE_SCORE: 100,
@@ -21,7 +21,7 @@ const SCORE_CONSTANTS = {
   EDUCATIONAL_ROOM: 25,
   SERVICE_ROOM_PENALTY: -10,
   MIN_PREFIX_LENGTH: 2,
-  MAX_RESULTS: 20,
+  MAX_RESULTS: 100,
 } as const
 
 export interface SearchContext {

@@ -43,21 +43,30 @@ const SearchMenu: FC<SearchMenuProps> = () => {
     }
   }, [rooms, debouncedSearchQuery, planModel])
 
-  const nearestRooms: Array<RoomData[]> = useMemo(() => {
+  /** Список быстрого поиска: ближайшие туалеты и входы, помещения мероприятий */
+  const quicks: RoomData[] = useMemo(() => {
+    const quicks: RoomData[] = []
+
+    quicks.push(...rooms.filter((r) => r.event))
+
+    // Заполнение ближайших важных помещений
     const currentPlan = planModel?.plan
-    if (!currentPlan) return []
-    const roomsInCurrentCorpus = dataStore().rooms.filter(
-      (room) => room.plan && room.plan.corpus === currentPlan.corpus
-    )
-    const types: RoomType[] = ['Мужской туалет', 'Женский туалет', 'Вход в здание']
-    const roomsByTypes = types.map((type) => roomsInCurrentCorpus.filter((room) => room.type === type))
-    const nearestRoomsByTypes = roomsByTypes.map((roomsByType) =>
-      roomsByType
-        .filter((r) => r.plan)
-        .sort((a, b) => Math.abs(currentPlan.floor - a.plan!.floor) - Math.abs(currentPlan.floor - b.plan!.floor))
-    )
-    console.log(nearestRoomsByTypes)
-    return nearestRoomsByTypes
+    if (currentPlan) {
+      const roomsInCurrentCorpus = dataStore().rooms.filter(
+        (room) => room.plan && room.plan.corpus === currentPlan.corpus
+      )
+      const types: RoomType[] = ['Мужской туалет', 'Женский туалет', 'Вход в здание']
+      const roomsByTypes = types.map((type) => roomsInCurrentCorpus.filter((room) => room.type === type))
+      const nearestRoomsByTypes = roomsByTypes.map((roomsByType) =>
+        roomsByType
+          .filter((r) => r.plan)
+          .sort((a, b) => Math.abs(currentPlan.floor - a.plan!.floor) - Math.abs(currentPlan.floor - b.plan!.floor))
+      )
+      const nearests = nearestRoomsByTypes.filter((typeArr) => typeArr.length > 0).map((typeArr) => typeArr[0])
+      quicks.push(...nearests)
+    }
+    console.log(quicks)
+    return quicks
   }, [planModel])
 
   // Сбрасываем результаты через полсекунды
@@ -103,7 +112,7 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   }
 
   function getTitle(room: RoomData): string {
-    if (room.type === 'Вход в здание') {
+    if (room.event || room.type === 'Вход в здание') {
       return room.title
     } else {
       return `Ближайший ${room.title.toLowerCase()}`
@@ -135,6 +144,7 @@ const SearchMenu: FC<SearchMenuProps> = () => {
                   addText={room.subTitle}
                   iconLink={room.icon}
                   isFirst={index === 0}
+                  style={room.event ? { backgroundColor: '#9cbbff30' } : undefined}
                   {...resultProps}
                 />
               ))
@@ -142,19 +152,16 @@ const SearchMenu: FC<SearchMenuProps> = () => {
           </>
         ) : (
           <>
-            {nearestRooms.map(
-              (roomsByType, index) =>
-                roomsByType.length !== 0 && (
-                  <MenuItem
-                    onClick={() => menuItemClickHandler(roomsByType[0])}
-                    text={getTitle(roomsByType[0])}
-                    addText={roomsByType[0].subTitle}
-                    iconLink={roomsByType[0].icon}
-                    isFirst={index === 0}
-                    {...resultProps}
-                  />
-                )
-            )}
+            {quicks.map((room, index) => (
+              <MenuItem
+                onClick={() => menuItemClickHandler(room)}
+                text={getTitle(room)}
+                addText={room.subTitle}
+                iconLink={room.icon}
+                isFirst={index === 0}
+                {...resultProps}
+              />
+            ))}
           </>
         )}
       </div>

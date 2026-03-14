@@ -60,28 +60,68 @@ const LeftMenu: FC = () => {
       </div>
       <div className={cl.items}>
         <MenuItem text='Сообщить о проблеме' color={Color.BLUE} iconLink={IconLink.PROBLEM} to='/report' />
-        <MenuItem text='О сервисе' color={Color.BLUE} iconLink={IconLink.ABOUT} />
+        {/*<MenuItem text='О сервисе' color={Color.BLUE} iconLink={IconLink.ABOUT} />*/}
+        {/*<MenuItem*/}
+        {/*  text='Тг-бот "ПОЛИНА"'*/}
+        {/*  color={Color.BLUE}*/}
+        {/*  iconLink={IconLink.TG_OUTLINED}*/}
+        {/*  to='https://t.me/mospolyna_bot'*/}
+        {/*  target='_blank'*/}
+        {/*/>*/}
         <MenuItem
-          text='Тг-бот "ПОЛИНА"'
-          color={Color.BLUE}
-          iconLink={IconLink.TG_OUTLINED}
-          to='https://t.me/mospolyna_bot'
-          target='_blank'
-        />
-        <MenuItem
-          text='Тг-бот "ПОЛИНА для абитуриентов"'
+          text='Наш Tg-бот'
           color={Color.BLUE}
           iconLink={IconLink.TG_OUTLINED}
           to='https://t.me/PoliNavigatorDOD_bot'
+          target='_blank'
+        />
+        <MenuItem
+          text='Регистрация на мастер-классы'
+          color={Color.BLUE}
+          iconLink={IconLink.LIST}
+          to='https://b24-pye8ry.bitrix24site.ru/crm_form_qn3p2/?utm_source=polina&utm_campaign=dod14032026'
+          target='_blank'
+        />
+        <MenuItem
+          text='Пройти опрос'
+          color={Color.BLUE}
+          iconLink={IconLink.LIST}
+          to='https://forms.yandex.ru/cloud/69b2b09b6d2d73da97353a99/'
           target='_blank'
           isLast
         />
       </div>
       <div className={cl.bottom}>
-        <div className={cl.bottom_links}>
+        <div className={cl.linksGroup}>
+          <div>Соцсети Московского Политеха:</div>
+          <div className={cl.bottom_links}>
+            <IconButton iconLink={IconLink.VK} color={Color.BLUE} to='https://t.me/mospolytech' target='_blank' />
+            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://vk.ru/moscowpolytech' target='_blank' />
+            <IconButton
+              iconLink={IconLink.MAX}
+              color={Color.BLUE}
+              to='https://max.ru/id7719455553_biz'
+              target='_blank'
+            />
+          </div>
+        </div>
+        <div className={cl.linksGroup}>
           <div>Наши соцсети:</div>
-          <IconButton iconLink={IconLink.VK} to='https://t.me/mospolynavigation' target='_blank' />
-          <IconButton iconLink={IconLink.TG} to='https://vk.com/mospolynavigation' target='_blank' />
+          <div className={cl.bottom_links}>
+            <IconButton iconLink={IconLink.VK} color={Color.BLUE} to='https://t.me/mospolynavigation' target='_blank' />
+            <IconButton
+              iconLink={IconLink.TG}
+              color={Color.BLUE}
+              to='https://vk.ru/mospolynavigation'
+              target='_blank'
+            />
+            <IconButton
+              iconLink={IconLink.MAX}
+              color={Color.BLUE}
+              to='https://max.ru/join/t5AiBtccxnLSF6VM2ycT6CzR_XrJo7dt5LuyDrXtHMU'
+              target='_blank'
+            />
+          </div>
         </div>
         <div className={cl.bottom_project}>Сделано студентами проекта “Политех-Навигация (ПолиНа)”</div>
       </div>

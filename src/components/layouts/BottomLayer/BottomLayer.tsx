@@ -88,7 +88,6 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
   })
 
   const { showDodLayout } = useShowDodLayout()
-  console.log({ showDodLayout })
 
   //TODO: переделать на навешивание классов через время
   const layerClassNames = classNames(cl.bottomLayer, {

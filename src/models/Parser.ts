@@ -5,7 +5,7 @@ import { RoomDto } from './data/types/dto.ts'
 export class Parser {
   static fillRoomData(inRoom: RoomDto, plan: PlanData): RoomData | null {
     const type = inRoom.type as RoomType
-    const tabletText = (() => {
+    let tabletText = (() => {
       if (!inRoom.tabletText || inRoom.tabletText === '-' || inRoom.tabletText === '—') return ''
       return inRoom.tabletText
     })()
@@ -13,6 +13,9 @@ export class Parser {
       if (!inRoom.numberOrTitle || inRoom.numberOrTitle === '-' || inRoom.numberOrTitle === '—') return ''
       return inRoom.numberOrTitle
     })()
+    // Заполняем является ли помещением мероприятия
+    const event = tabletText.includes('[EVENT] ')
+    tabletText = tabletText.replace('[EVENT] ', '')
 
     const icon: IconLink | null = (function () {
       switch (type) {
@@ -110,6 +113,7 @@ export class Parser {
         type: type,
         icon: icon,
         available: inRoom.available,
+        event: event,
       }
     else return null
   }

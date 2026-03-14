@@ -36,6 +36,8 @@ export type RoomData = {
   subTitle: string
   icon: IconLink | null
   plan: PlanData | null
+  /** Является ли помещение для мероприятия, помечаем и отображаем в быстром поиске всегда */
+  event: boolean
 }
 
 export type RoomType =

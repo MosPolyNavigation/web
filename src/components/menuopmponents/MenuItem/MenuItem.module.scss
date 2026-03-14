@@ -20,7 +20,7 @@
       gap: $size-10;
 
       .text {
-        @include clampText(1);
+        @include clampText(2);
       }
 
       .icon {
