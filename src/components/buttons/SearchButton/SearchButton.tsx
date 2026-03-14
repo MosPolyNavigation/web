@@ -3,7 +3,7 @@ import React, { FC, useEffect, useRef } from 'react'
 import cl from './SearchButton.module.scss'
 import Icon from '../../common/Icon/Icon.tsx'
 import { IconLink } from '../../../constants/IconLink.ts'
-import { Color } from '../../../constants/enums.ts'
+import { Color, Layout } from '../../../constants/enums.ts'
 import classNames from 'classnames'
 import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 
@@ -42,6 +42,7 @@ type Props = {
 }
 
 const SearchInput = (props: Props) => {
+  const activeLayout = useAppStore((state) => state.activeLayout)
   const searchQuery = useAppStore((state) => state.searchQuery)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -53,11 +54,18 @@ const SearchInput = (props: Props) => {
     }
   }, [props.expanded])
 
+  useEffect(() => {
+    if (activeLayout !== Layout.SEARCH) {
+      inputRef.current?.blur()
+    }
+  }, [activeLayout])
+
   return (
     <>
       <label htmlFor='search'></label>
       <input
         ref={inputRef}
+        // disabled={activeLayout !== Layout.SEARCH}
         autoComplete='off'
         placeholder={'Поиск...'}
         type='text'
