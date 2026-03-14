@@ -8,8 +8,10 @@ import { appStore, useAppStore } from '../../../../store/useAppStore.ts'
 import { QueryService } from '../../../../models/QueryService.ts'
 import { useDataStore } from '../../../../store/useDataStore.ts'
 import classNames from 'classnames'
+import { useNavigate } from 'react-router'
 
 const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
+  const navigate = useNavigate()
   const selectedRoomId = useAppStore((state) => state.selectedRoomId)
   const rooms = useDataStore((state) => state.rooms)
   const room = useMemo(() => rooms.find((room) => room.id === selectedRoomId), [selectedRoomId, rooms])
@@ -48,13 +50,25 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
       </div>
 
       <div className={classNames(cl.actions, cl.topActions, { [cl.isExpanded]: expanded })}>
-        <Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={IconLink.HEART} />
+        <Button
+          classNameExt={cl.heartBtn}
+          color={Color.C4}
+          size={Size.S}
+          iconLink={IconLink.PROBLEM}
+          onClick={() => navigate('/report')}
+        />
         <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text='Отсюда' onClick={fromBtnHandler} />
         <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text='Сюда' onClick={toBtnHandler} />
       </div>
 
       <div className={classNames(cl.actions, cl.bottomActions, { [cl.isExpanded]: expanded })}>
-        <Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={IconLink.HEART} />
+        <Button
+          classNameExt={cl.heartBtn}
+          color={Color.C4}
+          size={Size.S}
+          iconLink={IconLink.PROBLEM}
+          onClick={() => navigate('/report')}
+        />
         <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text='Отсюда' onClick={fromBtnHandler} />
         <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text='Сюда' onClick={toBtnHandler} />
       </div>

@@ -57,7 +57,8 @@ export const useDrag = (options: UseDragOptions = {}) => {
   const handleMove = useCallback(
     (clientY: number, event: TouchEvent | MouseEvent) => {
       if (!isDragging || !enabled) return
-
+      event.stopPropagation()
+      event.preventDefault()
       let deltaY = Math.ceil(clientY) - startY
       const scrollables = scrollablesRef.current
 
