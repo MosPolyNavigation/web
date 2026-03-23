@@ -6,6 +6,17 @@ import { appConfig } from '../../appConfig.ts'
 
 const LS_DATA_KEY = 'data-v1'
 
+async function loadBundledLocationsJson(): Promise<DataDto | null> {
+  try {
+    const base = `${window.location.origin}${import.meta.env.BASE_URL}`
+    const res = await fetch(new URL('data/locationsV2.json', base))
+    if (!res.ok) return null
+    return (await res.json()) as DataDto
+  } catch {
+    return null
+  }
+}
+
 export async function getDataFromServerAndParse({ source }: { source: 'server' | 'ls' }) {
   let data: DataDto = {
     plans: [],
@@ -25,15 +36,23 @@ export async function getDataFromServerAndParse({ source }: { source: 'server' |
       if (!fromLS) throw new Error('Нет сохраненных данных')
       data = JSON.parse(fromLS) as DataDto
     } else {
-      data = (
-        await axios.get<DataDto>(appConfig.dataUrl, {
-          params: {
-            // Query-параметр _t с текущим timestamp — делает каждый URL уникальным (?_t=1710412345678), что исключает попадание в кеш даже у агрессивно кеширующих CDN (например, GitHub Pages).
-            _t: Date.now(),
-          },
-        })
-      ).data
-      if (data) localStorage.setItem(LS_DATA_KEY, JSON.stringify(data))
+      try {
+        data = (
+          await axios.get<DataDto>(appConfig.dataUrl, {
+            params: {
+              // Query-параметр _t с текущим timestamp — делает каждый URL уникальным (?_t=1710412345678), что исключает попадание в кеш даже у агрессивно кеширующих CDN (например, GitHub Pages).
+              _t: Date.now(),
+            },
+          })
+        ).data
+        if (data) localStorage.setItem(LS_DATA_KEY, JSON.stringify(data))
+      } catch {
+        const bundled = await loadBundledLocationsJson()
+        if (bundled?.plans?.length) {
+          data = bundled
+          localStorage.setItem(LS_DATA_KEY, JSON.stringify(data))
+        }
+      }
     }
 
     console.log(`Данные загружены с ${source}`)

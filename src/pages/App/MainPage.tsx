@@ -39,11 +39,15 @@ function MainPage() {
 
   useEffect(() => {
     ;(async () => {
-      if (!userStore().userId) {
-        const userId = await statisticApi.getUserToken()
-        userStore().setUserId(userId)
+      try {
+        if (!userStore().userId) {
+          const userId = await statisticApi.getUserToken()
+          if (userId) userStore().setUserId(userId)
+        }
+        void statisticApi.sendSiteVisit()
+      } catch {
+        /* офлайн: API статистики недоступен */
       }
-      void statisticApi.sendSiteVisit()
     })()
   }, [])
 
