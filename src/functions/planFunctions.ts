@@ -15,7 +15,8 @@ export function isSvgSafe(svgContent: string): boolean {
   }
 
   // Проверяем на наличие JavaScript в обработчиках событий
-  const eventHandlerPattern = /on\w+\s*=\s*["'][^"']*["']/gi
+  // \b чтобы не ловить «on» внутри имён вроде patternContentUnits (…ontentUnits=)
+  const eventHandlerPattern = /\bon\w+\s*=\s*["'][^"']*["']/gi
   if (eventHandlerPattern.test(svgContent)) {
     console.warn('SVG содержит обработчики событий - потенциальная угроза безопасности')
     return false
