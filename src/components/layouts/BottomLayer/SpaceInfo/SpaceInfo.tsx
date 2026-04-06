@@ -56,10 +56,10 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
     } else {
       if (navigator.share) {
         await navigator.share({
-          text: `Делаюсь с тобой аудиторией в приложении Политех Навигация!
+          text: `Делюсь с тобой аудиторией в приложении Политех Навигация!
 
-${room.title}`,
-          url: roomLink,
+${room.title}
+${roomLink}`,
         })
         return
       }
