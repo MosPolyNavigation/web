@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import cl from './Icon.module.scss'
 import { IconLink } from '../../../constants/IconLink.ts'
 import { Color, Size } from '../../../constants/enums.ts'
@@ -13,7 +13,7 @@ interface IconProps {
 }
 
 const Icon: FC<IconProps> = ({ iconLink, color, classNameExt = '', size = Size.M }) => {
-  const IconComponent = getIconComponent(iconLink)
+  const IconComponent = useMemo(() => getIconComponent(iconLink), [iconLink])
 
   if (!IconComponent) return null
 

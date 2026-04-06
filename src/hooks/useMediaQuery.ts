@@ -23,3 +23,7 @@ export const useShowDodLayout = () => {
 
   return { showDodLayout }
 }
+
+export const useIsDesktop = () => {
+  return useMediaQuery('(min-width: 1040px)')
+}

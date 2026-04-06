@@ -9,9 +9,12 @@ import { QueryService } from '../../../../models/QueryService.ts'
 import { useDataStore } from '../../../../store/useDataStore.ts'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router'
+import { useIsDesktop } from '../../../../hooks/useMediaQuery.ts'
+import { RoomData } from '../../../../constants/types.ts'
 
 const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
   const navigate = useNavigate()
+  const isDesktop = useIsDesktop()
   const selectedRoomId = useAppStore((state) => state.selectedRoomId)
   const rooms = useDataStore((state) => state.rooms)
   const room = useMemo(() => rooms.find((room) => room.id === selectedRoomId), [selectedRoomId, rooms])
@@ -28,6 +31,40 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
   function toBtnHandler() {
     appStore().setQueryService(new QueryService({ to: selectedRoomId }))
     appStore().changeSelectedRoom(null)
+  }
+
+  async function shareBtnHandler(room: RoomData | undefined) {
+    if(!room) {
+      appStore().toast.showForTime('Не удалось получить данные о помещении')
+      return
+    }
+
+    const roomLink = `https://mpunav.ru/?room=${selectedRoomId}`
+
+    const copyToClipboard = async () => {
+      try {
+        await navigator.clipboard.writeText(roomLink)
+        appStore().toast.showForTime('Ссылка скопирована в буфер обмена')
+      } catch (error) {
+        appStore().toast.showForTime('Не удалось скопировать ссылку в буфер обмена')
+      }
+    }
+
+    if (isDesktop) {
+      await copyToClipboard()
+      return
+    } else {
+      if (navigator.share) {
+        await navigator.share({ text: 
+`Делаюсь с тобой аудиторией в приложении Политех Навигация!
+
+${room.title}`, url: roomLink })
+        return
+      }
+      await copyToClipboard()
+    }
+
+    
   }
 
   if (!selectedRoomId) {
@@ -54,14 +91,28 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
           classNameExt={cl.heartBtn}
           color={Color.C4}
           size={Size.S}
-          iconLink={IconLink.PROBLEM}
-          onClick={() => navigate('/report')}
+          iconLink={IconLink.SHARE}
+          onClick={() => shareBtnHandler(room)}
         />
+        {/*<Button*/}
+        {/*  classNameExt={cl.heartBtn}*/}
+        {/*  color={Color.C4}*/}
+        {/*  size={Size.S}*/}
+        {/*  iconLink={IconLink.PROBLEM}*/}
+        {/*  onClick={() => navigate('/report')}*/}
+        {/*/>*/}
         <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text='Отсюда' onClick={fromBtnHandler} />
         <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text='Сюда' onClick={toBtnHandler} />
       </div>
 
       <div className={classNames(cl.actions, cl.bottomActions, { [cl.isExpanded]: expanded })}>
+        {/*<Button*/}
+        {/*  classNameExt={cl.heartBtn}*/}
+        {/*  color={Color.C4}*/}
+        {/*  size={Size.S}*/}
+        {/*  iconLink={IconLink.HEART}*/}
+        {/*  onClick={() => shareBtnHandler(room)}*/}
+        {/*/>*/}
         <Button
           classNameExt={cl.heartBtn}
           color={Color.C4}
