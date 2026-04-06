@@ -30,15 +30,22 @@ const MiddleAndTopControlsLayer: FC = () => {
 
       <div className={cl.top}>
         <Button iconLink={IconLink.MENU} onClick={() => controlBtnClickHandler(BtnName.MENU)} />
-        <div className={cl.planInfo}>
-          {currentPlan ? (
-            <>
-              {currentPlan.corpus.location.short}, корпус {currentPlan.corpus.title}, этаж {currentPlan.floor}
-            </>
-          ) : (
-            <LoadMsg />
-          )}
-        </div>
+        <button
+          type='button'
+          className={cl.planInfoButton}
+          onClick={() => controlBtnClickHandler(BtnName.BOTTOM_RIGHT)}
+          disabled={!currentPlan}
+        >
+          <div className={cl.planInfo}>
+            {currentPlan ? (
+              <>
+                {currentPlan.corpus.location.short}, корпус {currentPlan.corpus.title}, этаж {currentPlan.floor}
+              </>
+            ) : (
+              <LoadMsg />
+            )}
+          </div>
+        </button>
       </div>
 
       <div className={cl.middle}>

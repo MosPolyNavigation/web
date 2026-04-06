@@ -26,8 +26,21 @@
     align-items: center;
     gap: $size-20;
 
+    .planInfoButton {
+      pointer-events: auto;
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+      cursor: pointer;
+
+      &:disabled {
+        cursor: default;
+      }
+    }
+
     .planInfo {
       @extend %text-4;
+      width: 100%;
       color: $color-4;
     }
   }
