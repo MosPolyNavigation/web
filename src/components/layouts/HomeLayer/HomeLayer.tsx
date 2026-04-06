@@ -33,7 +33,7 @@ const HomeLayer: FC = () => {
     return null
   }
 
-  const expandLocation = (location) => {
+  const expandLocation = (location: LocationData) => {
     setExpandedLocation(location)
   }
 

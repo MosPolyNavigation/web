@@ -11,7 +11,7 @@ interface LocationCardProps extends Attributes {
   expanded?: boolean
   location: LocationData
   corpuses: CorpusData[]
-  expandLocation: (location) => void
+  expandLocation: (location: LocationData) => void
 }
 
 const LocationCard: FC<LocationCardProps> = ({ expanded, location, corpuses, expandLocation }) => {
