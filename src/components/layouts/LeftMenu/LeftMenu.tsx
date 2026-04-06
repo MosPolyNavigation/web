@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FC, useEffect, useMemo, useState } from 'react'
-import { BtnName, Color, Layout } from '../../../constants/enums.ts'
+import { BtnName, Color, Layout, Size } from '../../../constants/enums.ts'
 import { IconLink } from '../../../constants/IconLink.ts'
 import useOnHideRemover from '../../../hooks/useOnHideRemover.ts'
 import { useAppStore } from '../../../store/useAppStore.ts'
@@ -99,24 +99,48 @@ const LeftMenu: FC = () => {
           </div>
         </div>
         <div className={cl.linksGroup}>
+          <div>Соцсети Центра карьеры:</div>
+          <div className={cl.bottom_links}>
+            <IconButton iconLink={IconLink.VK} color={Color.BLUE} to='https://vk.com/mospolywork' target='_blank' />
+            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://t.me/mospolywork' target='_blank' />
+            <IconButton
+              iconLink={IconLink.MAX}
+              color={Color.BLUE}
+              to='https://max.ru/id7719455553_gos11'
+              target='_blank'
+            />
+          </div>
+        </div>
+        <div className={cl.linksGroup}>
           <div>Наши соцсети:</div>
           <div className={cl.bottom_links}>
             <IconButton
               iconLink={IconLink.VK}
               color={Color.BLUE}
+              size={Size.XL}
               to='https://vk.ru/mospolynavigation'
               target='_blank'
             />
-            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://t.me/mospolynavigation' target='_blank' />
+            <IconButton
+              iconLink={IconLink.TG}
+              color={Color.BLUE}
+              size={Size.XL}
+              to='https://t.me/mospolynavigation'
+              target='_blank'
+            />
             <IconButton
               iconLink={IconLink.MAX}
               color={Color.BLUE}
+              size={Size.XL}
               to='https://max.ru/join/t5AiBtccxnLSF6VM2ycT6CzR_XrJo7dt5LuyDrXtHMU'
               target='_blank'
             />
           </div>
         </div>
-        <div className={cl.bottom_project}>Сделано студентами проекта “Политех-Навигация (ПолиНа)”</div>
+        <div className={cl.bottom_project}>
+          <img src='img/logo.png' alt='' className={cl.bottomProjectLogo} />
+          <div className={cl.bottom_projectText}>Сделано студентами проекта “Политех-Навигация (ПолиНа)”</div>
+        </div>
       </div>
       {isDevelopMode && (
         <div>

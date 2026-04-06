@@ -29,6 +29,12 @@
     min-width: toRem(24);
   }
 
+  &.sizeXL {
+    width: toRem(30);
+    height: toRem(30);
+    min-width: toRem(30);
+  }
+
   &:not(.initialColor) {
     svg [fill]:not([fill='none']) {
       fill: currentColor;
