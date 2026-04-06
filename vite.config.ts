@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
 
     css: {
       preprocessorOptions: {
-      scss: {},
+        scss: {},
       },
       modules: {
         generateScopedName: '[local]__[hash:base64:2]',

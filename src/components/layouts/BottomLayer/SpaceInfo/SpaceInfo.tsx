@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from 'react'
+import { FC, useCallback, useEffect, useMemo } from 'react'
 import cl from './SpaceInfo.module.scss'
 import Icon from '../../../common/Icon/Icon.tsx'
 import { IconLink } from '../../../../constants/IconLink.ts'
@@ -34,7 +34,7 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
   }
 
   async function shareBtnHandler(room: RoomData | undefined) {
-    if(!room) {
+    if (!room) {
       appStore().toast.showForTime('Не удалось получить данные о помещении')
       return
     }
@@ -55,17 +55,30 @@ const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
       return
     } else {
       if (navigator.share) {
-        await navigator.share({ text: 
-`Делаюсь с тобой аудиторией в приложении Политех Навигация!
+        await navigator.share({
+          text: `Делаюсь с тобой аудиторией в приложении Политех Навигация!
 
-${room.title}`, url: roomLink })
+${room.title}`,
+          url: roomLink,
+        })
         return
       }
       await copyToClipboard()
     }
-
-    
   }
+
+  const renderActions = useCallback(
+    (classNameExt: string, iconLink: IconLink, onClick: () => void) => {
+      return (
+        <div className={classNames(cl.actions, classNameExt, { [cl.isExpanded]: expanded })}>
+          <Button classNameExt={cl.heartBtn} color={Color.C4} size={Size.S} iconLink={iconLink} onClick={onClick} />
+          <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text='Отсюда' onClick={fromBtnHandler} />
+          <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text='Сюда' onClick={toBtnHandler} />
+        </div>
+      )
+    },
+    [expanded]
+  )
 
   if (!selectedRoomId) {
     return null
@@ -86,43 +99,8 @@ ${room.title}`, url: roomLink })
         )}
       </div>
 
-      <div className={classNames(cl.actions, cl.topActions, { [cl.isExpanded]: expanded })}>
-        <Button
-          classNameExt={cl.heartBtn}
-          color={Color.C4}
-          size={Size.S}
-          iconLink={IconLink.SHARE}
-          onClick={() => shareBtnHandler(room)}
-        />
-        {/*<Button*/}
-        {/*  classNameExt={cl.heartBtn}*/}
-        {/*  color={Color.C4}*/}
-        {/*  size={Size.S}*/}
-        {/*  iconLink={IconLink.PROBLEM}*/}
-        {/*  onClick={() => navigate('/report')}*/}
-        {/*/>*/}
-        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text='Отсюда' onClick={fromBtnHandler} />
-        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text='Сюда' onClick={toBtnHandler} />
-      </div>
-
-      <div className={classNames(cl.actions, cl.bottomActions, { [cl.isExpanded]: expanded })}>
-        {/*<Button*/}
-        {/*  classNameExt={cl.heartBtn}*/}
-        {/*  color={Color.C4}*/}
-        {/*  size={Size.S}*/}
-        {/*  iconLink={IconLink.HEART}*/}
-        {/*  onClick={() => shareBtnHandler(room)}*/}
-        {/*/>*/}
-        <Button
-          classNameExt={cl.heartBtn}
-          color={Color.C4}
-          size={Size.S}
-          iconLink={IconLink.PROBLEM}
-          onClick={() => navigate('/report')}
-        />
-        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.FROM} text='Отсюда' onClick={fromBtnHandler} />
-        <Button color={Color.BLUE} size={Size.S} iconLink={IconLink.TO} text='Сюда' onClick={toBtnHandler} />
-      </div>
+      {renderActions(cl.topActions, IconLink.SHARE, () => shareBtnHandler(room))}
+      {renderActions(cl.bottomActions, IconLink.PROBLEM, () => navigate('/report'))}
     </div>
   )
 }
