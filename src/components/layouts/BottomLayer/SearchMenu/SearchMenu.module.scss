@@ -1,4 +1,4 @@
-@import '../../../../styles/base';
+@use '../../../../styles/base' as *;
 
 .searchMenu {
   margin-bottom: calc($size-40);

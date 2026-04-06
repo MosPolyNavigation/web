@@ -1,6 +1,6 @@
 @use 'sass:math';
-@import './fonts';
-@import './base';
+@use './fonts';
+@use './base' as *;
 
 * {
   margin: 0;
