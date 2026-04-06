@@ -1,4 +1,4 @@
-import { Id, PlanData, RoomModel } from '../../constants/types.ts'
+import { Id, PlanData, RoomElementModel } from '../../constants/types.ts'
 import { copyAttribute, virtualCircleSVGEl } from '../../functions/planFunctions.ts'
 import cl from '../../components/layouts/Plan/PlanLayout.module.scss'
 import { appStore } from '../../store/useAppStore.ts'
@@ -7,8 +7,8 @@ import { dataStore } from '../../store/useDataStore.ts'
 import { userStore } from '../../store/useUserStore.ts'
 import { IconLink } from '../../constants/IconLink.ts'
 
-export class PlanModel {
-  readonly rooms: Map<Id, RoomModel>
+export class PlanElementModel {
+  readonly rooms: Map<Id, RoomElementModel>
 
   constructor(
     public plan: PlanData,
@@ -159,7 +159,7 @@ export class PlanModel {
   /**
    * Поиск входа для помещения
    */
-  private findEntranceForRoom(roomData: RoomModel, entrancesIdToEl: Map<Id, SVGCircleElement>) {
+  private findEntranceForRoom(roomData: RoomElementModel, entrancesIdToEl: Map<Id, SVGCircleElement>) {
     for (const [entranceId, entranceEl] of entrancesIdToEl) {
       if (this.isEntranceOfRoom(entranceEl, roomData.roomEl)) {
         roomData.entranceId = entranceId
@@ -211,7 +211,7 @@ export class PlanModel {
    * Обработчик клика по помещению
    * @param room Модель помещения, по которому кликнули
    */
-  private handleRoomClick(room: RoomModel) {
+  private handleRoomClick(room: RoomElementModel) {
     //Если аудитории нет в таблице помещений, то она не выделяется (кроме режима разработчика)
     if (!dataStore().rooms.find((roomInfo: any) => roomInfo.id === room.roomId)) {
       appStore().toast.showForTime(
@@ -241,7 +241,7 @@ export class PlanModel {
    * @param options `hideRooms` и `hideEntrances` - скрыть все помещения / кружочки входа, `activateRoom` и `activateEntrance` выделить переданное помещение / его кружочек входа
    */
   public toggleRoom(
-    room: RoomModel | null,
+    room: RoomElementModel | null,
     options: {
       activateRoom?: boolean
       hideRooms?: boolean
@@ -272,7 +272,7 @@ export class PlanModel {
    * @param room
    * @param last Последний ли это план в маршруте, если нет, добавляет слушатель на переключения плана на следующий в маршруте
    */
-  public highlightRoomForNextStep(room: RoomModel | undefined, last: boolean) {
+  public highlightRoomForNextStep(room: RoomElementModel | undefined, last: boolean) {
     if (!room) {
       console.log(`Попытка подсветить помещение, которого нет`, room)
       return

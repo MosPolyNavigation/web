@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { BtnName, Layout, SearchIndent } from '../constants/enums.ts'
 
 import { PlanData } from '../constants/types.ts'
-import { PlanModel } from '../models/Plan/PlanModel.ts'
+import { PlanElementModel } from '../models/Plan/PlanElementModel.ts'
 import { QueryService } from '../models/QueryService'
 import chalk from 'chalk'
 import { Toast } from '../models/Toast.ts'
@@ -30,7 +30,7 @@ type State = {
    * Получается из `currentPlan` и изображения плана.
    * Нужно для **взаимодействия с SVG** плана
    */
-  planModel: null | PlanModel
+  planModel: null | PlanElementModel
   /**
    * Сервис выбора помещений и маршрута
    * Хранит id "Куда" и "Откуда", а также построенный маршрут
@@ -166,7 +166,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
   },
 
   changePlanModel: (planInf, planSvgEl, virtualSvg) => {
-    set({ planModel: new PlanModel(planInf, planSvgEl, virtualSvg) })
+    set({ planModel: new PlanElementModel(planInf, planSvgEl, virtualSvg) })
   },
 
   setQueryService: (query, updateUrl = false) => {
