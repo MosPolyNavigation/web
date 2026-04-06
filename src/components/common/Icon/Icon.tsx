@@ -3,6 +3,7 @@ import cl from './Icon.module.scss'
 import { IconLink } from '../../../constants/IconLink.ts'
 import { Color, Size } from '../../../constants/enums.ts'
 import classNames from 'classnames'
+import { getIconComponent } from '../../../constants/iconComponents.ts'
 
 interface IconProps {
   iconLink: IconLink
@@ -12,27 +13,22 @@ interface IconProps {
 }
 
 const Icon: FC<IconProps> = ({ iconLink, color, classNameExt = '', size = Size.M }) => {
-  // Расчет CSS правила для применения картинки, если указан цвет - устанавливает маску, если нет - устанавливает
-  // изображение фона
+  const IconComponent = getIconComponent(iconLink)
 
-  const iconLinkStyleProperty = (() => {
-    const iconUrl = `url(${iconLink})`
-    if (color === Color.INITIAL) {
-      return { backgroundImage: iconUrl }
-    } else {
-      return { maskImage: iconUrl, backgroundColor: color }
-    }
-  })()
+  if (!IconComponent) return null
 
   return (
     <div
       className={classNames(cl.icon, classNameExt, {
         [cl.sizeM]: size === Size.M,
         [cl.sizeS]: size === Size.S,
+        [cl.sizeL]: size === Size.L,
         [cl.initialColor]: color === Color.INITIAL,
       })}
-      style={iconLinkStyleProperty}
-    />
+      style={color === Color.INITIAL ? undefined : { color }}
+    >
+      <IconComponent />
+    </div>
   )
 }
 

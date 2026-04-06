@@ -1,10 +1,14 @@
 @import '../../../styles/base';
 
 .icon {
-  &:not(.initialColor) {
-    mask-position: center;
-    mask-repeat: no-repeat;
-    mask-size: contain;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   &.sizeM {
@@ -19,9 +23,23 @@
     min-width: toRem(16);
   }
 
+  &.sizeL {
+    width: toRem(24);
+    height: toRem(24);
+    min-width: toRem(24);
+  }
+
+  &:not(.initialColor) {
+    svg [fill]:not([fill='none']) {
+      fill: currentColor;
+    }
+
+    svg [stroke]:not([stroke='none']) {
+      stroke: currentColor;
+    }
+  }
+
   &.initialColor {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
+    color: inherit;
   }
 }
