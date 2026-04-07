@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import cl from './SpaceInfo.module.scss'
 import Icon from '../../../common/Icon/Icon.tsx'
 import { IconLink } from '../../../../constants/IconLink.ts'
@@ -8,20 +8,97 @@ import { appStore, useAppStore } from '../../../../store/useAppStore.ts'
 import { QueryService } from '../../../../models/QueryService.ts'
 import { useDataStore } from '../../../../store/useDataStore.ts'
 import classNames from 'classnames'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { useIsDesktop } from '../../../../hooks/useMediaQuery.ts'
 import { RoomData } from '../../../../constants/types.ts'
 
+const TIME_RANGE_PATTERN = /^\s*(\d{1,2}):(\d{2})\s*[-–—]\s*(\d{1,2}):(\d{2})\b/
+const DEBUG_TIME_PATTERN = /^(\d{1,2}):(\d{2})$/
+
+type ScheduleParagraphState = 'past' | 'current' | 'future' | null
+
+function getCurrentMinutes() {
+  const now = new Date()
+  return now.getHours() * 60 + now.getMinutes()
+}
+
+function parseTimeOverride(value: string | null): number | null {
+  if (!value) {
+    return null
+  }
+
+  const match = value.match(DEBUG_TIME_PATTERN)
+
+  if (!match) {
+    return null
+  }
+
+  const [, hoursRaw, minutesRaw] = match
+  const hours = Number(hoursRaw)
+  const minutes = Number(minutesRaw)
+
+  if (Number.isNaN(hours) || Number.isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    return null
+  }
+
+  return hours * 60 + minutes
+}
+
+function getScheduleParagraphState(part: string, currentMinutes: number): ScheduleParagraphState {
+  const match = part.match(TIME_RANGE_PATTERN)
+
+  if (!match) {
+    return null
+  }
+
+  const [, startHours, startMinutes, endHours, endMinutes] = match
+  const start = Number(startHours) * 60 + Number(startMinutes)
+  const end = Number(endHours) * 60 + Number(endMinutes)
+
+  if (Number.isNaN(start) || Number.isNaN(end) || start > end) {
+    return null
+  }
+
+  if (currentMinutes >= end) {
+    return 'past'
+  }
+
+  if (currentMinutes >= start) {
+    return 'current'
+  }
+
+  return 'future'
+}
+
 const SpaceInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const isDesktop = useIsDesktop()
   const selectedRoomId = useAppStore((state) => state.selectedRoomId)
   const rooms = useDataStore((state) => state.rooms)
   const room = useMemo(() => rooms.find((room) => room.id === selectedRoomId), [selectedRoomId, rooms])
+  const [currentMinutes, setCurrentMinutes] = useState(getCurrentMinutes)
+
+  const subtitleParts = useMemo(() => room?.subTitle.split('\n') ?? [], [room?.subTitle])
+  const debugTimeOverride = useMemo(
+    () => (import.meta.env.DEV ? parseTimeOverride(searchParams.get('debugTime')) : null),
+    [searchParams]
+  )
 
   useEffect(() => {
-    console.log(room)
-  }, [room])
+    if (debugTimeOverride !== null) {
+      setCurrentMinutes(debugTimeOverride)
+      return
+    }
+
+    setCurrentMinutes(getCurrentMinutes())
+
+    const intervalId = window.setInterval(() => {
+      setCurrentMinutes(getCurrentMinutes())
+    }, 30_000)
+
+    return () => window.clearInterval(intervalId)
+  }, [debugTimeOverride])
 
   function fromBtnHandler() {
     appStore().setQueryService(new QueryService({ from: selectedRoomId }))
@@ -95,7 +172,23 @@ ${roomLink}`,
         {room && room.subTitle == '' ? (
           <span>&nbsp;</span>
         ) : (
-          room && room.subTitle.split('\n').map((part) => <p>{part}</p>)
+          subtitleParts.map((part, index) => {
+            const trimmedPart = part.trimEnd()
+            const scheduleState = getScheduleParagraphState(trimmedPart, currentMinutes)
+
+            return (
+              <p
+                key={`${index}-${part}`}
+                className={classNames({
+                  [cl.headingParagraph]: trimmedPart.endsWith(':'),
+                  [cl.pastParagraph]: scheduleState === 'past',
+                  [cl.currentParagraph]: scheduleState === 'current',
+                })}
+              >
+                {part}
+              </p>
+            )
+          })
         )}
       </div>
 

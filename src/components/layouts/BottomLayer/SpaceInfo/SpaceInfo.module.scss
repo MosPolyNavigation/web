@@ -45,6 +45,19 @@
     }
   }
 
+  .headingParagraph {
+    font-weight: 700;
+  }
+
+  .pastParagraph {
+    opacity: 0.45;
+  }
+
+  .currentParagraph {
+    color: $color-5;
+    font-weight: 700;
+  }
+
   .actions {
     display: flex;
     gap: $size-10;
