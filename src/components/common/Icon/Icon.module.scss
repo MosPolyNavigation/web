@@ -1,4 +1,4 @@
-@import '../../../styles/base';
+@use '../../../styles/base' as *;
 
 .icon {
   display: inline-flex;
@@ -27,6 +27,12 @@
     width: toRem(24);
     height: toRem(24);
     min-width: toRem(24);
+  }
+
+  &.sizeXL {
+    width: toRem(30);
+    height: toRem(30);
+    min-width: toRem(30);
   }
 
   &:not(.initialColor) {

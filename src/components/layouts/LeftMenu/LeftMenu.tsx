@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FC, useEffect, useMemo, useState } from 'react'
-import { BtnName, Color, Layout } from '../../../constants/enums.ts'
+import { BtnName, Color, Layout, Size } from '../../../constants/enums.ts'
 import { IconLink } from '../../../constants/IconLink.ts'
 import useOnHideRemover from '../../../hooks/useOnHideRemover.ts'
 import { useAppStore } from '../../../store/useAppStore.ts'
@@ -69,24 +69,17 @@ const LeftMenu: FC = () => {
         {/*  target='_blank'*/}
         {/*/>*/}
         <MenuItem
-          text='Наш Tg-бот'
+          text='Telegram-бот ПолиНа 🕊️'
           color={Color.BLUE}
           iconLink={IconLink.TG_OUTLINED}
           to='https://t.me/PoliNavigatorDOD_bot'
           target='_blank'
         />
         <MenuItem
-          text='Регистрация на мастер-классы'
+          text='Регистрация на программы ДПО'
           color={Color.BLUE}
           iconLink={IconLink.LIST}
-          to='https://b24-pye8ry.bitrix24site.ru/crm_form_qn3p2/?utm_source=polina&utm_campaign=dod14032026'
-          target='_blank'
-        />
-        <MenuItem
-          text='Пройти опрос'
-          color={Color.BLUE}
-          iconLink={IconLink.LIST}
-          to='https://forms.yandex.ru/cloud/69b2b09b6d2d73da97353a99/'
+          to='https://anketolog.ru/service/survey/fill/alias/1013232/zDglLGRB'
           target='_blank'
           isLast
         />
@@ -106,24 +99,48 @@ const LeftMenu: FC = () => {
           </div>
         </div>
         <div className={cl.linksGroup}>
+          <div>Соцсети Центра карьеры:</div>
+          <div className={cl.bottom_links}>
+            <IconButton iconLink={IconLink.VK} color={Color.BLUE} to='https://vk.com/mospolywork' target='_blank' />
+            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://t.me/mospolywork' target='_blank' />
+            <IconButton
+              iconLink={IconLink.MAX}
+              color={Color.BLUE}
+              to='https://max.ru/id7719455553_gos11'
+              target='_blank'
+            />
+          </div>
+        </div>
+        <div className={cl.linksGroup}>
           <div>Наши соцсети:</div>
           <div className={cl.bottom_links}>
             <IconButton
               iconLink={IconLink.VK}
               color={Color.BLUE}
+              size={Size.XL}
               to='https://vk.ru/mospolynavigation'
               target='_blank'
             />
-            <IconButton iconLink={IconLink.TG} color={Color.BLUE} to='https://t.me/mospolynavigation' target='_blank' />
+            <IconButton
+              iconLink={IconLink.TG}
+              color={Color.BLUE}
+              size={Size.XL}
+              to='https://t.me/mospolynavigation'
+              target='_blank'
+            />
             <IconButton
               iconLink={IconLink.MAX}
               color={Color.BLUE}
+              size={Size.XL}
               to='https://max.ru/join/t5AiBtccxnLSF6VM2ycT6CzR_XrJo7dt5LuyDrXtHMU'
               target='_blank'
             />
           </div>
         </div>
-        <div className={cl.bottom_project}>Сделано студентами проекта “Политех-Навигация (ПолиНа)”</div>
+        <div className={cl.bottom_project}>
+          <img src='img/logo.png' alt='' className={cl.bottomProjectLogo} />
+          <div className={cl.bottom_projectText}>Сделано студентами проекта “Политех-Навигация (ПолиНа)”</div>
+        </div>
       </div>
       {isDevelopMode && (
         <div>

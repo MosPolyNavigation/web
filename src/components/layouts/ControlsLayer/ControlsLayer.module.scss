@@ -1,4 +1,4 @@
-@import '../../../styles/base';
+@use '../../../styles/base' as *;
 
 .middleAndTopControlsLayer {
   position: absolute;
@@ -26,8 +26,22 @@
     align-items: center;
     gap: $size-20;
 
+    .planInfoButton {
+      pointer-events: auto;
+      align-self: stretch;
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+      cursor: pointer;
+
+      &:disabled {
+        cursor: default;
+      }
+    }
+
     .planInfo {
       @extend %text-4;
+      width: 100%;
       color: $color-4;
     }
   }

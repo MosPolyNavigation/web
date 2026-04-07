@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { AnimationEvent, FC, useEffect, useState } from 'react'
 import cl from './FloorNumber.module.scss'
 import classNames from 'classnames'
 import { useAppStore } from '../../../../store/useAppStore.ts'
@@ -32,7 +32,7 @@ const FloorNumber: FC = () => {
     console.log(upOrDown)
   }, [upOrDown])
 
-  const animationEndHandler = (e) => {
+  const animationEndHandler = (_e: AnimationEvent<HTMLDivElement>) => {
     if (currentPlan) {
       setBaseFloor(currentPlan.floor)
       setUpOrDown('none')

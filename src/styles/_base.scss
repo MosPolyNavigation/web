@@ -1,6 +1,6 @@
-@import 'variables';
-@import 'functions';
-@import 'text';
+@forward 'variables';
+@forward 'functions';
+@forward 'text';
 
 @keyframes hide-end {
   to {

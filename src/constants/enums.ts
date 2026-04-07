@@ -36,6 +36,7 @@ export enum Size {
   SM,
   M,
   L,
+  XL,
 }
 
 export enum BtnName {

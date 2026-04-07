@@ -1,4 +1,4 @@
-@import '../../../styles/base';
+@use '../../../styles/base' as *;
 
 .leftMenu {
   position: absolute;
@@ -92,8 +92,23 @@
     }
 
     .bottom_project {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: toRem(8);
       color: $color-4;
+    }
+
+    .bottom_projectText {
       text-wrap: balance;
+      flex: 1;
+    }
+
+    .bottomProjectLogo {
+      width: toRem(30);
+      height: toRem(30);
+      min-width: toRem(30);
+      object-fit: contain;
     }
   }
 }
