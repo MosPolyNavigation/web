@@ -10,6 +10,7 @@ import { appStore } from '../../store/useAppStore.ts'
 import PlanLayout from '../../components/layouts/Plan/PlanLayout.tsx'
 import Toast from '../../components/common/Toast/Toast.tsx'
 import PwaInstallBanner from '../../components/common/PwaInstallBanner/PwaInstallBanner.tsx'
+import EventInfoBanner from '../../components/common/EventInfoBanner/EventInfoBanner.tsx'
 import { appConfig } from '../../appConfig.ts'
 import { userStore } from '../../store/useUserStore.ts'
 import { statisticApi } from '../../api/statisticApi.ts'
@@ -62,7 +63,10 @@ function MainPage() {
 
       <PlanLayout />
       <Toast />
-      <PwaInstallBanner />
+      <div className={cl.bannerStack}>
+        <EventInfoBanner />
+        <PwaInstallBanner />
+      </div>
     </div>
   )
 }

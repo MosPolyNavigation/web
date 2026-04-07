@@ -10,9 +10,7 @@ import { RoomData, RoomType } from '../../../../constants/types.ts'
 import { QueryService } from '../../../../models/QueryService.ts'
 import { searchRooms } from '../../../../functions/roomSearch.ts'
 import { useDebounce } from '../../../../hooks/useDebounce.ts'
-
-const EVENT_SECTION_TITLE = 'День карьеры Ростелекома'
-const EVENT_SECTION_SUBTITLE = 'масштабное событие для прокачки твоей карьеры в цифровом будущем'
+import { EVENT_INFO } from '../../../../constants/eventInfo.ts'
 
 const SearchMenu: FC = () => {
   const rooms = useDataStore((state) => state.rooms)
@@ -143,8 +141,8 @@ const SearchMenu: FC = () => {
       <section className={cl.eventSection}>
         <div className={cl.eventSectionLabel}>Событие</div>
         <div className={cl.eventSectionHeader}>
-          <div className={cl.eventSectionTitle}>{EVENT_SECTION_TITLE}</div>
-          <div className={cl.eventSectionSubtitle}>{EVENT_SECTION_SUBTITLE}</div>
+          <div className={cl.eventSectionTitle}>{EVENT_INFO.title}</div>
+          <div className={cl.eventSectionSubtitle}>{EVENT_INFO.subtitle}</div>
         </div>
         <div className={cl.sectionItems}>{renderMenuItems(list, { event: true })}</div>
       </section>
