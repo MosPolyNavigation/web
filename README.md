@@ -1,50 +1,55 @@
-# React + TypeScript + Vite
+# Политех Навигация
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Веб-приложение навигации по кампусу Московского Политеха.
 
-Currently, two official plugins are available:
+Стек: `React 19` + `TypeScript` + `Vite`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Локальный запуск
 
-## Expanding the ESLint configuration
+### 1. Установить зависимости
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npm ci
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 2. Запустить dev-сервер
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```bash
+npm run dev
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+По умолчанию Vite пытается стартовать на `http://localhost:3000/`.
+Если порт занят, он автоматически выберет следующий свободный порт и покажет его в консоли.
+
+### 3. Открыть приложение в браузере
+
+Откройте адрес, который вывел Vite, например:
+
+```text
+http://localhost:3000/
+```
+
+## Переменные окружения
+
+Для локальной разработки `.env` не обязателен.
+Если нужно переопределить настройки, можно создать его на основе примера:
+
+```bash
+cp example.env .env
+```
+
+Доступные переменные:
+
+- `USE_HTTPS=true` включает HTTPS только если в корне проекта есть файлы `localhost-key.pem` и `localhost.pem`.
+- `VITE_BASE_PATH=` базовый путь приложения. Для локальной разработки обычно оставляется пустым.
+- `VITE_BASE_PATH=/web/` используется для публикации на `gh-pages`.
+
+## Полезные команды
+
+```bash
+npm run dev        # локальная разработка
+npm run build      # production build в dist/
+npm run host       # локальный preview собранной версии
+npm run hostshare  # preview на 3000 порту с --host
+npm run lint       # проверка eslint
 ```
