@@ -23,6 +23,65 @@
     padding-bottom: $size-20;
     overflow-y: auto;
     flex-direction: column;
+    gap: $size-15;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: $size-10;
+  }
+
+  .sectionItems {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sectionLabel {
+    font-size: toRem(11);
+    line-height: toRem(13);
+    font-weight: 500;
+    color: $color-4;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .eventSection {
+    display: flex;
+    flex-direction: column;
+    gap: $size-10;
+    padding: $size-15;
+    border: 1px solid rgba($ext-color-blue, 0.22);
+    border-radius: $size-20;
+    background:
+      linear-gradient(180deg, rgba($ext-color-blue, 0.14) 0%, rgba($color-active, 0.7) 100%),
+      rgba($color-2, 0.95);
+    box-shadow: 0 0 18px rgba($ext-color-blue, 0.08);
+  }
+
+  .eventSectionLabel {
+    font-size: toRem(11);
+    line-height: toRem(13);
+    font-weight: 500;
+    color: $ext-color-blue;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .eventSectionHeader {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(4);
+  }
+
+  .eventSectionTitle {
+    @extend %text-4;
+    color: $color-5;
+  }
+
+  .eventSectionSubtitle {
+    @extend %text-2;
+    color: rgba($color-5, 0.8);
   }
 
   .noResults {

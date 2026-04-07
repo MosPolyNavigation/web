@@ -7,6 +7,8 @@ import Icon from '../../common/Icon/Icon.tsx'
 import cl from './MenuItem.module.scss'
 
 interface MenuItemProps {
+  className?: string
+  accented?: boolean
   isFirst?: boolean
   isLast?: boolean
   iconLink?: IconLink | null
@@ -40,7 +42,10 @@ const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
       <Link
         to={props.to}
         target={props.target}
-        className={classNames(cl.menuItem, { [cl.sizeS]: props.size === Size.S })}
+        className={classNames(cl.menuItem, props.className, {
+          [cl.sizeS]: props.size === Size.S,
+          [cl.accented]: props.accented,
+        })}
       >
         {content}
       </Link>
@@ -49,7 +54,10 @@ const MenuItem: FC<MenuItemProps> = (props: MenuItemProps) => {
 
   return (
     <button
-      className={classNames(cl.menuItem, { [cl.sizeS]: props.size === Size.S })}
+      className={classNames(cl.menuItem, props.className, {
+        [cl.sizeS]: props.size === Size.S,
+        [cl.accented]: props.accented,
+      })}
       style={props.style}
       onClick={props.onClick}
     >

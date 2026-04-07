@@ -4,18 +4,17 @@ import { IconLink } from '../../../../constants/IconLink.ts'
 import Button from '../../../buttons/LargeButton/Button.tsx'
 import { Color, Layout, SearchIndent, Size } from '../../../../constants/enums.ts'
 import MenuItem from '../../../menuopmponents/MenuItem/MenuItem.tsx'
-import { dataStore, useDataStore } from '../../../../store/useDataStore.ts'
+import { useDataStore } from '../../../../store/useDataStore.ts'
 import { appStore, useAppStore } from '../../../../store/useAppStore.ts'
 import { RoomData, RoomType } from '../../../../constants/types.ts'
 import { QueryService } from '../../../../models/QueryService.ts'
 import { searchRooms } from '../../../../functions/roomSearch.ts'
 import { useDebounce } from '../../../../hooks/useDebounce.ts'
 
-interface SearchMenuProps {
-  a?: boolean
-}
+const EVENT_SECTION_TITLE = 'День карьеры Ростелекома'
+const EVENT_SECTION_SUBTITLE = 'масштабное событие для прокачки твоей карьеры в цифровом будущем'
 
-const SearchMenu: FC<SearchMenuProps> = () => {
+const SearchMenu: FC = () => {
   const rooms = useDataStore((state) => state.rooms)
   const resultsRef = useRef<HTMLDivElement | null>(null)
   const [results, setResults] = useState(false)
@@ -43,18 +42,17 @@ const SearchMenu: FC<SearchMenuProps> = () => {
     }
   }, [rooms, debouncedSearchQuery, planModel])
 
-  /** Список быстрого поиска: ближайшие туалеты и входы, помещения мероприятий */
+  const eventRooms = useMemo(() => rooms.filter((room) => room.event), [rooms])
+  const searchedEventRooms = useMemo(() => roomsRenderList.filter((room) => room.event), [roomsRenderList])
+  const searchedCommonRooms = useMemo(() => roomsRenderList.filter((room) => !room.event), [roomsRenderList])
+
+  /** Список быстрого поиска: ближайшие туалеты и входы */
   const quicks: RoomData[] = useMemo(() => {
     const quicks: RoomData[] = []
-
-    quicks.push(...rooms.filter((r) => r.event))
-
     // Заполнение ближайших важных помещений
     const currentPlan = planModel?.plan
     if (currentPlan) {
-      const roomsInCurrentCorpus = dataStore().rooms.filter(
-        (room) => room.plan && room.plan.corpus === currentPlan.corpus
-      )
+      const roomsInCurrentCorpus = rooms.filter((room) => room.plan && room.plan.corpus === currentPlan.corpus)
       const types: RoomType[] = ['Мужской туалет', 'Женский туалет', 'Вход в здание']
       const roomsByTypes = types.map((type) => roomsInCurrentCorpus.filter((room) => room.type === type))
       const nearestRoomsByTypes = roomsByTypes.map((roomsByType) =>
@@ -65,9 +63,9 @@ const SearchMenu: FC<SearchMenuProps> = () => {
       const nearests = nearestRoomsByTypes.filter((typeArr) => typeArr.length > 0).map((typeArr) => typeArr[0])
       quicks.push(...nearests)
     }
-    console.log(quicks)
+
     return quicks
-  }, [planModel])
+  }, [planModel, rooms])
 
   // Сбрасываем результаты через полсекунды
   useEffect(() => {
@@ -96,7 +94,6 @@ const SearchMenu: FC<SearchMenuProps> = () => {
   }, [resultsRef, results])
 
   function menuItemClickHandler(room: RoomData) {
-    console.log(room.title, room.subTitle)
     const searchIndent = appStore().searchIndent
 
     if (searchIndent === SearchIndent.SELECT) {
@@ -105,7 +102,6 @@ const SearchMenu: FC<SearchMenuProps> = () => {
     } else if (searchIndent === SearchIndent.SET_FROM) {
       appStore().setQueryService(new QueryService({ from: room.id }))
     } else if (searchIndent === SearchIndent.SET_TO) {
-      console.log(1123)
       appStore().setQueryService(new QueryService({ to: room.id }))
     }
     appStore().changeLayout(Layout.PLAN)
@@ -117,6 +113,42 @@ const SearchMenu: FC<SearchMenuProps> = () => {
     } else {
       return `Ближайший ${room.title.toLowerCase()}`
     }
+  }
+
+  function renderMenuItems(list: RoomData[], options?: { event?: boolean; quickTitle?: boolean; firstIndexOffset?: number }) {
+    const { event = false, quickTitle = false, firstIndexOffset = 0 } = options ?? {}
+
+    return list.map((room, index) => (
+      <MenuItem
+        key={`${room.id}-${firstIndexOffset + index}`}
+        onClick={() => menuItemClickHandler(room)}
+        text={event ? room.title : quickTitle ? getTitle(room) : room.title}
+        addText={room.subTitle}
+        iconLink={room.icon}
+        isFirst={index === 0}
+        isLast={index === list.length - 1}
+        accented={event}
+        color={event ? Color.BLUE : resultProps.color}
+        size={resultProps.size}
+      />
+    ))
+  }
+
+  function renderEventSection(list: RoomData[]) {
+    if (list.length === 0) {
+      return null
+    }
+
+    return (
+      <section className={cl.eventSection}>
+        <div className={cl.eventSectionLabel}>Событие</div>
+        <div className={cl.eventSectionHeader}>
+          <div className={cl.eventSectionTitle}>{EVENT_SECTION_TITLE}</div>
+          <div className={cl.eventSectionSubtitle}>{EVENT_SECTION_SUBTITLE}</div>
+        </div>
+        <div className={cl.sectionItems}>{renderMenuItems(list, { event: true })}</div>
+      </section>
+    )
   }
 
   return (
@@ -137,31 +169,28 @@ const SearchMenu: FC<SearchMenuProps> = () => {
                 <div className={cl.noResultsText}>Ничего не найдено</div>
               </div>
             ) : (
-              roomsRenderList.map((room, index) => (
-                <MenuItem
-                  onClick={() => menuItemClickHandler(room)}
-                  text={room.title}
-                  addText={room.subTitle}
-                  iconLink={room.icon}
-                  isFirst={index === 0}
-                  style={room.event ? { backgroundColor: '#9cbbff30' } : undefined}
-                  {...resultProps}
-                />
-              ))
+              <>
+                {renderEventSection(searchedEventRooms)}
+                {searchedCommonRooms.length > 0 && (
+                  <section className={cl.section}>
+                    {searchedEventRooms.length > 0 && <div className={cl.sectionLabel}>Другие результаты</div>}
+                    <div className={cl.sectionItems}>{renderMenuItems(searchedCommonRooms)}</div>
+                  </section>
+                )}
+              </>
             )}
           </>
         ) : (
           <>
-            {quicks.map((room, index) => (
-              <MenuItem
-                onClick={() => menuItemClickHandler(room)}
-                text={getTitle(room)}
-                addText={room.subTitle}
-                iconLink={room.icon}
-                isFirst={index === 0}
-                {...resultProps}
-              />
-            ))}
+            {renderEventSection(eventRooms)}
+            {quicks.length > 0 && (
+              <section className={cl.section}>
+                {eventRooms.length > 0 && <div className={cl.sectionLabel}>Быстрый доступ</div>}
+                <div className={cl.sectionItems}>
+                  {renderMenuItems(quicks, { quickTitle: true, firstIndexOffset: eventRooms.length })}
+                </div>
+              </section>
+            )}
           </>
         )}
       </div>
