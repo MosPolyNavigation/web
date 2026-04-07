@@ -77,7 +77,7 @@ ${roomLink}`,
         </div>
       )
     },
-    [expanded]
+    [expanded, fromBtnHandler, toBtnHandler]
   )
 
   if (!selectedRoomId) {
