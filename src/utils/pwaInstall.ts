@@ -44,9 +44,15 @@ export function isIOSDevice(): boolean {
   return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1
 }
 
+export function isFirefoxBrowser(): boolean {
+  if (typeof navigator === 'undefined') return false
+  return /firefox/i.test(navigator.userAgent)
+}
+
 /** Показать баннер: в режиме браузера и нет записи об установке; при повторе — только через 2 суток после lastPromptAt */
 export function shouldShowPwaInstallBannerByStorage(): boolean {
   if (isPwaStandalone()) return false
+  if (isFirefoxBrowser()) return false
   const s = parsePwaInstallStored()
   if (s === null) return true
   if ('installed' in s && s.installed) return false
