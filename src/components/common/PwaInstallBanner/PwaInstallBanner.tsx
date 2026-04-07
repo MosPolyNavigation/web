@@ -100,7 +100,7 @@ const PwaInstallBanner = () => {
             {iosHint && (
               <p className={cl.iosHint}>
                 Отлично!
-                <br /> Нажмите <b>"Поделиться"</b> внизу экрана, затем <b>"На экран Домой"</b>.
+                <br /> Нажмите кнопку <b>Поделиться</b> внизу экрана, затем <b>Добавить На экран Домой</b>.
               </p>
             )}
             <button type='button' className={cl.close} onClick={dismiss} aria-label='Закрыть'>
