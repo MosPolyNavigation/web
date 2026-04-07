@@ -24,11 +24,7 @@ function WaySelectorButton(props: Props) {
       {props.text ? (
         <button className={cl.waySelectorButton} onClick={props.onClick}>
           <div className={cl.waySelectorContent}>
-            <Icon
-              classNameExt={cl.waySelectorIcon}
-              iconLink={props.icon ?? props.baseIcon}
-              color={Color.INITIAL}
-            />
+            <Icon classNameExt={cl.waySelectorIcon} iconLink={props.icon ?? props.baseIcon} color={Color.INITIAL} />
             <div className={cl.buttonText}>{props.text}</div>
           </div>
           <div className={cl.clearButton} onClick={(e) => onCrossBtnClick(e)}>
