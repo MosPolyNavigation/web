@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router'
 import Button from '../../buttons/LargeButton/Button.tsx'
 import Icon from '../Icon/Icon.tsx'
 import { Color, Layout, Size } from '../../../constants/enums.ts'
 import { IconLink } from '../../../constants/IconLink.ts'
-import { useAppStore } from '../../../store/useAppStore.ts'
+import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 import {
   isFirefoxBrowser,
   isMobileDevice,
@@ -14,6 +15,7 @@ import {
   shouldShowPwaInstallBannerByStorage,
   type BeforeInstallPromptEvent,
 } from '../../../utils/pwaInstall.ts'
+import { isBannerDebugOverrideEnabled } from '../../../utils/bannerDebugOverride.ts'
 import cl from './PwaInstallBanner.module.scss'
 
 const LOGO_SRC = `${import.meta.env.BASE_URL}img/logo.png`
@@ -22,18 +24,26 @@ const LOGO_SRC = `${import.meta.env.BASE_URL}img/logo.png`
  * Баннер установки PWA (внизу экрана, оформление как Toast). Виден только на слое плана.
  */
 const PwaInstallBanner = () => {
+  const [searchParams] = useSearchParams()
   const activeLayout = useAppStore((state) => state.activeLayout)
+  const forceShowBanners = isBannerDebugOverrideEnabled(searchParams)
   const [storageOk, setStorageOk] = useState(() => shouldShowPwaInstallBannerByStorage())
+  const [dismissed, setDismissed] = useState(false)
   const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
   // нажали установить в сафари, покажем подсказку
   const [iosHint, setIosHint] = useState(false)
 
   const dismiss = useCallback(() => {
+    if (forceShowBanners) {
+      return
+    }
+
     markPwaInstallBannerDismissed()
+    setDismissed(true)
     setStorageOk(false)
     deferredPrompt.current = null
     setIosHint(false)
-  }, [])
+  }, [forceShowBanners])
 
   const onInstallClick = useCallback(async () => {
     const e = deferredPrompt.current
@@ -50,19 +60,21 @@ const PwaInstallBanner = () => {
       setIosHint(true)
       return
     }
+
+    appStore().toast.showForTime('Если системное окно не открылось, установите приложение через меню браузера')
   }, [])
 
   useEffect(() => {
-    if (!isMobileDevice()) return
-    if (isPwaStandalone()) {
+    if (!forceShowBanners && !isMobileDevice()) return
+    if (!forceShowBanners && isPwaStandalone()) {
       markPwaInstalledInStorage()
       setStorageOk(false)
       return
     }
 
     if (!('serviceWorker' in navigator)) return
-    if (isFirefoxBrowser()) return
-    if (!shouldShowPwaInstallBannerByStorage()) return
+    if (!forceShowBanners && isFirefoxBrowser()) return
+    if (!forceShowBanners && !shouldShowPwaInstallBannerByStorage()) return
 
     const onBeforeInstall = (event: Event) => {
       event.preventDefault()
@@ -83,12 +95,15 @@ const PwaInstallBanner = () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstall)
       window.removeEventListener('appinstalled', onInstalled)
     }
-  }, [])
+  }, [forceShowBanners])
 
-  if (activeLayout !== Layout.PLAN) return null
-  if (!isMobileDevice()) return null
-  if (isFirefoxBrowser()) return null
-  if (!storageOk || isPwaStandalone()) return null
+  if (!forceShowBanners && dismissed) return null
+  if (!forceShowBanners) {
+    if (activeLayout !== Layout.PLAN) return null
+    if (!isMobileDevice()) return null
+    if (isFirefoxBrowser()) return null
+    if (!storageOk || isPwaStandalone()) return null
+  }
 
   return (
     <div className={cl.banner} role='dialog' aria-label='Установка приложения'>

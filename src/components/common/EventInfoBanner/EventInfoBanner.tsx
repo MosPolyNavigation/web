@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router'
 import Button from '../../buttons/LargeButton/Button.tsx'
 import Icon from '../Icon/Icon.tsx'
 import { Color, Layout, SearchIndent, Size } from '../../../constants/enums.ts'
@@ -6,6 +7,7 @@ import { IconLink } from '../../../constants/IconLink.ts'
 import { useDataStore } from '../../../store/useDataStore.ts'
 import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 import { EVENT_INFO } from '../../../constants/eventInfo.ts'
+import { isBannerDebugOverrideEnabled } from '../../../utils/bannerDebugOverride.ts'
 import cl from './EventInfoBanner.module.scss'
 
 const EVENT_BANNER_STORAGE_KEY = 'eventInfoBannerDismissedDay'
@@ -45,9 +47,11 @@ function markEventBannerDismissedToday() {
 }
 
 const EventInfoBanner = () => {
+  const [searchParams] = useSearchParams()
   const activeLayout = useAppStore((state) => state.activeLayout)
   const currentPlan = useAppStore((state) => state.currentPlan)
   const rooms = useDataStore((state) => state.rooms)
+  const forceShowBanners = isBannerDebugOverrideEnabled(searchParams)
   const [visible, setVisible] = useState(() => !isEventBannerDismissedToday())
 
   const isEventDate = useMemo(() => getMoscowDateKey() === EVENT_INFO.bannerDateMoscow, [])
@@ -73,9 +77,13 @@ const EventInfoBanner = () => {
   }, [currentPlan, rooms])
 
   const dismiss = useCallback(() => {
+    if (forceShowBanners) {
+      return
+    }
+
     markEventBannerDismissedToday()
     setVisible(false)
-  }, [])
+  }, [forceShowBanners])
 
   const openSearch = useCallback(() => {
     appStore().setSearchIndent(SearchIndent.SELECT)
@@ -83,7 +91,11 @@ const EventInfoBanner = () => {
     appStore().changeLayout(Layout.SEARCH)
   }, [])
 
-  if (activeLayout !== Layout.PLAN || !isEventDate || !isBsCampus || !hasEventRooms || !visible) {
+  if (!forceShowBanners && !visible) {
+    return null
+  }
+
+  if (!forceShowBanners && (activeLayout !== Layout.PLAN || !isEventDate || !isBsCampus || !hasEventRooms)) {
     return null
   }
 
