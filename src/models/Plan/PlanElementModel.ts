@@ -75,12 +75,17 @@ export class PlanElementModel {
   private processSpaces() {
     const spacesElement = this.planSvgEl.getElementById('Spaces')
     if (!spacesElement) return
+    const eventRoomIds = new Set(
+      dataStore()
+        .rooms.filter((room) => room.plan?.id === this.plan.id && room.event)
+        .map((room) => room.id)
+    )
 
     for (const spaceEl of spacesElement.children) {
       if (spaceEl.id.startsWith('!')) {
         this.addUnknownToastClick(spaceEl)
       } else if (['path', 'rect'].includes(spaceEl.tagName)) {
-        this.addRoom(spaceEl as SVGPathElement | SVGCircleElement)
+        this.addRoom(spaceEl as SVGPathElement | SVGCircleElement, eventRoomIds.has(spaceEl.id))
       }
     }
   }
@@ -102,7 +107,7 @@ export class PlanElementModel {
   /**
    * Добавление помещения в коллекцию
    */
-  private addRoom(roomEl: SVGPathElement | SVGCircleElement) {
+  private addRoom(roomEl: SVGPathElement | SVGCircleElement, isEventRoom = false) {
     this.rooms.set(roomEl.id, {
       roomId: roomEl.id,
       roomEl: roomEl,
@@ -111,6 +116,9 @@ export class PlanElementModel {
     })
     roomEl.removeAttribute('opacity') //Удаление оригинального атрибута, потому что с ним плохо работает transition
     roomEl.classList.add(cl.room) //добавляем помещению соответствующий класс, для подсветки
+    if (isEventRoom) {
+      roomEl.classList.add(cl.eventRoom)
+    }
     setTimeout(() => roomEl.classList.add(cl.animated), 20) //Добавление класса анимации чуть позже, чтобы успели обновиться свойства
   }
 

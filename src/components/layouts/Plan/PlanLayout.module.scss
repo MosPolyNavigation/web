@@ -26,6 +26,25 @@
       height: 100%;
 
       .room {
+        &.eventRoom:not(.highlight) {
+          animation: room-event-pulse 2.1s infinite ease-in-out;
+
+          @media (prefers-reduced-motion: reduce) {
+            animation: none;
+          }
+
+          @keyframes room-event-pulse {
+            0%,
+            100% {
+              opacity: 1;
+            }
+
+            50% {
+              opacity: 0.4;
+            }
+          }
+        }
+
         //Аудитории
         &[fill='#3B3C41'] {
           //transition: fill 200ms ease;
