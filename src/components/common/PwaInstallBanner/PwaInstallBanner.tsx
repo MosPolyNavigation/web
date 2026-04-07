@@ -6,6 +6,7 @@ import { IconLink } from '../../../constants/IconLink.ts'
 import { useAppStore } from '../../../store/useAppStore.ts'
 import {
   isFirefoxBrowser,
+  isMobileDevice,
   isIOSDevice,
   isPwaStandalone,
   markPwaInstallBannerDismissed,
@@ -52,6 +53,7 @@ const PwaInstallBanner = () => {
   }, [])
 
   useEffect(() => {
+    if (!isMobileDevice()) return
     if (isPwaStandalone()) {
       markPwaInstalledInStorage()
       setStorageOk(false)
@@ -84,6 +86,7 @@ const PwaInstallBanner = () => {
   }, [])
 
   if (activeLayout !== Layout.PLAN) return null
+  if (!isMobileDevice()) return null
   if (isFirefoxBrowser()) return null
   if (!storageOk || isPwaStandalone()) return null
 

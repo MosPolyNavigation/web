@@ -49,9 +49,15 @@ export function isFirefoxBrowser(): boolean {
   return /firefox/i.test(navigator.userAgent)
 }
 
+export function isMobileDevice(): boolean {
+  if (typeof navigator === 'undefined') return false
+  return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent)
+}
+
 /** Показать баннер: в режиме браузера и нет записи об установке; при повторе — только через 2 суток после lastPromptAt */
 export function shouldShowPwaInstallBannerByStorage(): boolean {
   if (isPwaStandalone()) return false
+  if (!isMobileDevice()) return false
   if (isFirefoxBrowser()) return false
   const s = parsePwaInstallStored()
   if (s === null) return true
