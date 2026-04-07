@@ -18,6 +18,7 @@ interface ButtonProps extends Attributes {
   textPosition?: Pos.LEFT | Pos.RIGHT
   style?: CSSProperties
   type?: 'button' | 'submit' | 'reset'
+  fullWidth?: boolean
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -28,6 +29,7 @@ const Button: FC<ButtonProps> = (props) => {
     [cl.sizeL]: size === Size.M,
     [cl.sizeS]: size === Size.S,
     [cl.current]: props.current,
+    [cl.fullWidth]: props.fullWidth,
   })
 
   const textStyle = props.textColor && { color: props.textColor }

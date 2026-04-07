@@ -9,6 +9,7 @@ import BottomControlsLayer from '../../components/layouts/BottomControlsLayer/Bo
 import { appStore } from '../../store/useAppStore.ts'
 import PlanLayout from '../../components/layouts/Plan/PlanLayout.tsx'
 import Toast from '../../components/common/Toast/Toast.tsx'
+import PwaInstallBanner from '../../components/common/PwaInstallBanner/PwaInstallBanner.tsx'
 import { appConfig } from '../../appConfig.ts'
 import { userStore } from '../../store/useUserStore.ts'
 import { statisticApi } from '../../api/statisticApi.ts'
@@ -61,11 +62,7 @@ function MainPage() {
 
       <PlanLayout />
       <Toast />
-      {/*<div style={{position: "absolute", inset: 0, width: '100%', height: '100%', backgroundColor: "white", zIndex: 2}}>*/}
-      {/*	*/}
-      {/*	<h1>asl;dkj</h1>*/}
-      {/*</div>*/}
-      <Toast />
+      <PwaInstallBanner />
     </div>
   )
 }

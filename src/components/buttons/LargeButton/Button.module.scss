@@ -60,6 +60,10 @@
     //user-select: none;
   }
 
+  &.fullWidth {
+    width: 100%;
+  }
+
   .text {
     position: relative;
     top: 0.4px;
