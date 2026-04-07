@@ -1,15 +1,19 @@
 import classNames from 'classnames'
 import { FC, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router'
 import { BtnName, Color, Layout, Size } from '../../../constants/enums.ts'
 import { IconLink } from '../../../constants/IconLink.ts'
 import useOnHideRemover from '../../../hooks/useOnHideRemover.ts'
-import { useAppStore } from '../../../store/useAppStore.ts'
+import { appStore, useAppStore } from '../../../store/useAppStore.ts'
+import { isAndroidDevice, isIOSDevice } from '../../../utils/pwaInstall.ts'
 import { userStore, useUserStore } from '../../../store/useUserStore.ts'
+import { getPlatformDebugOverride } from '../../../utils/bannerDebugOverride.ts'
 import IconButton from '../../buttons/IconButton/IconButton.tsx'
 import MenuItem from '../../menuopmponents/MenuItem/MenuItem.tsx'
 import cl from './LeftMenu.module.scss'
 
 const LeftMenu: FC = () => {
+  const [searchParams] = useSearchParams()
   const [activeLayout, controlBtnClickHandler] = [
     useAppStore((state) => state.activeLayout),
     useAppStore((state) => state.controlBtnClickHandler),
@@ -20,6 +24,16 @@ const LeftMenu: FC = () => {
 
   const isVisible = useMemo(() => activeLayout === Layout.MENU, [activeLayout])
   const [isRemoved, removerAnimationEndHandler] = useOnHideRemover(isVisible)
+
+  const platformOverride = getPlatformDebugOverride(searchParams)
+  const isIOS = platformOverride ? platformOverride === 'ios' : isIOSDevice()
+  const isAndroid = platformOverride ? platformOverride === 'android' : isAndroidDevice()
+
+  const installIcon = useMemo<IconLink>(() => {
+    if (isAndroid) return IconLink.ANDROID
+    if (isIOS) return IconLink.IOS
+    return IconLink.SHARE
+  }, [isAndroid, isIOS])
 
   useEffect(() => {
     if (!isVisible) {
@@ -59,6 +73,17 @@ const LeftMenu: FC = () => {
         />
       </div>
       <div className={cl.items}>
+        <MenuItem
+          text='Установить приложение'
+          color={Color.BLUE}
+          iconLink={installIcon}
+          onClick={() => {
+            appStore().changeLayout(Layout.PWA_INSTALL)
+            // закрываем боковое меню
+            appStore().controlBtnClickHandler(BtnName.MENU_CLOSE)
+          }}
+          isFirst
+        />
         <MenuItem text='Сообщить о проблеме' color={Color.BLUE} iconLink={IconLink.PROBLEM} to='/report' />
         {/*<MenuItem text='О сервисе' color={Color.BLUE} iconLink={IconLink.ABOUT} />*/}
         {/*<MenuItem*/}
@@ -132,7 +157,7 @@ const LeftMenu: FC = () => {
               iconLink={IconLink.MAX}
               color={Color.BLUE}
               size={Size.XL}
-              to='https://max.ru/join/t5AiBtccxnLSF6VM2ycT6CzR_XrJo7dt5LuyDrXtHMU'
+              to='https://max.ru/id7719455553_gos13'
               target='_blank'
             />
           </div>

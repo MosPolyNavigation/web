@@ -7,6 +7,7 @@ import { CardState, Layout } from '../../../constants/enums.ts'
 import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 import { useDrag } from '../../../hooks/useDrag.ts'
 import SearchMenu from './SearchMenu/SearchMenu.tsx'
+import PwaInstallSheet from './PwaInstallSheet/PwaInstallSheet.tsx'
 import SpaceInfo from './SpaceInfo/SpaceInfo.tsx'
 import WayInfo from './WayInfo/WayInfo.tsx'
 import { Pointer, QueryService } from '../../../models/QueryService.ts'
@@ -24,19 +25,25 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
   const [bottomCardState, setBottomCardState] = useState<CardState>(CardState.HIDDEN)
   const previousState = useRef<CardState>(bottomCardState)
   const containerRef = useRef<HTMLDivElement>(null)
+  const isSearchOverlayLayout = activeLayout === Layout.SEARCH
+  const isPwaInstallOverlayLayout = activeLayout === Layout.PWA_INSTALL
+  const isOverlayLayout = isSearchOverlayLayout || isPwaInstallOverlayLayout
 
   /** Есть ли активный маршрут и показывать ли его */
-  const activeRoute = activeLayout !== Layout.SEARCH && queryService.steps && queryService.from && queryService.to
+  const activeRoute = !isOverlayLayout && queryService.steps && queryService.from && queryService.to
 
   useEffect(() => {
-    if (activeLayout === Layout.SEARCH) {
+    if (isSearchOverlayLayout) {
       setBottomCardState(CardState.EXPANDED)
+    } else if (isPwaInstallOverlayLayout) {
+      // "App viewer mode" for install instructions: fullscreen overlay.
+      setBottomCardState(CardState.FULLSCREEN)
     } else if (selectedRoomId || queryService.steps) {
       setBottomCardState(CardState.COLLAPSED)
     } else {
       setBottomCardState(CardState.HIDDEN)
     }
-  }, [selectedRoomId, activeLayout, queryService])
+  }, [selectedRoomId, isPwaInstallOverlayLayout, isSearchOverlayLayout, queryService])
 
   useEffect(() => {
     setTimeout(() => {
@@ -46,10 +53,10 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
   }, [bottomCardState])
 
   const { isDragging, translateY, handleTouchStart, handleTouchMove, handleTouchEnd, handleMouseDown } = useDrag({
-    enabled: bottomCardState !== CardState.HIDDEN,
+    enabled: bottomCardState !== CardState.HIDDEN && !isPwaInstallOverlayLayout,
     minTranslateY:
       bottomCardState === CardState.FULLSCREEN ||
-      (bottomCardState === CardState.EXPANDED && activeLayout === Layout.SEARCH)
+      (bottomCardState === CardState.EXPANDED && isSearchOverlayLayout)
         ? 0
         : null,
     onDragEnd: (deltaY, e) => {
@@ -69,7 +76,7 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
         // Действия при закрытии
 
         if (bottomCardState === CardState.FULLSCREEN || bottomCardState === CardState.EXPANDED) {
-          if (activeLayout === Layout.SEARCH) {
+          if (isOverlayLayout) {
             setBottomCardState(CardState.HIDDEN)
             appStore().changeLayout(appStore().previousLayout)
           } else {
@@ -116,14 +123,21 @@ const BottomLayer: FC<BottomLayerProps> = ({ children }) => {
       <div className={cl.slider}></div>
       {activeLayout !== Layout.SEARCH && !queryService.steps && (
         <IconButton
-          onClick={() => appStore().changeSelectedRoom(null)}
+          onClick={() => {
+            if (activeLayout === Layout.PWA_INSTALL) {
+              appStore().changeLayout(appStore().previousLayout)
+              return
+            }
+            appStore().changeSelectedRoom(null)
+          }}
           className={cl.closeBtn}
           iconLink={IconLink.CROSS}
         />
       )}
       {activeLayout === Layout.SEARCH && <SearchMenu />}
+      {activeLayout === Layout.PWA_INSTALL && <PwaInstallSheet />}
       {/*TODO: По идее надо добавить в стор сосотояния для открытого SpaceInfo и WayInfo чтобы вот так костыльно не делать*/}
-      {activeLayout !== Layout.SEARCH && queryService.steps === undefined && (
+      {!isOverlayLayout && queryService.steps === undefined && (
         <SpaceInfo expanded={bottomCardState === CardState.FULLSCREEN} />
       )}
       {activeRoute && <WayInfo />}

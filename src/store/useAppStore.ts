@@ -106,6 +106,7 @@ export const useAppStore = create<State & Action>()((set, get) => ({
         get().changeLayout(Layout.LOCATIONS)
       } else if (activeLayout === Layout.LOCATIONS) get().changeLayout(Layout.PLAN)
       else if (activeLayout === Layout.SEARCH) get().changeLayout(get().previousLayout)
+      else if (activeLayout === Layout.PWA_INSTALL) get().changeLayout(get().previousLayout)
     } //Показать левое меню
     else if (btnName === BtnName.SEARCH && activeLayout !== Layout.SEARCH) {
       get().setSearchIndent(SearchIndent.SELECT)

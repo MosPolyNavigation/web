@@ -22,6 +22,8 @@ export enum IconLink {
   SMILE_SAD = 'img/icons/ui/Smile-sad.svg',
   LIST = 'img/icons/ui/list.svg',
   SHARE = 'img/icons/ui/share.svg',
+  IOS = 'img/icons/ui/ios.svg',
+  ANDROID = 'img/icons/ui/android.svg',
 
   LEGAL = 'img/icons/plans/legal.svg',
   STUDY = 'img/icons/plans/study.svg',

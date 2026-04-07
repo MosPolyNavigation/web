@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import Button from '../../buttons/LargeButton/Button.tsx'
 import Icon from '../Icon/Icon.tsx'
@@ -52,7 +52,7 @@ const EventInfoBanner = () => {
   const currentPlan = useAppStore((state) => state.currentPlan)
   const rooms = useDataStore((state) => state.rooms)
   const forceShowBanners = isBannerDebugOverrideEnabled(searchParams)
-  const [visible, setVisible] = useState(() => !isEventBannerDismissedToday())
+  const [visible, setVisible] = useState(() => (forceShowBanners ? true : !isEventBannerDismissedToday()))
 
   const isEventDate = useMemo(() => getMoscowDateKey() === EVENT_INFO.bannerDateMoscow, [])
   const isBsCampus = useMemo(() => {
@@ -76,12 +76,19 @@ const EventInfoBanner = () => {
     return rooms.some((room) => room.event && room.plan?.corpus.location === currentPlan.corpus.location)
   }, [currentPlan, rooms])
 
-  const dismiss = useCallback(() => {
+  useEffect(() => {
     if (forceShowBanners) {
-      return
+      // В debug-режиме всегда показываем баннеры после перезагрузки/переключения параметра.
+      setVisible(true)
     }
+  }, [forceShowBanners])
 
-    markEventBannerDismissedToday()
+  const dismiss = useCallback(() => {
+    // В debug-режиме скрываем баннер, но не фиксируем это в localStorage,
+    // чтобы после перезагрузки при showBanners=1 баннер снова был виден.
+    if (!forceShowBanners) {
+      markEventBannerDismissedToday()
+    }
     setVisible(false)
   }, [forceShowBanners])
 
@@ -89,9 +96,10 @@ const EventInfoBanner = () => {
     appStore().setSearchIndent(SearchIndent.SELECT)
     appStore().setSearchQuery('')
     appStore().changeLayout(Layout.SEARCH)
-  }, [])
+    dismiss()
+  }, [dismiss])
 
-  if (!forceShowBanners && !visible) {
+  if (!visible) {
     return null
   }
 

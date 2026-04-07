@@ -75,6 +75,25 @@ http://localhost:3000/?showBanners=1
 http://localhost:3000/?showBanners=1&debugTime=11:35
 ```
 
+## Dev override для платформы PWA
+
+В локальной разработке можно подменить платформу для экрана установки PWA через query-параметр `debugPlatform`.
+
+Поддерживаются значения:
+
+- `ios`
+- `android`
+- `desktop`
+
+Примеры:
+
+```text
+http://localhost:3000/?debugPlatform=ios
+http://localhost:3000/?showBanners=1&debugPlatform=android
+```
+
+Этот override работает только в dev-режиме.
+
 ## Баннеры
 
 Баннеры отображаются стеком внутри окна приложения. Если активно несколько баннеров сразу, они выстраиваются друг над другом.

@@ -18,11 +18,13 @@ function BaseControls() {
   }
 
   const rightBtnClass = classNames({
-    [cl.locationsBtn]: activeLayout !== Layout.SEARCH && activeLayout !== Layout.LOCATIONS,
+    [cl.locationsBtn]:
+      activeLayout !== Layout.SEARCH && activeLayout !== Layout.LOCATIONS && activeLayout !== Layout.PWA_INSTALL,
   })
 
   const rightBtnIcon = (function () {
-    if (activeLayout === Layout.SEARCH || activeLayout === Layout.LOCATIONS) return IconLink.CROSS
+    if (activeLayout === Layout.SEARCH || activeLayout === Layout.LOCATIONS || activeLayout === Layout.PWA_INSTALL)
+      return IconLink.CROSS
     return IconLink.LOCATIONS
   })()
 

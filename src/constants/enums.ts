@@ -52,6 +52,7 @@ export enum Layout {
   PLAN = 'PLAN',
   LOCATIONS = 'LOCATIONS',
   SEARCH = 'SEARCH',
+  PWA_INSTALL = 'PWA_INSTALL',
   MENU = 'MENU',
   REPORT = 'REPORT',
 }

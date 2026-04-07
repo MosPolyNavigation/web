@@ -8,8 +8,9 @@ import { appStore, useAppStore } from '../../../store/useAppStore.ts'
 import {
   isFirefoxBrowser,
   isMobileDevice,
-  isIOSDevice,
   isPwaStandalone,
+  setDeferredInstallPrompt,
+  clearDeferredInstallPrompt,
   markPwaInstallBannerDismissed,
   markPwaInstalledInStorage,
   shouldShowPwaInstallBannerByStorage,
@@ -30,39 +31,21 @@ const PwaInstallBanner = () => {
   const [storageOk, setStorageOk] = useState(() => shouldShowPwaInstallBannerByStorage())
   const [dismissed, setDismissed] = useState(false)
   const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
-  // нажали установить в сафари, покажем подсказку
-  const [iosHint, setIosHint] = useState(false)
 
   const dismiss = useCallback(() => {
-    if (forceShowBanners) {
-      return
+    if (!forceShowBanners) {
+      markPwaInstallBannerDismissed()
+      setStorageOk(false)
     }
-
-    markPwaInstallBannerDismissed()
     setDismissed(true)
-    setStorageOk(false)
     deferredPrompt.current = null
-    setIosHint(false)
+    clearDeferredInstallPrompt()
   }, [forceShowBanners])
 
-  const onInstallClick = useCallback(async () => {
-    const e = deferredPrompt.current
-    if (e) {
-      try {
-        await e.prompt()
-        await e.userChoice
-      } finally {
-        deferredPrompt.current = null
-      }
-      return
-    }
-    if (isIOSDevice()) {
-      setIosHint(true)
-      return
-    }
-
-    appStore().toast.showForTime('Если системное окно не открылось, установите приложение через меню браузера')
-  }, [])
+  const onInstallClick = useCallback(() => {
+    appStore().changeLayout(Layout.PWA_INSTALL)
+    dismiss()
+  }, [dismiss])
 
   useEffect(() => {
     if (!forceShowBanners && !isMobileDevice()) return
@@ -79,12 +62,14 @@ const PwaInstallBanner = () => {
     const onBeforeInstall = (event: Event) => {
       event.preventDefault()
       deferredPrompt.current = event as BeforeInstallPromptEvent
+      setDeferredInstallPrompt(deferredPrompt.current)
       setStorageOk(shouldShowPwaInstallBannerByStorage())
     }
 
     const onInstalled = () => {
       markPwaInstalledInStorage()
       deferredPrompt.current = null
+      clearDeferredInstallPrompt()
       setStorageOk(false)
     }
 
@@ -97,7 +82,7 @@ const PwaInstallBanner = () => {
     }
   }, [forceShowBanners])
 
-  if (!forceShowBanners && dismissed) return null
+  if (dismissed) return null
   if (!forceShowBanners) {
     if (activeLayout !== Layout.PLAN) return null
     if (!isMobileDevice()) return null
@@ -111,34 +96,17 @@ const PwaInstallBanner = () => {
         {/* <img className={cl.logo} src={LOGO_SRC} alt='' width={48} height={48} /> */}
         <div className={cl.content}>
           <div className={cl.titleRow}>
-            {!iosHint && <p className={cl.title}>Установите наше приложение</p>}
-            {iosHint && (
-              <p className={cl.iosHint}>
-                Отлично!
-                <br /> Нажмите кнопку <b>Поделиться</b> внизу экрана, затем <b>Добавить На экран Домой</b>.
-              </p>
-            )}
+            <p className={cl.title}>Установите наше приложение</p>
             <button type='button' className={cl.close} onClick={dismiss} aria-label='Закрыть'>
               <Icon size={Size.S} iconLink={IconLink.CROSS} color={Color.C4} />
             </button>
           </div>
-          {!iosHint && (
-            <>
-              {' '}
-              <p className={cl.subtitle}>
-                Так оно будет работать стабильнее, а вы будете всегда иметь быстрый доступ к навигации по кампусу
-              </p>
-              <div className={cl.actions}>
-                <Button
-                  color={Color.BLUE}
-                  text='Установить'
-                  onClick={() => void onInstallClick()}
-                  size={Size.S}
-                  fullWidth
-                />
-              </div>
-            </>
-          )}
+          <p className={cl.subtitle}>
+            Так оно будет работать стабильнее, а вы будете всегда иметь быстрый доступ к навигации по кампусу
+          </p>
+          <div className={cl.actions}>
+            <Button color={Color.BLUE} text='Установить' onClick={() => void onInstallClick()} size={Size.S} fullWidth />
+          </div>
         </div>
       </div>
     </div>

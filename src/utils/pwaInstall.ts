@@ -4,6 +4,8 @@ export type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>
 }
 
+let deferredInstallPrompt: BeforeInstallPromptEvent | null = null
+
 /** JSON в localStorage: `{ "installed": true }` или `{ "lastPromptAt": number }` */
 export const PWA_INSTALLED_STORAGE_KEY = 'isPWAInstalled'
 
@@ -44,6 +46,11 @@ export function isIOSDevice(): boolean {
   return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1
 }
 
+export function isAndroidDevice(): boolean {
+  if (typeof navigator === 'undefined') return false
+  return /android/i.test(navigator.userAgent)
+}
+
 export function isFirefoxBrowser(): boolean {
   if (typeof navigator === 'undefined') return false
   return /firefox/i.test(navigator.userAgent)
@@ -81,4 +88,16 @@ export function markPwaInstalledInStorage(): void {
   } catch {
     /* ignore */
   }
+}
+
+export function setDeferredInstallPrompt(event: BeforeInstallPromptEvent | null): void {
+  deferredInstallPrompt = event
+}
+
+export function getDeferredInstallPrompt(): BeforeInstallPromptEvent | null {
+  return deferredInstallPrompt
+}
+
+export function clearDeferredInstallPrompt(): void {
+  deferredInstallPrompt = null
 }
