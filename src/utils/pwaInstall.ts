@@ -50,8 +50,9 @@ export function isFirefoxBrowser(): boolean {
 }
 
 export function isMobileDevice(): boolean {
-  if (typeof navigator === 'undefined') return false
-  return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent)
+  return true
+  // if (typeof navigator === 'undefined') return true
+  // return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent)
 }
 
 /** Показать баннер: в режиме браузера и нет записи об установке; при повторе — только через 2 суток после lastPromptAt */
