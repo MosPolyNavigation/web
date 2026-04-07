@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
   const keyPath = path.join(__dirname, 'localhost-key.pem')
   const certPath = path.join(__dirname, 'localhost.pem')
   const canUseHttps = useHttps && fs.existsSync(keyPath) && fs.existsSync(certPath)
-  const base = '/web/'
+  const base = env.VITE_BASE_PATH?.trim()
 
   return {
     plugins: [
@@ -125,6 +125,6 @@ export default defineConfig(({ mode }) => {
       },
       devSourcemap: true,
     },
-    base: '/web/',
+    base,
   }
 })

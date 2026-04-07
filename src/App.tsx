@@ -11,7 +11,7 @@ const App = () => {
   }, [])
 
   return (
-    <BrowserRouter basename={window.location.origin.includes('mpunav.ru') ? undefined : '/web'}>
+    <BrowserRouter basename={import.meta.env.VITE_BASE_PATH?.slice(0, -1)}>
       <Routes>
         <Route element={<DodLayout />}>
           <Route path='/' element={<MainPage />} />
