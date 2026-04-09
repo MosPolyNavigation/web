@@ -12,6 +12,9 @@ import { searchRooms } from '../../../../functions/roomSearch.ts'
 import { useDebounce } from '../../../../hooks/useDebounce.ts'
 import { EVENT_INFO } from '../../../../constants/eventInfo.ts'
 
+// Включить отображение события в поиске
+const ENABLE_EVENT = false
+
 const SearchMenu: FC = () => {
   const rooms = useDataStore((state) => state.rooms)
   const resultsRef = useRef<HTMLDivElement | null>(null)
@@ -168,10 +171,10 @@ const SearchMenu: FC = () => {
               </div>
             ) : (
               <>
-                {renderEventSection(searchedEventRooms)}
+                {ENABLE_EVENT && renderEventSection(searchedEventRooms)}
                 {searchedCommonRooms.length > 0 && (
                   <section className={cl.section}>
-                    {searchedEventRooms.length > 0 && <div className={cl.sectionLabel}>Другие результаты</div>}
+                    {ENABLE_EVENT && searchedEventRooms.length > 0 && <div className={cl.sectionLabel}>Другие результаты</div>}
                     <div className={cl.sectionItems}>{renderMenuItems(searchedCommonRooms)}</div>
                   </section>
                 )}
@@ -180,7 +183,7 @@ const SearchMenu: FC = () => {
           </>
         ) : (
           <>
-            {renderEventSection(eventRooms)}
+            {ENABLE_EVENT && renderEventSection(eventRooms)}
             {quicks.length > 0 && (
               <section className={cl.section}>
                 {eventRooms.length > 0 && <div className={cl.sectionLabel}>Быстрый доступ</div>}
