@@ -17,9 +17,10 @@ export const useMediaQuery = (query: string) => {
   )
 }
 
+/** Определяет отображение десктопного дод режима, также в functions.scss */
 export const useShowDodLayout = () => {
-  const showDodLayout = useMediaQuery('(min-width: 550px)')
-  // const showDodLayout = false
+  // const showDodLayout = useMediaQuery('(min-width: 550px)')
+  const showDodLayout = false
 
   return { showDodLayout }
 }
