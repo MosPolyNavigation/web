@@ -3,6 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <title>Политех Навигация</title>
+    <script>
+      const newDomain = "https://mpunav.ru";
+
+      const newUrl =
+        newDomain.replace(/\/$/, "") +
+        window.location.pathname
+          .replace(/^\/web(?=\/|$)/, "") // убираем только в начале
+          .replace(/\/index\.html$/, "")
+          .replace(/\/404\.html$/, "") +
+        window.location.search +
+        window.location.hash;
+
+      // редирект
+      window.location.replace(newUrl);
+    </script>
     <style>
       body {
         background-color: #12141c;
@@ -203,18 +218,6 @@
 
     <script>
       (function () {
-        const newDomain = "https://mpunav.ru";
-
-        const newUrl =
-          newDomain.replace(/\/$/, "") +
-          window.location.pathname
-            .replace("/index.html", "")
-            .replace("/404.html", "") +
-          window.location.search +
-          window.location.hash;
-
-        console.log(newUrl);
-
         const manualRedirectEl = document.getElementById("manualRedirectEl");
         const linkEl = document.getElementById("manualRedirect_AEl");
         console.log(linkEl);
@@ -227,9 +230,6 @@
           manualRedirectEl.style.display = "block";
           removeItEl.style.display = "none";
         }, 1500);
-
-        // редирект
-        window.location.replace(newUrl);
       })();
     </script>
   </body>
